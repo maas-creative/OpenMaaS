@@ -173,3 +173,13 @@ Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
 - **Geospatial Operations**: Use PostGIS functions for location-based queries
 - **Authentication**: All services validate JWT tokens against the shared secret
 - **Service Communication**: Internal services communicate through Kong with service-to-service authentication
+
+## Git Workflow Instructions
+
+When the user asks to push changes to git:
+1. Always check if git is initialized first (`git status`)
+2. If there's a nested git repository warning, remove the nested .git directory
+3. Stage all changes with `git add .`
+4. Create a meaningful commit message that describes what was implemented
+5. If asked to push to origin main, execute `git push origin main`
+6. The user may not have set up the remote origin yet - that's okay, just note it
