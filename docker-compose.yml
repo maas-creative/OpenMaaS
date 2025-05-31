@@ -114,6 +114,34 @@ services:
     networks:
       - openmaas-network
 
+  # User Service
+  user-service:
+    build:
+      context: .
+      dockerfile: services/user-service/Dockerfile
+    container_name: openmaas-user-service
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: openmaas
+      DATABASE_PASSWORD: openmaas-dev
+      DATABASE_NAME: openmaas
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-change-in-production}
+      KEYCLOAK_URL: http://keycloak:8080
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+      - redis
+      - keycloak
+    networks:
+      - openmaas-network
+    profiles:
+      - services
+
   # Development database admin tool
   adminer:
     image: adminer:latest
