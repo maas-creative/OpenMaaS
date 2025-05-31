@@ -19,10 +19,10 @@ The system follows a microservices architecture with:
 
 1. **Auth Service** (port 3001) - JWT authentication, Keycloak integration, role-based access
 2. **User Service** (port 3002) - User profiles, trip history, preferences management
+3. **Transit Service** (port 3003) - GTFS data processing, transit information API
 
 ### Planned Services (configured in Kong but not yet implemented)
 
-3. **Transit Service** (port 3003) - GTFS data processing
 4. **Route Service** (port 3004) - Route planning with OpenTripPlanner
 5. **Booking Service** (port 3005) - Reservation management
 6. **Payment Service** (port 3006) - Payment processing
@@ -76,6 +76,14 @@ npm run lint       # Lint service code
 For User Service specifically:
 ```bash
 cd services/user-service
+npm run migration:generate -- -n MigrationName  # Generate migration
+npm run migration:run                           # Run migrations
+npm run migration:revert                        # Revert last migration
+```
+
+For Transit Service specifically:
+```bash
+cd services/transit-service
 npm run migration:generate -- -n MigrationName  # Generate migration
 npm run migration:run                           # Run migrations
 npm run migration:revert                        # Revert last migration
