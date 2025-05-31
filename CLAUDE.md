@@ -20,10 +20,10 @@ The system follows a microservices architecture with:
 1. **Auth Service** (port 3001) - JWT authentication, Keycloak integration, role-based access
 2. **User Service** (port 3002) - User profiles, trip history, preferences management
 3. **Transit Service** (port 3003) - GTFS data processing, transit information API
+4. **Route Service** (port 3004) - Multi-modal route planning with OpenTripPlanner integration
 
 ### Planned Services (configured in Kong but not yet implemented)
 
-4. **Route Service** (port 3004) - Route planning with OpenTripPlanner
 5. **Booking Service** (port 3005) - Reservation management
 6. **Payment Service** (port 3006) - Payment processing
 
@@ -58,7 +58,7 @@ npm run test
 # Lint all code
 npm run lint
 
-# Format code
+# Format code with Prettier
 npm run format
 ```
 
@@ -170,10 +170,12 @@ Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
 
 ## Development Workflow
 
-1. **Environment Variables**: Copy `.env.example` to `.env` in each service directory
-2. **Database Migrations**: Run migrations before starting development
-3. **Type Safety**: Always build types library first: `npm run build -- --filter=@openmaas/types`
-4. **API Documentation**: Each service exposes Swagger docs at `http://localhost:[port]/api`
+1. **Prerequisites**: Node.js 18+, npm 9+, Docker & Docker Compose
+2. **Environment Variables**: Copy `.env.example` to `.env` in each service directory
+3. **Database Migrations**: Run migrations before starting development
+4. **Type Safety**: Always build types library first: `npm run build -- --filter=@openmaas/types`
+5. **API Documentation**: Each service exposes Swagger docs at `http://localhost:[port]/api`
+6. **Code Quality**: Husky pre-commit hooks run linting and formatting automatically
 
 ## Key Integration Points
 
