@@ -176,10 +176,12 @@ Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
 
 ## Git Workflow Instructions
 
+This repository is hosted at: https://github.com/ukyonagata0105/OpenMaaS
+
 When the user asks to push changes to git:
 1. Always check if git is initialized first (`git status`)
 2. If there's a nested git repository warning, remove the nested .git directory
 3. Stage all changes with `git add .`
 4. Create a meaningful commit message that describes what was implemented
 5. If asked to push to origin main, execute `git push origin main`
-6. The user may not have set up the remote origin yet - that's okay, just note it
+6. The remote origin is already configured for this repository
