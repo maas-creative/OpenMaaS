@@ -21,10 +21,10 @@ The system follows a microservices architecture with:
 2. **User Service** (port 3002) - User profiles, trip history, preferences management
 3. **Transit Service** (port 3003) - GTFS data processing, transit information API
 4. **Route Service** (port 3004) - Multi-modal route planning with OpenTripPlanner integration
+5. **Booking Service** (port 3005) - Reservation and booking management with provider integration
 
 ### Planned Services (configured in Kong but not yet implemented)
 
-5. **Booking Service** (port 3005) - Reservation management
 6. **Payment Service** (port 3006) - Payment processing
 
 ## Common Commands
@@ -84,6 +84,14 @@ npm run migration:revert                        # Revert last migration
 For Transit Service specifically:
 ```bash
 cd services/transit-service
+npm run migration:generate -- -n MigrationName  # Generate migration
+npm run migration:run                           # Run migrations
+npm run migration:revert                        # Revert last migration
+```
+
+For Booking Service specifically:
+```bash
+cd services/booking-service
 npm run migration:generate -- -n MigrationName  # Generate migration
 npm run migration:run                           # Run migrations
 npm run migration:revert                        # Revert last migration
