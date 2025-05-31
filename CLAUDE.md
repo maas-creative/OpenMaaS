@@ -22,10 +22,7 @@ The system follows a microservices architecture with:
 3. **Transit Service** (port 3003) - GTFS data processing, transit information API
 4. **Route Service** (port 3004) - Multi-modal route planning with OpenTripPlanner integration
 5. **Booking Service** (port 3005) - Reservation and booking management with provider integration
-
-### Planned Services (configured in Kong but not yet implemented)
-
-6. **Payment Service** (port 3006) - Payment processing
+6. **Payment Service** (port 3006) - Stripe payment processing, refunds, payment methods management
 
 ## Common Commands
 
@@ -95,6 +92,17 @@ cd services/booking-service
 npm run migration:generate -- -n MigrationName  # Generate migration
 npm run migration:run                           # Run migrations
 npm run migration:revert                        # Revert last migration
+```
+
+For Payment Service specifically:
+```bash
+cd services/payment-service
+npm run migration:generate -- -n MigrationName  # Generate migration
+npm run migration:run                           # Run migrations
+npm run migration:revert                        # Revert last migration
+
+# Stripe webhook testing (requires Stripe CLI)
+stripe listen --forward-to localhost:3006/webhooks/stripe
 ```
 
 ### Testing Single Files
@@ -191,6 +199,8 @@ Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
 - **Geospatial Operations**: Use PostGIS functions for location-based queries
 - **Authentication**: All services validate JWT tokens against the shared secret
 - **Service Communication**: Internal services communicate through Kong with service-to-service authentication
+- **Payment Processing**: Stripe integration for payments, refunds, and payment method management
+- **Webhook Handling**: Stripe webhooks are verified and processed asynchronously
 
 ## Git Workflow Instructions
 
