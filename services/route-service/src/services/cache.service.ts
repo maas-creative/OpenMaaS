@@ -7,9 +7,11 @@ export class CacheService {
   private readonly cache = new Map<string, { value: unknown; expiry: number }>();
   private readonly redisEnabled = false; // TODO: Implement Redis integration
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly _configService: ConfigService) {
     // Start cleanup interval for in-memory cache
     setInterval(() => this.cleanup(), 60000); // Cleanup every minute
+    // TODO: Use configService for Redis configuration in the future
+    void this._configService;
   }
 
   async get<T>(key: string): Promise<T | null> {

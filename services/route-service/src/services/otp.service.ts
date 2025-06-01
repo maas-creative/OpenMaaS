@@ -11,6 +11,7 @@ import {
   RoutePlanResponseDto,
   GeocodingRequestDto,
   GeocodingResponseDto,
+  ItineraryDto,
 } from '../dto/route-plan.dto';
 import { TransportMode } from '@openmaas/types';
 
@@ -80,8 +81,8 @@ export class OtpService {
   private readonly timeout: number;
 
   constructor(private readonly configService: ConfigService) {
-    this.otpUrl = this.configService.get('otp.url');
-    this.timeout = this.configService.get('otp.timeout');
+    this.otpUrl = this.configService.get('otp.url') || 'http://localhost:8090/otp/routers/default';
+    this.timeout = this.configService.get('otp.timeout') || 30000;
   }
 
   async planRoute(request: RoutePlanRequestDto): Promise<RoutePlanResponseDto> {
@@ -158,7 +159,7 @@ export class OtpService {
       return {
         query: request.query,
         results:
-          otpResponse.features?.map((feature) => ({
+          (otpResponse as any).features?.map((feature: any) => ({
             lat: feature.geometry.coordinates[1],
             lon: feature.geometry.coordinates[0],
             name: feature.properties.label || feature.properties.name,
@@ -203,11 +204,11 @@ export class OtpService {
 
     // Walking/biking parameters
     const maxWalkDistance =
-      request.maxWalkDistance || this.configService.get('routePlanning.maxWalkDistance');
+      request.maxWalkDistance || this.configService.get('routePlanning.maxWalkDistance') || 2000;
     params.append('maxWalkDistance', maxWalkDistance.toString());
 
     if (request.modes?.includes(TransportMode.BICYCLE)) {
-      const maxBikeDistance = this.configService.get('routePlanning.maxBikeDistance');
+      const maxBikeDistance = this.configService.get('routePlanning.maxBikeDistance') || 20000;
       params.append('maxBikeDistance', maxBikeDistance.toString());
     }
 
@@ -218,7 +219,7 @@ export class OtpService {
 
     // Number of itineraries
     const numItineraries =
-      request.numItineraries || this.configService.get('routePlanning.defaultNumItineraries');
+      request.numItineraries || this.configService.get('routePlanning.defaultNumItineraries') || 3;
     params.append('numItineraries', numItineraries.toString());
 
     // Preferred/avoided routes
@@ -323,7 +324,7 @@ export class OtpService {
       })) || [];
 
     return {
-      itineraries,
+      itineraries: itineraries as ItineraryDto[],
       requestParameters: request,
       debugOutput:
         this.configService.get('app.env') === 'development'

@@ -12,17 +12,10 @@ import {
 import { Transform, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  RoutePlanRequest,
-  RoutePlanResponse,
-  Location,
   TransportMode,
-  Itinerary,
-  Leg,
-  Place,
-  Fare,
 } from '@openmaas/types';
 
-export class LocationDto implements Location {
+export class LocationDto {
   @ApiProperty({ description: 'Latitude in decimal degrees' })
   @IsNumber()
   @Min(-90)
@@ -48,7 +41,7 @@ export class LocationDto implements Location {
   stopId?: string;
 }
 
-export class RoutePlanRequestDto implements Omit<RoutePlanRequest, 'from' | 'to'> {
+export class RoutePlanRequestDto {
   @ApiProperty({ type: LocationDto, description: 'Starting location' })
   @Type(() => LocationDto)
   from!: LocationDto;
@@ -113,7 +106,7 @@ export class RoutePlanRequestDto implements Omit<RoutePlanRequest, 'from' | 'to'
   avoidRoutes?: string[];
 }
 
-export class PlaceDto implements Place {
+export class PlaceDto {
   @ApiProperty()
   name!: string;
 
@@ -133,7 +126,7 @@ export class PlaceDto implements Place {
   vertexType?: string;
 }
 
-export class FareDto implements Fare {
+export class FareDto {
   @ApiProperty()
   type!: string;
 
@@ -152,7 +145,7 @@ export class FareDto implements Fare {
   }>;
 }
 
-export class LegDto implements Leg {
+export class LegDto {
   @ApiProperty()
   startTime!: Date;
 
@@ -175,7 +168,7 @@ export class LegDto implements Leg {
   to!: PlaceDto;
 
   @ApiPropertyOptional()
-  legGeometry?: GeoJSON.LineString;
+  legGeometry?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   realTime?: boolean;
@@ -196,7 +189,7 @@ export class LegDto implements Leg {
   alerts?: Array<Record<string, unknown>>;
 }
 
-export class ItineraryDto implements Itinerary {
+export class ItineraryDto {
   @ApiProperty()
   startTime!: Date;
 
@@ -225,7 +218,7 @@ export class ItineraryDto implements Itinerary {
   fare?: FareDto;
 }
 
-export class RoutePlanResponseDto implements RoutePlanResponse {
+export class RoutePlanResponseDto {
   @ApiProperty({ type: [ItineraryDto] })
   itineraries!: ItineraryDto[];
 
