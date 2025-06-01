@@ -49,23 +49,23 @@ export class LoggerService implements NestLoggerService {
     }
   }
 
-  log(message: any, context?: string): void {
+  log(message: string, context?: string): void {
     this.logger.info(message, { context: context || this.context });
   }
 
-  error(message: any, trace?: string, context?: string): void {
+  error(message: string, trace?: string, context?: string): void {
     this.logger.error(message, { trace, context: context || this.context });
   }
 
-  warn(message: any, context?: string): void {
+  warn(message: string, context?: string): void {
     this.logger.warn(message, { context: context || this.context });
   }
 
-  debug(message: any, context?: string): void {
+  debug(message: string, context?: string): void {
     this.logger.debug(message, { context: context || this.context });
   }
 
-  verbose(message: any, context?: string): void {
+  verbose(message: string, context?: string): void {
     this.logger.verbose(message, { context: context || this.context });
   }
 

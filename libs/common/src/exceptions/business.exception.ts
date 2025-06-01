@@ -5,7 +5,7 @@ export class BusinessException extends HttpException {
     message: string,
     code: string,
     statusCode: HttpStatus = HttpStatus.BAD_REQUEST,
-    details?: any,
+    details?: unknown,
   ) {
     super(
       {
