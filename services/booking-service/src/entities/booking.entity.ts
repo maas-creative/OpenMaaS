@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import {
   BookingStatus,
@@ -26,7 +28,8 @@ export class BookingEntity {
   id: string;
 
   @Column({ name: 'user_id' })
-  userId: string;
+  @Index()
+  userId: string; // References User.id from user-service
 
   @Column({ name: 'trip_id' })
   tripId: string;
@@ -65,7 +68,8 @@ export class BookingEntity {
   fare: BookingFare;
 
   @Column({ name: 'payment_id', nullable: true })
-  paymentId?: string;
+  @Index()
+  paymentId?: string; // References Payment.id from payment-service
 
   @Column({ name: 'confirmation_code', unique: true })
   confirmationCode: string;

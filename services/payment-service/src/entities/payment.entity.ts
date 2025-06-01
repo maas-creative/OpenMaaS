@@ -21,10 +21,12 @@ export class PaymentEntity {
   id: string;
 
   @Column({ name: 'user_id' })
-  userId: string;
+  @Index()
+  userId: string; // References User.id from user-service
 
   @Column({ name: 'booking_id', nullable: true })
-  bookingId?: string;
+  @Index()
+  bookingId?: string; // References Booking.id from booking-service
 
   @Column({ name: 'amount', type: 'decimal', precision: 10, scale: 2 })
   amount: number;

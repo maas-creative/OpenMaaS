@@ -12,6 +12,7 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
+  HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
@@ -20,6 +21,7 @@ import { AuthContext } from '@openmaas/types';
 import { UserService } from '../services/user.service';
 import { TripHistoryService } from '../services/trip-history.service';
 import { UserPreferencesService } from '../services/user-preferences.service';
+import { HealthService } from '../services/health.service';
 import { CreateUserDto, UpdateUserDto, UpdateUserRolesDto, UserQueryDto } from '../dto/user.dto';
 import {
   CreateTripHistoryDto,
@@ -42,6 +44,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly tripHistoryService: TripHistoryService,
     private readonly userPreferencesService: UserPreferencesService,
+    private readonly healthService: HealthService,
   ) {}
 
   @Post()
@@ -275,11 +278,15 @@ export class UserController {
   @Get('health')
   @ApiOperation({ summary: 'Health check endpoint' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
-  health() {
-    return {
-      status: 'healthy',
-      service: 'user-service',
-      timestamp: new Date().toISOString(),
-    };
+  @ApiResponse({ status: 503, description: 'Service is unhealthy' })
+  async health() {
+    const healthStatus = await this.healthService.getHealthStatus();
+    
+    // Return appropriate HTTP status based on health
+    if (healthStatus.status === 'unhealthy') {
+      throw new HttpException(healthStatus, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    
+    return healthStatus;
   }
 }

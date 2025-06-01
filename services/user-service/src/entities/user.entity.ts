@@ -39,7 +39,7 @@ export class User {
   preferences: UserPreferences;
 
   @Column({ type: 'jsonb', default: {}, nullable: true })
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -95,7 +95,7 @@ export class User {
     };
   }
 
-  updateMetadata(key: string, value: any): void {
+  updateMetadata(key: string, value: unknown): void {
     if (!this.metadata) {
       this.metadata = {};
     }

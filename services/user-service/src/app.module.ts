@@ -7,6 +7,7 @@ import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { TripHistoryService } from './services/trip-history.service';
 import { UserPreferencesService } from './services/user-preferences.service';
+import { HealthService } from './services/health.service';
 import { UserRepository } from './repositories/user.repository';
 import { TripHistoryRepository } from './repositories/trip-history.repository';
 import { User } from './entities/user.entity';
@@ -44,6 +45,7 @@ import { getDatabaseConfig } from './config/database.config';
     UserService,
     TripHistoryService,
     UserPreferencesService,
+    HealthService,
     UserRepository,
     TripHistoryRepository,
     JwtStrategy,
