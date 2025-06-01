@@ -2,7 +2,6 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
-  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -37,8 +36,8 @@ export class AuthService {
 
       // Generate tokens
       return this.generateTokens(userInfo);
-    } catch (error: any) {
-      if (error.response?.status === 409) {
+    } catch (error) {
+      if (error instanceof Error && 'response' in error && (error as any).response?.status === 409) {
         throw new ConflictException('User with this email already exists');
       }
       throw error;

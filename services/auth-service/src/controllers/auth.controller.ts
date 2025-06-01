@@ -9,13 +9,9 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import {
   AuthToken,
-  LoginRequest,
-  RegisterRequest,
-  ChangePasswordRequest,
   KeycloakUserInfo,
 } from '@openmaas/types';
 import { AuthService } from '../services/auth.service';
@@ -53,7 +49,7 @@ export class AuthController {
     type: AuthToken,
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Request() req: any, @Body() loginDto: LoginDto): Promise<AuthToken> {
+  async login(@Request() req: Express.Request, @Body() loginDto: LoginDto): Promise<AuthToken> {
     return this.authService.login(loginDto);
   }
 
@@ -67,7 +63,7 @@ export class AuthController {
     type: KeycloakUserInfo,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@Request() req: any): Promise<KeycloakUserInfo> {
+  async getProfile(@Request() req: Express.Request): Promise<KeycloakUserInfo> {
     return this.authService.getUserInfo(req.user.sub);
   }
 
@@ -82,7 +78,7 @@ export class AuthController {
     type: AuthToken,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async refreshToken(@Request() req: any): Promise<AuthToken> {
+  async refreshToken(@Request() req: Express.Request): Promise<AuthToken> {
     return this.authService.refreshToken(req.user.sub);
   }
 
@@ -97,7 +93,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized or incorrect password' })
   async changePassword(
-    @Request() req: any,
+    @Request() req: Express.Request,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<void> {
     await this.authService.changePassword(req.user.sub, changePasswordDto);
@@ -113,7 +109,7 @@ export class AuthController {
     description: 'Account successfully deleted',
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async deleteAccount(@Request() req: any): Promise<void> {
+  async deleteAccount(@Request() req: Express.Request): Promise<void> {
     await this.authService.deleteAccount(req.user.sub);
   }
 
