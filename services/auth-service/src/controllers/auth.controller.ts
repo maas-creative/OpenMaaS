@@ -10,7 +10,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { AuthToken, KeycloakUserInfo } from '@openmaas/types';
+import { Request as ExpressRequest } from 'express';
+import { AuthToken, KeycloakUserInfo, AuthContext } from '@openmaas/types';
 import { AuthService } from '../services/auth.service';
 import { RegisterDto, LoginDto, ChangePasswordDto } from '../dto/auth.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -27,7 +28,15 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: 'User successfully registered',
-    type: AuthToken,
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: { type: 'string' },
+        refresh_token: { type: 'string' },
+        expires_in: { type: 'number' },
+        token_type: { type: 'string' }
+      }
+    }
   })
   @ApiResponse({ status: 409, description: 'User already exists' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
@@ -43,10 +52,18 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in',
-    type: AuthToken,
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: { type: 'string' },
+        refresh_token: { type: 'string' },
+        expires_in: { type: 'number' },
+        token_type: { type: 'string' }
+      }
+    }
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Request() req: Express.Request, @Body() loginDto: LoginDto): Promise<AuthToken> {
+  async login(@Request() req: ExpressRequest & { user: AuthContext }, @Body() loginDto: LoginDto): Promise<AuthToken> {
     return this.authService.login(loginDto);
   }
 
@@ -57,10 +74,19 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Current user information',
-    type: KeycloakUserInfo,
+    schema: {
+      type: 'object',
+      properties: {
+        sub: { type: 'string' },
+        email: { type: 'string' },
+        given_name: { type: 'string' },
+        family_name: { type: 'string' },
+        preferred_username: { type: 'string' }
+      }
+    }
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@Request() req: Express.Request): Promise<KeycloakUserInfo> {
+  async getProfile(@Request() req: ExpressRequest & { user: AuthContext }): Promise<KeycloakUserInfo> {
     return this.authService.getUserInfo(req.user.sub);
   }
 
@@ -72,10 +98,18 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Token successfully refreshed',
-    type: AuthToken,
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: { type: 'string' },
+        refresh_token: { type: 'string' },
+        expires_in: { type: 'number' },
+        token_type: { type: 'string' }
+      }
+    }
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async refreshToken(@Request() req: Express.Request): Promise<AuthToken> {
+  async refreshToken(@Request() req: ExpressRequest & { user: AuthContext }): Promise<AuthToken> {
     return this.authService.refreshToken(req.user.sub);
   }
 
@@ -90,7 +124,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized or incorrect password' })
   async changePassword(
-    @Request() req: Express.Request,
+    @Request() req: ExpressRequest & { user: AuthContext },
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<void> {
     await this.authService.changePassword(req.user.sub, changePasswordDto);
@@ -106,7 +140,7 @@ export class AuthController {
     description: 'Account successfully deleted',
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async deleteAccount(@Request() req: Express.Request): Promise<void> {
+  async deleteAccount(@Request() req: ExpressRequest & { user: AuthContext }): Promise<void> {
     await this.authService.deleteAccount(req.user.sub);
   }
 

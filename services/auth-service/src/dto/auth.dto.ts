@@ -12,7 +12,7 @@ import {
 export class RegisterDto {
   @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: 'SecurePass123!' })
   @IsString()
@@ -21,7 +21,7 @@ export class RegisterDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'Password must contain uppercase, lowercase, number/special character',
   })
-  password: string;
+  password!: string;
 
   @ApiProperty({ example: 'John', required: false })
   @IsOptional()
@@ -44,17 +44,17 @@ export class RegisterDto {
 export class LoginDto {
   @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: 'SecurePass123!' })
   @IsString()
-  password: string;
+  password!: string;
 }
 
 export class ChangePasswordDto {
   @ApiProperty({ example: 'CurrentPass123!' })
   @IsString()
-  currentPassword: string;
+  currentPassword!: string;
 
   @ApiProperty({ example: 'NewSecurePass123!' })
   @IsString()
@@ -63,19 +63,19 @@ export class ChangePasswordDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'Password must contain uppercase, lowercase, number/special character',
   })
-  newPassword: string;
+  newPassword!: string;
 }
 
 export class ResetPasswordDto {
   @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 }
 
 export class ConfirmResetPasswordDto {
   @ApiProperty({ example: 'reset-token-here' })
   @IsString()
-  token: string;
+  token!: string;
 
   @ApiProperty({ example: 'NewSecurePass123!' })
   @IsString()
@@ -84,5 +84,5 @@ export class ConfirmResetPasswordDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'Password must contain uppercase, lowercase, number/special character',
   })
-  newPassword: string;
+  newPassword!: string;
 }

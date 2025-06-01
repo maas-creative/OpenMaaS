@@ -28,14 +28,14 @@ export class LocationDto implements Location {
   @Min(-90)
   @Max(90)
   @Transform(({ value }) => parseFloat(value))
-  lat: number;
+  lat!: number;
 
   @ApiProperty({ description: 'Longitude in decimal degrees' })
   @IsNumber()
   @Min(-180)
   @Max(180)
   @Transform(({ value }) => parseFloat(value))
-  lon: number;
+  lon!: number;
 
   @ApiPropertyOptional({ description: 'Human-readable location name' })
   @IsOptional()
@@ -51,11 +51,11 @@ export class LocationDto implements Location {
 export class RoutePlanRequestDto implements Omit<RoutePlanRequest, 'from' | 'to'> {
   @ApiProperty({ type: LocationDto, description: 'Starting location' })
   @Type(() => LocationDto)
-  from: LocationDto;
+  from!: LocationDto;
 
   @ApiProperty({ type: LocationDto, description: 'Destination location' })
   @Type(() => LocationDto)
-  to: LocationDto;
+  to!: LocationDto;
 
   @ApiPropertyOptional({ description: 'Departure/arrival time in ISO format' })
   @IsOptional()
@@ -115,13 +115,13 @@ export class RoutePlanRequestDto implements Omit<RoutePlanRequest, 'from' | 'to'
 
 export class PlaceDto implements Place {
   @ApiProperty()
-  name: string;
+  name!: string;
 
   @ApiProperty()
-  lat: number;
+  lat!: number;
 
   @ApiProperty()
-  lon: number;
+  lon!: number;
 
   @ApiPropertyOptional()
   stopId?: string;
@@ -135,16 +135,16 @@ export class PlaceDto implements Place {
 
 export class FareDto implements Fare {
   @ApiProperty()
-  type: string;
+  type!: string;
 
   @ApiProperty()
-  currency: string;
+  currency!: string;
 
   @ApiProperty()
-  cents: number;
+  cents!: number;
 
   @ApiProperty()
-  components: Array<{
+  components!: Array<{
     fareId: string;
     currency: string;
     cents: number;
@@ -154,25 +154,25 @@ export class FareDto implements Fare {
 
 export class LegDto implements Leg {
   @ApiProperty()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiProperty({ description: 'Duration in seconds' })
-  duration: number;
+  duration!: number;
 
   @ApiProperty({ description: 'Distance in meters' })
-  distance: number;
+  distance!: number;
 
   @ApiProperty({ enum: TransportMode })
-  mode: TransportMode;
+  mode!: TransportMode;
 
   @ApiProperty({ type: PlaceDto })
-  from: PlaceDto;
+  from!: PlaceDto;
 
   @ApiProperty({ type: PlaceDto })
-  to: PlaceDto;
+  to!: PlaceDto;
 
   @ApiPropertyOptional()
   legGeometry?: GeoJSON.LineString;
@@ -198,28 +198,28 @@ export class LegDto implements Leg {
 
 export class ItineraryDto implements Itinerary {
   @ApiProperty()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiProperty({ description: 'Total duration in seconds' })
-  duration: number;
+  duration!: number;
 
   @ApiProperty({ description: 'Number of transfers' })
-  transfers: number;
+  transfers!: number;
 
   @ApiProperty({ description: 'Total walking distance in meters' })
-  walkDistance: number;
+  walkDistance!: number;
 
   @ApiProperty({ description: 'Total walking time in seconds' })
-  walkTime: number;
+  walkTime!: number;
 
   @ApiProperty({ description: 'Total waiting time in seconds' })
-  waitingTime: number;
+  waitingTime!: number;
 
   @ApiProperty({ type: [LegDto] })
-  legs: LegDto[];
+  legs!: LegDto[];
 
   @ApiPropertyOptional({ type: FareDto })
   fare?: FareDto;
@@ -227,10 +227,10 @@ export class ItineraryDto implements Itinerary {
 
 export class RoutePlanResponseDto implements RoutePlanResponse {
   @ApiProperty({ type: [ItineraryDto] })
-  itineraries: ItineraryDto[];
+  itineraries!: ItineraryDto[];
 
   @ApiProperty({ type: RoutePlanRequestDto })
-  requestParameters: RoutePlanRequestDto;
+  requestParameters!: RoutePlanRequestDto;
 
   @ApiPropertyOptional()
   debugOutput?: Record<string, unknown>;
@@ -239,7 +239,7 @@ export class RoutePlanResponseDto implements RoutePlanResponse {
 export class GeocodingRequestDto {
   @ApiProperty({ description: 'Address or location name to geocode' })
   @IsString()
-  query: string;
+  query!: string;
 
   @ApiPropertyOptional({ description: 'Limit number of results' })
   @IsOptional()
@@ -264,8 +264,8 @@ export class GeocodingRequestDto {
 
 export class GeocodingResponseDto {
   @ApiProperty()
-  query: string;
+  query!: string;
 
   @ApiProperty({ type: [LocationDto] })
-  results: LocationDto[];
+  results!: LocationDto[];
 }
