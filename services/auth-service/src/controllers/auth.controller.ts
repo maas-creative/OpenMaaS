@@ -63,7 +63,7 @@ export class AuthController {
     }
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Request() req: ExpressRequest & { user: AuthContext }, @Body() loginDto: LoginDto): Promise<AuthToken> {
+  async login(@Request() _req: ExpressRequest & { user: AuthContext }, @Body() loginDto: LoginDto): Promise<AuthToken> {
     return this.authService.login(loginDto);
   }
 
@@ -87,7 +87,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Request() req: ExpressRequest & { user: AuthContext }): Promise<KeycloakUserInfo> {
-    return this.authService.getUserInfo(req.user.sub);
+    return this.authService.getUserInfo((req.user as AuthContext).userId);
   }
 
   @Post('refresh')
@@ -110,7 +110,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async refreshToken(@Request() req: ExpressRequest & { user: AuthContext }): Promise<AuthToken> {
-    return this.authService.refreshToken(req.user.sub);
+    return this.authService.refreshToken((req.user as AuthContext).userId);
   }
 
   @Post('change-password')
@@ -127,7 +127,7 @@ export class AuthController {
     @Request() req: ExpressRequest & { user: AuthContext },
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<void> {
-    await this.authService.changePassword(req.user.sub, changePasswordDto);
+    await this.authService.changePassword((req.user as AuthContext).userId, changePasswordDto);
   }
 
   @Delete('account')
@@ -141,7 +141,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteAccount(@Request() req: ExpressRequest & { user: AuthContext }): Promise<void> {
-    await this.authService.deleteAccount(req.user.sub);
+    await this.authService.deleteAccount((req.user as AuthContext).userId);
   }
 
   @Get('health')

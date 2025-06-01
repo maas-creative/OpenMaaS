@@ -144,16 +144,16 @@ export class KeycloakService implements OnModuleInit {
 
   async validateUser(email: string, password: string): Promise<KeycloakUserInfo | null> {
     try {
-      const tokenResponse = await this.kcAdminClient.auth({
+      await this.kcAdminClient.auth({
         grantType: 'password',
         clientId: this.configService.get<string>('keycloak.clientId') || 'openmaas-backend',
         clientSecret: this.configService.get<string>('keycloak.clientSecret'),
         username: email,
         password,
-        scope: 'openid',
+        scopes: ['openid'],
       });
 
-      if (tokenResponse.accessToken) {
+      if (this.kcAdminClient.accessToken) {
         // Get user info
         const users = await this.kcAdminClient.users.find({
           realm: this.realm,
