@@ -22,20 +22,22 @@ export class PaymentMethodRepository {
   }
 
   async findByUserAndId(userId: string, id: string): Promise<PaymentMethodEntity | null> {
-    return this.repository.findOne({ 
-      where: { id, userId, isActive: true } 
+    return this.repository.findOne({
+      where: { id, userId, isActive: true },
     });
   }
 
-  async findByStripePaymentMethodId(stripePaymentMethodId: string): Promise<PaymentMethodEntity | null> {
-    return this.repository.findOne({ 
-      where: { stripePaymentMethodId } 
+  async findByStripePaymentMethodId(
+    stripePaymentMethodId: string,
+  ): Promise<PaymentMethodEntity | null> {
+    return this.repository.findOne({
+      where: { stripePaymentMethodId },
     });
   }
 
   async findDefaultByUser(userId: string): Promise<PaymentMethodEntity | null> {
-    return this.repository.findOne({ 
-      where: { userId, isDefault: true, isActive: true } 
+    return this.repository.findOne({
+      where: { userId, isDefault: true, isActive: true },
     });
   }
 
@@ -44,23 +46,20 @@ export class PaymentMethodRepository {
     return this.repository.save(entity);
   }
 
-  async update(id: string, paymentMethod: Partial<PaymentMethodEntity>): Promise<PaymentMethodEntity> {
+  async update(
+    id: string,
+    paymentMethod: Partial<PaymentMethodEntity>,
+  ): Promise<PaymentMethodEntity> {
     await this.repository.update(id, paymentMethod);
     return this.findById(id);
   }
 
   async setAsDefault(userId: string, id: string): Promise<void> {
     // First, unset any existing default
-    await this.repository.update(
-      { userId, isDefault: true },
-      { isDefault: false }
-    );
+    await this.repository.update({ userId, isDefault: true }, { isDefault: false });
 
     // Then set the new default
-    await this.repository.update(
-      { id, userId },
-      { isDefault: true }
-    );
+    await this.repository.update({ id, userId }, { isDefault: true });
   }
 
   async deactivate(id: string): Promise<void> {
@@ -68,9 +67,6 @@ export class PaymentMethodRepository {
   }
 
   async deleteByUser(userId: string, id: string): Promise<void> {
-    await this.repository.update(
-      { id, userId },
-      { isActive: false }
-    );
+    await this.repository.update({ id, userId }, { isActive: false });
   }
 }

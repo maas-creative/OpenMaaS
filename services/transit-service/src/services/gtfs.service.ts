@@ -30,7 +30,7 @@ export class GtfsService {
 
   async downloadAndProcessFeed(feed: FeedEntity): Promise<void> {
     const feedPath = path.join(this.storagePath, feed.feedId);
-    
+
     try {
       // Create directory for feed
       await fs.mkdir(feedPath, { recursive: true });
@@ -57,7 +57,7 @@ export class GtfsService {
 
   private async downloadFile(url: string, destination: string): Promise<void> {
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to download file: ${response.statusText}`);
     }
@@ -72,10 +72,7 @@ export class GtfsService {
   }
 
   private async extractZip(zipPath: string, outputPath: string): Promise<void> {
-    await pipeline(
-      createReadStream(zipPath),
-      unzipper.Extract({ path: outputPath }),
-    );
+    await pipeline(createReadStream(zipPath), unzipper.Extract({ path: outputPath }));
   }
 
   private async processGtfsFiles(feedPath: string, feedId: string): Promise<void> {
@@ -88,7 +85,7 @@ export class GtfsService {
 
   private async processAgencies(feedPath: string, feedId: string): Promise<void> {
     const agencyFile = path.join(feedPath, 'agency.txt');
-    
+
     try {
       await fs.access(agencyFile);
     } catch {
@@ -103,7 +100,7 @@ export class GtfsService {
       trim: true,
     });
 
-    parser.on('readable', function() {
+    parser.on('readable', function () {
       let record;
       while ((record = parser.read()) !== null) {
         agencies.push({
@@ -135,7 +132,7 @@ export class GtfsService {
 
   private async processStops(feedPath: string, feedId: string): Promise<void> {
     const stopsFile = path.join(feedPath, 'stops.txt');
-    
+
     try {
       await fs.access(stopsFile);
     } catch {
@@ -150,7 +147,7 @@ export class GtfsService {
       trim: true,
     });
 
-    parser.on('readable', function() {
+    parser.on('readable', function () {
       let record;
       while ((record = parser.read()) !== null) {
         stops.push({
@@ -192,7 +189,7 @@ export class GtfsService {
 
   private async processRoutes(feedPath: string, feedId: string): Promise<void> {
     const routesFile = path.join(feedPath, 'routes.txt');
-    
+
     try {
       await fs.access(routesFile);
     } catch {
@@ -207,7 +204,7 @@ export class GtfsService {
       trim: true,
     });
 
-    parser.on('readable', function() {
+    parser.on('readable', function () {
       let record;
       while ((record = parser.read()) !== null) {
         routes.push({
@@ -245,7 +242,7 @@ export class GtfsService {
     await this.routeRepository.deleteByFeed(feedId);
     await this.stopRepository.deleteByFeed(feedId);
     await this.agencyRepository.deleteByFeed(feedId);
-    
+
     // Clean up files
     const feedPath = path.join(this.storagePath, feedId);
     try {

@@ -9,7 +9,7 @@ export interface Payment {
   provider: PaymentProvider;
   providerTransactionId?: string;
   description?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
   completedAt?: Date;
@@ -37,7 +37,7 @@ export interface PaymentMethod {
   expiryYear?: number;
   holderName?: string;
   isDefault?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export enum PaymentMethodType {
@@ -86,14 +86,14 @@ export interface CreatePaymentDto {
   currency: string;
   paymentMethodId: string;
   description?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   returnUrl?: string;
 }
 
 export interface ProcessPaymentDto {
   paymentIntentId?: string;
   paymentMethodId?: string;
-  confirmationDetails?: any;
+  confirmationDetails?: Record<string, unknown>;
 }
 
 export interface CreateRefundDto {

@@ -45,6 +45,7 @@ OpenMaaSは、公共交通、ライドシェア、バイクシェアなどの様
 ## 🛠️ 技術スタック
 
 ### バックエンド
+
 - **主要言語**: TypeScript (Node.js/NestJS)
 - **補助言語**: Python (データ処理), Java (既存ツール連携)
 - **データベース**: PostgreSQL + PostGIS, Redis
@@ -52,10 +53,12 @@ OpenMaaSは、公共交通、ライドシェア、バイクシェアなどの様
 - **APIゲートウェイ**: Kong
 
 ### フロントエンド
+
 - **Web**: React + TypeScript + Material-UI
 - **Mobile**: Flutter + Dart
 
 ### インフラ
+
 - **コンテナ**: Docker
 - **オーケストレーション**: Kubernetes
 - **CI/CD**: GitHub Actions

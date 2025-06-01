@@ -1,16 +1,22 @@
-import { Injectable, Logger, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PaymentRepository } from '../repositories/payment.repository';
 import { PaymentMethodRepository } from '../repositories/payment-method.repository';
 import { RefundRepository } from '../repositories/refund.repository';
 import { StripeService } from './stripe.service';
-import { 
-  CreatePaymentDto, 
-  ProcessPaymentDto, 
+import {
+  CreatePaymentDto,
+  ProcessPaymentDto,
   CreateRefundDto,
   PaymentResponseDto,
   PaymentSessionResponseDto,
-  PaymentHistoryDto
+  PaymentHistoryDto,
 } from '../dto/payment.dto';
 import { PaymentStatus, PaymentProvider, RefundStatus } from '@openmaas/types';
 import Stripe from 'stripe';
@@ -31,14 +37,19 @@ export class PaymentService {
     try {
       // Check for idempotency
       if (dto.idempotencyKey) {
-        const existingPayment = await this.paymentRepository.findByIdempotencyKey(dto.idempotencyKey);
+        const existingPayment = await this.paymentRepository.findByIdempotencyKey(
+          dto.idempotencyKey,
+        );
         if (existingPayment) {
           return this.createSessionFromPayment(existingPayment);
         }
       }
 
       // Validate payment method
-      const paymentMethod = await this.paymentMethodRepository.findByUserAndId(userId, dto.paymentMethodId);
+      const paymentMethod = await this.paymentMethodRepository.findByUserAndId(
+        userId,
+        dto.paymentMethodId,
+      );
       if (!paymentMethod) {
         throw new BadRequestException('Invalid payment method');
       }
@@ -52,7 +63,7 @@ export class PaymentService {
           metadata: { userId },
         });
         stripeCustomerId = customer.id;
-        
+
         // Update payment method with customer ID
         await this.paymentMethodRepository.update(paymentMethod.id, {
           stripeCustomerId,
@@ -98,9 +109,13 @@ export class PaymentService {
     }
   }
 
-  async processPayment(userId: string, paymentId: string, dto: ProcessPaymentDto): Promise<PaymentResponseDto> {
+  async processPayment(
+    userId: string,
+    paymentId: string,
+    dto: ProcessPaymentDto,
+  ): Promise<PaymentResponseDto> {
     const payment = await this.paymentRepository.findById(paymentId);
-    
+
     if (!payment) {
       throw new NotFoundException('Payment not found');
     }
@@ -122,7 +137,7 @@ export class PaymentService {
 
       // Update payment status based on Stripe response
       const status = this.mapStripeStatus(paymentIntent.status);
-      
+
       await this.paymentRepository.updateStatus(payment.id, status, {
         providerTransactionId: paymentIntent.id,
         stripeChargeId: paymentIntent.charges?.data[0]?.id,
@@ -130,23 +145,23 @@ export class PaymentService {
       });
 
       const updatedPayment = await this.paymentRepository.findById(payment.id);
-      
+
       this.logger.log(`Processed payment ${payment.id} with status ${status}`);
       return this.toResponseDto(updatedPayment);
     } catch (error) {
       this.logger.error(`Error processing payment ${payment.id}:`, error);
-      
+
       await this.paymentRepository.updateStatus(payment.id, PaymentStatus.FAILED, {
         failureReason: error.message,
       });
-      
+
       throw new BadRequestException('Payment processing failed');
     }
   }
 
   async getPayment(userId: string, paymentId: string): Promise<PaymentResponseDto> {
     const payment = await this.paymentRepository.findById(paymentId);
-    
+
     if (!payment) {
       throw new NotFoundException('Payment not found');
     }
@@ -170,7 +185,7 @@ export class PaymentService {
     );
 
     return {
-      payments: payments.map(p => this.toResponseDto(p)),
+      payments: payments.map((p) => this.toResponseDto(p)),
       total,
       limit: query.limit || 20,
       offset: query.offset || 0,
@@ -179,7 +194,7 @@ export class PaymentService {
 
   async createRefund(userId: string, dto: CreateRefundDto): Promise<any> {
     const payment = await this.paymentRepository.findById(dto.paymentId);
-    
+
     if (!payment) {
       throw new NotFoundException('Payment not found');
     }
@@ -196,7 +211,7 @@ export class PaymentService {
     const refundWindowDays = this.configService.get('payment.refundWindowDays');
     const refundDeadline = new Date(payment.completedAt);
     refundDeadline.setDate(refundDeadline.getDate() + refundWindowDays);
-    
+
     if (new Date() > refundDeadline) {
       throw new BadRequestException('Refund window has expired');
     }
@@ -204,7 +219,7 @@ export class PaymentService {
     // Calculate refund amount
     const refundAmount = dto.amount || payment.amount;
     const totalRefunded = await this.refundRepository.getTotalRefundedAmount(payment.id);
-    
+
     if (totalRefunded + refundAmount > payment.amount) {
       throw new BadRequestException('Refund amount exceeds payment amount');
     }
@@ -237,7 +252,7 @@ export class PaymentService {
       await this.paymentRepository.incrementRefundedAmount(payment.id, refundAmount);
 
       this.logger.log(`Created refund ${refund.id} for payment ${payment.id}`);
-      
+
       return {
         id: refund.id,
         paymentId: refund.paymentId,
@@ -260,19 +275,19 @@ export class PaymentService {
       case 'payment_intent.succeeded':
         await this.handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
         break;
-      
+
       case 'payment_intent.payment_failed':
         await this.handlePaymentIntentFailed(event.data.object as Stripe.PaymentIntent);
         break;
-      
+
       case 'charge.refunded':
         await this.handleChargeRefunded(event.data.object as Stripe.Charge);
         break;
-      
+
       case 'refund.updated':
         await this.handleRefundUpdated(event.data.object as Stripe.Refund);
         break;
-      
+
       default:
         this.logger.debug(`Unhandled webhook event type: ${event.type}`);
     }
@@ -280,7 +295,7 @@ export class PaymentService {
 
   private async handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent): Promise<void> {
     const payment = await this.paymentRepository.findByStripePaymentIntentId(paymentIntent.id);
-    
+
     if (!payment) {
       this.logger.warn(`Payment not found for payment intent ${paymentIntent.id}`);
       return;
@@ -297,7 +312,7 @@ export class PaymentService {
 
   private async handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent): Promise<void> {
     const payment = await this.paymentRepository.findByStripePaymentIntentId(paymentIntent.id);
-    
+
     if (!payment) {
       this.logger.warn(`Payment not found for payment intent ${paymentIntent.id}`);
       return;
@@ -316,14 +331,16 @@ export class PaymentService {
       return;
     }
 
-    const payment = await this.paymentRepository.findByStripePaymentIntentId(charge.payment_intent as string);
-    
+    const payment = await this.paymentRepository.findByStripePaymentIntentId(
+      charge.payment_intent as string,
+    );
+
     if (!payment) {
       return;
     }
 
     const refundedAmount = charge.amount_refunded / 100;
-    
+
     if (refundedAmount >= payment.amount) {
       await this.paymentRepository.updateStatus(payment.id, PaymentStatus.REFUNDED);
     } else if (refundedAmount > 0) {
@@ -333,17 +350,18 @@ export class PaymentService {
 
   private async handleRefundUpdated(refund: Stripe.Refund): Promise<void> {
     const refundEntity = await this.refundRepository.findByStripeRefundId(refund.id);
-    
+
     if (!refundEntity) {
       this.logger.warn(`Refund not found for Stripe refund ${refund.id}`);
       return;
     }
 
-    const status = refund.status === 'succeeded' 
-      ? RefundStatus.COMPLETED 
-      : refund.status === 'failed' 
-        ? RefundStatus.FAILED 
-        : RefundStatus.PROCESSING;
+    const status =
+      refund.status === 'succeeded'
+        ? RefundStatus.COMPLETED
+        : refund.status === 'failed'
+          ? RefundStatus.FAILED
+          : RefundStatus.PROCESSING;
 
     await this.refundRepository.updateStatus(refundEntity.id, status, {
       failureReason: refund.failure_reason,
@@ -367,7 +385,10 @@ export class PaymentService {
     }
   }
 
-  private createSessionFromPayment(payment: any, paymentIntent?: Stripe.PaymentIntent): PaymentSessionResponseDto {
+  private createSessionFromPayment(
+    payment: any,
+    paymentIntent?: Stripe.PaymentIntent,
+  ): PaymentSessionResponseDto {
     return {
       id: payment.id,
       clientSecret: paymentIntent?.client_secret || '',
@@ -398,7 +419,7 @@ export class PaymentService {
       updatedAt: entity.updatedAt,
       completedAt: entity.completedAt,
       failureReason: entity.failureReason,
-      refunds: entity.refunds?.map(r => ({
+      refunds: entity.refunds?.map((r) => ({
         id: r.id,
         paymentId: r.paymentId,
         amount: r.amount,

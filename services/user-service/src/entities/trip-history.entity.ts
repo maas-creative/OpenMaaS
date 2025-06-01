@@ -101,10 +101,13 @@ export class TripHistory {
 
   get mainMode(): string {
     // Return the mode with the longest distance
-    const modeDistances = this.legs.reduce((acc, leg) => {
-      acc[leg.mode] = (acc[leg.mode] || 0) + leg.distance;
-      return acc;
-    }, {} as Record<string, number>);
+    const modeDistances = this.legs.reduce(
+      (acc, leg) => {
+        acc[leg.mode] = (acc[leg.mode] || 0) + leg.distance;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     return Object.entries(modeDistances).sort(([, a], [, b]) => b - a)[0]?.[0] || 'WALK';
   }

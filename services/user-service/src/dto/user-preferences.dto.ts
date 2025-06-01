@@ -1,12 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsString,
-  IsBoolean,
-  IsOptional,
-  IsEnum,
-  ValidateNested,
-  IsObject,
-} from 'class-validator';
+import { IsString, IsBoolean, IsOptional, IsEnum, ValidateNested, IsObject } from 'class-validator';
 import { Type } from 'class-transformer';
 import { NotificationPreferences, AccessibilityPreferences } from '@openmaas/types';
 

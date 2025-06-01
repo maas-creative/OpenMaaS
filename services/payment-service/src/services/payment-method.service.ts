@@ -13,10 +13,15 @@ export class PaymentMethodService {
     private readonly stripeService: StripeService,
   ) {}
 
-  async addPaymentMethod(userId: string, dto: CreatePaymentMethodDto): Promise<PaymentMethodResponseDto> {
+  async addPaymentMethod(
+    userId: string,
+    dto: CreatePaymentMethodDto,
+  ): Promise<PaymentMethodResponseDto> {
     try {
       // Check if payment method already exists
-      const existing = await this.paymentMethodRepository.findByStripePaymentMethodId(dto.stripePaymentMethodId);
+      const existing = await this.paymentMethodRepository.findByStripePaymentMethodId(
+        dto.stripePaymentMethodId,
+      );
       if (existing) {
         throw new BadRequestException('Payment method already exists');
       }
@@ -24,7 +29,7 @@ export class PaymentMethodService {
       // Get or create Stripe customer
       let stripeCustomerId: string;
       const existingMethods = await this.paymentMethodRepository.findAll(userId);
-      
+
       if (existingMethods.length > 0 && existingMethods[0].stripeCustomerId) {
         stripeCustomerId = existingMethods[0].stripeCustomerId;
       } else {
@@ -73,12 +78,15 @@ export class PaymentMethodService {
 
   async getPaymentMethods(userId: string): Promise<PaymentMethodResponseDto[]> {
     const methods = await this.paymentMethodRepository.findAll(userId);
-    return methods.map(m => this.toResponseDto(m));
+    return methods.map((m) => this.toResponseDto(m));
   }
 
-  async getPaymentMethod(userId: string, paymentMethodId: string): Promise<PaymentMethodResponseDto> {
+  async getPaymentMethod(
+    userId: string,
+    paymentMethodId: string,
+  ): Promise<PaymentMethodResponseDto> {
     const method = await this.paymentMethodRepository.findByUserAndId(userId, paymentMethodId);
-    
+
     if (!method) {
       throw new NotFoundException('Payment method not found');
     }
@@ -86,24 +94,27 @@ export class PaymentMethodService {
     return this.toResponseDto(method);
   }
 
-  async setDefaultPaymentMethod(userId: string, paymentMethodId: string): Promise<PaymentMethodResponseDto> {
+  async setDefaultPaymentMethod(
+    userId: string,
+    paymentMethodId: string,
+  ): Promise<PaymentMethodResponseDto> {
     const method = await this.paymentMethodRepository.findByUserAndId(userId, paymentMethodId);
-    
+
     if (!method) {
       throw new NotFoundException('Payment method not found');
     }
 
     await this.paymentMethodRepository.setAsDefault(userId, paymentMethodId);
-    
+
     const updated = await this.paymentMethodRepository.findById(paymentMethodId);
     this.logger.log(`Set payment method ${paymentMethodId} as default for user ${userId}`);
-    
+
     return this.toResponseDto(updated);
   }
 
   async removePaymentMethod(userId: string, paymentMethodId: string): Promise<void> {
     const method = await this.paymentMethodRepository.findByUserAndId(userId, paymentMethodId);
-    
+
     if (!method) {
       throw new NotFoundException('Payment method not found');
     }
@@ -152,8 +163,10 @@ export class PaymentMethodService {
 
       // Sync with database
       for (const stripeMethod of stripeMethods) {
-        const existing = await this.paymentMethodRepository.findByStripePaymentMethodId(stripeMethod.id);
-        
+        const existing = await this.paymentMethodRepository.findByStripePaymentMethodId(
+          stripeMethod.id,
+        );
+
         if (!existing) {
           // Add new payment method found in Stripe
           await this.paymentMethodRepository.create({

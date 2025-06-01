@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoggerService } from '../logger';
@@ -17,16 +12,10 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url, body } = request;
     const now = Date.now();
 
-    this.logger.log(
-      `Incoming Request: ${method} ${url}`,
-      'LoggingInterceptor',
-    );
+    this.logger.log(`Incoming Request: ${method} ${url}`, 'LoggingInterceptor');
 
     if (process.env.NODE_ENV === 'development' && body) {
-      this.logger.debug(
-        `Request Body: ${JSON.stringify(body)}`,
-        'LoggingInterceptor',
-      );
+      this.logger.debug(`Request Body: ${JSON.stringify(body)}`, 'LoggingInterceptor');
     }
 
     return next.handle().pipe(

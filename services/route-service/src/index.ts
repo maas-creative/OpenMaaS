@@ -44,7 +44,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(port);
-  
+
   const logger = new LoggerService('Bootstrap');
   logger.log(`Route Service is running on port ${port}`);
   logger.log(`API documentation available at http://localhost:${port}/api`);

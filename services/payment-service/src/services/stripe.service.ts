@@ -1,11 +1,11 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
-import { 
-  CreatePaymentIntentParams, 
-  CreateCustomerParams, 
+import {
+  CreatePaymentIntentParams,
+  CreateCustomerParams,
   AttachPaymentMethodParams,
-  CreateRefundParams 
+  CreateRefundParams,
 } from '../interfaces/stripe.interfaces';
 
 @Injectable()
@@ -91,16 +91,19 @@ export class StripeService {
     }
   }
 
-  async confirmPaymentIntent(paymentIntentId: string, paymentMethodId?: string): Promise<Stripe.PaymentIntent> {
+  async confirmPaymentIntent(
+    paymentIntentId: string,
+    paymentMethodId?: string,
+  ): Promise<Stripe.PaymentIntent> {
     try {
       const params: Stripe.PaymentIntentConfirmParams = {};
-      
+
       if (paymentMethodId) {
         params.payment_method = paymentMethodId;
       }
 
       const paymentIntent = await this.stripe.paymentIntents.confirm(paymentIntentId, params);
-      
+
       this.logger.log(`Confirmed payment intent: ${paymentIntentId}`);
       return paymentIntent;
     } catch (error) {
@@ -122,12 +125,13 @@ export class StripeService {
 
   async attachPaymentMethod(params: AttachPaymentMethodParams): Promise<Stripe.PaymentMethod> {
     try {
-      const paymentMethod = await this.stripe.paymentMethods.attach(
-        params.paymentMethodId,
-        { customer: params.customerId },
-      );
+      const paymentMethod = await this.stripe.paymentMethods.attach(params.paymentMethodId, {
+        customer: params.customerId,
+      });
 
-      this.logger.log(`Attached payment method ${params.paymentMethodId} to customer ${params.customerId}`);
+      this.logger.log(
+        `Attached payment method ${params.paymentMethodId} to customer ${params.customerId}`,
+      );
       return paymentMethod;
     } catch (error) {
       this.logger.error('Failed to attach payment method:', error);
@@ -152,7 +156,7 @@ export class StripeService {
   async detachPaymentMethod(paymentMethodId: string): Promise<Stripe.PaymentMethod> {
     try {
       const paymentMethod = await this.stripe.paymentMethods.detach(paymentMethodId);
-      
+
       this.logger.log(`Detached payment method: ${paymentMethodId}`);
       return paymentMethod;
     } catch (error) {
@@ -181,7 +185,7 @@ export class StripeService {
       }
 
       const refund = await this.stripe.refunds.create(refundParams);
-      
+
       this.logger.log(`Created refund: ${refund.id}`);
       return refund;
     } catch (error) {
@@ -201,7 +205,7 @@ export class StripeService {
 
   async constructWebhookEvent(payload: string | Buffer, signature: string): Promise<Stripe.Event> {
     const webhookSecret = this.configService.get('stripe.webhookSecret');
-    
+
     try {
       return this.stripe.webhooks.constructEvent(payload, signature, webhookSecret);
     } catch (error) {

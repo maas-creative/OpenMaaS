@@ -12,7 +12,7 @@ export class AgencyRepository {
 
   async findAll(feedId?: string): Promise<AgencyEntity[]> {
     const query = this.repository.createQueryBuilder('agency');
-    
+
     if (feedId) {
       query.where('agency.feedId = :feedId', { feedId });
     }
@@ -36,10 +36,7 @@ export class AgencyRepository {
     return this.repository.save(entity);
   }
 
-  async update(
-    agencyId: string,
-    agency: Partial<AgencyEntity>,
-  ): Promise<AgencyEntity> {
+  async update(agencyId: string, agency: Partial<AgencyEntity>): Promise<AgencyEntity> {
     await this.repository.update({ agencyId }, agency);
     return this.findById(agencyId);
   }

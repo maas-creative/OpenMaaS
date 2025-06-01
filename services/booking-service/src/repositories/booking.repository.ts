@@ -59,7 +59,11 @@ export class BookingRepository {
     return this.repository.findOne({ where: { confirmationCode } });
   }
 
-  async findByUserId(userId: string, limit: number = 20, offset: number = 0): Promise<BookingEntity[]> {
+  async findByUserId(
+    userId: string,
+    limit: number = 20,
+    offset: number = 0,
+  ): Promise<BookingEntity[]> {
     return this.repository.find({
       where: { userId },
       order: { createdAt: 'DESC' },
@@ -119,13 +123,17 @@ export class BookingRepository {
     return this.findById(id);
   }
 
-  async updateStatus(id: string, status: BookingStatus, metadata?: Record<string, any>): Promise<void> {
+  async updateStatus(
+    id: string,
+    status: BookingStatus,
+    metadata?: Record<string, any>,
+  ): Promise<void> {
     const updateData: Partial<BookingEntity> = { status };
-    
+
     if (status === BookingStatus.CANCELLED) {
       updateData.cancelledAt = new Date();
     }
-    
+
     if (metadata) {
       updateData.metadata = metadata;
     }

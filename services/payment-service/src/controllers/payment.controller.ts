@@ -12,26 +12,20 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PaymentService } from '../services/payment.service';
 import { PaymentMethodService } from '../services/payment-method.service';
-import { 
-  CreatePaymentDto, 
-  ProcessPaymentDto, 
+import {
+  CreatePaymentDto,
+  ProcessPaymentDto,
   CreateRefundDto,
   CreatePaymentMethodDto,
   PaymentResponseDto,
   PaymentSessionResponseDto,
   PaymentMethodResponseDto,
   PaymentHistoryDto,
-  RefundResponseDto
+  RefundResponseDto,
 } from '../dto/payment.dto';
 
 @ApiTags('payments')
@@ -84,10 +78,7 @@ export class PaymentController {
     status: 200,
     description: 'Payment history retrieved successfully',
   })
-  async getPaymentHistory(
-    @Request() req: any,
-    @Query() query: PaymentHistoryDto,
-  ): Promise<any> {
+  async getPaymentHistory(@Request() req: any, @Query() query: PaymentHistoryDto): Promise<any> {
     return this.paymentService.getPaymentHistory(req.user.userId, query);
   }
 
@@ -100,10 +91,7 @@ export class PaymentController {
     type: PaymentResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Payment not found' })
-  async getPayment(
-    @Request() req: any,
-    @Param('id') id: string,
-  ): Promise<PaymentResponseDto> {
+  async getPayment(@Request() req: any, @Param('id') id: string): Promise<PaymentResponseDto> {
     return this.paymentService.getPayment(req.user.userId, id);
   }
 
@@ -116,10 +104,7 @@ export class PaymentController {
   })
   @ApiResponse({ status: 400, description: 'Invalid refund request' })
   @ApiResponse({ status: 404, description: 'Payment not found' })
-  async createRefund(
-    @Request() req: any,
-    @Body() dto: CreateRefundDto,
-  ): Promise<any> {
+  async createRefund(@Request() req: any, @Body() dto: CreateRefundDto): Promise<any> {
     return this.paymentService.createRefund(req.user.userId, dto);
   }
 
@@ -189,10 +174,7 @@ export class PaymentController {
   @ApiResponse({ status: 204, description: 'Payment method removed successfully' })
   @ApiResponse({ status: 404, description: 'Payment method not found' })
   @ApiResponse({ status: 400, description: 'Cannot remove payment method' })
-  async removePaymentMethod(
-    @Request() req: any,
-    @Param('id') id: string,
-  ): Promise<void> {
+  async removePaymentMethod(@Request() req: any, @Param('id') id: string): Promise<void> {
     return this.paymentMethodService.removePaymentMethod(req.user.userId, id);
   }
 

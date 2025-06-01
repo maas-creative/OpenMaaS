@@ -61,7 +61,7 @@ export class FeedService {
 
     // Clean up GTFS data
     await this.gtfsService.cleanupFeedData(feed.feedId);
-    
+
     // Delete feed record
     await this.feedRepository.delete(id);
   }
@@ -93,18 +93,18 @@ export class FeedService {
     this.isUpdating = true;
     try {
       const staleFeeds = await this.feedRepository.findStaleFeeds();
-      
+
       if (staleFeeds.length === 0) {
         return;
       }
 
       this.logger.log(`Found ${staleFeeds.length} stale feeds to update`);
-      
+
       for (const feed of staleFeeds) {
         const now = new Date();
         const lastUpdate = feed.lastUpdated?.getTime() || 0;
         const timeSinceUpdate = now.getTime() - lastUpdate;
-        
+
         if (timeSinceUpdate >= feed.updateFrequency * 1000) {
           await this.updateFeed(feed.id);
         }

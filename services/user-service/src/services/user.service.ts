@@ -138,7 +138,7 @@ export class UserService {
   async updateRoles(id: string, roles: UserRole[]): Promise<User> {
     const user = await this.findById(id);
     user.roles = roles;
-    
+
     const updatedUser = await this.userRepository.update(id, { roles });
     if (!updatedUser) {
       throw new BadRequestException('Failed to update user roles');
@@ -150,7 +150,7 @@ export class UserService {
   async addRole(id: string, role: UserRole): Promise<User> {
     const user = await this.findById(id);
     user.addRole(role);
-    
+
     const updatedUser = await this.userRepository.update(id, { roles: user.roles });
     if (!updatedUser) {
       throw new BadRequestException('Failed to add role');
@@ -162,7 +162,7 @@ export class UserService {
   async removeRole(id: string, role: UserRole): Promise<User> {
     const user = await this.findById(id);
     user.removeRole(role);
-    
+
     const updatedUser = await this.userRepository.update(id, { roles: user.roles });
     if (!updatedUser) {
       throw new BadRequestException('Failed to remove role');

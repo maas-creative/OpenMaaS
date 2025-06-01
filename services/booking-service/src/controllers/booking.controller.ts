@@ -22,13 +22,13 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { BookingService } from '../services/booking.service';
-import { 
-  CreateBookingDto, 
-  UpdateBookingDto, 
-  CancelBookingDto, 
-  BookingSearchDto, 
-  BookingResponseDto, 
-  BookingListResponseDto 
+import {
+  CreateBookingDto,
+  UpdateBookingDto,
+  CancelBookingDto,
+  BookingSearchDto,
+  BookingResponseDto,
+  BookingListResponseDto,
 } from '../dto/booking.dto';
 
 @ApiTags('bookings')
@@ -115,10 +115,7 @@ export class BookingController {
   })
   @ApiResponse({ status: 404, description: 'Booking not found' })
   @ApiResponse({ status: 403, description: 'Access denied' })
-  async getBooking(
-    @Request() req: any,
-    @Param('id') id: string,
-  ): Promise<BookingResponseDto> {
+  async getBooking(@Request() req: any, @Param('id') id: string): Promise<BookingResponseDto> {
     return this.bookingService.getBooking(req.user.userId, id);
   }
 

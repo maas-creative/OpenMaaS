@@ -1,4 +1,14 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from 'typeorm';
 import { WheelchairAccessible, BikesAllowed } from '@openmaas/types';
 import { RouteEntity } from './route.entity';
 import { StopTimeEntity } from './stop-time.entity';

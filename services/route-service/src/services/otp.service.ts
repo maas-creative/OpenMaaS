@@ -1,7 +1,17 @@
-import { Injectable, Logger, BadRequestException, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  BadRequestException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import fetch from 'node-fetch';
-import { RoutePlanRequestDto, RoutePlanResponseDto, GeocodingRequestDto, GeocodingResponseDto } from '../dto/route-plan.dto';
+import {
+  RoutePlanRequestDto,
+  RoutePlanResponseDto,
+  GeocodingRequestDto,
+  GeocodingResponseDto,
+} from '../dto/route-plan.dto';
 import { TransportMode } from '@openmaas/types';
 
 @Injectable()
@@ -19,13 +29,13 @@ export class OtpService {
     try {
       const otpParams = this.buildOtpParams(request);
       const url = `${this.otpUrl}/plan?${otpParams.toString()}`;
-      
+
       this.logger.debug(`OTP request: ${url}`);
 
       const response = await fetch(url, {
         timeout: this.timeout,
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'User-Agent': 'OpenMaaS-RouteService/1.0',
         },
       });
@@ -37,21 +47,19 @@ export class OtpService {
       }
 
       const otpResponse = await response.json();
-      
+
       if (otpResponse.error) {
-        throw new BadRequestException(
-          `OTP error: ${otpResponse.error.message || 'Unknown error'}`,
-        );
+        throw new BadRequestException(`OTP error: ${otpResponse.error.message || 'Unknown error'}`);
       }
 
       return this.transformOtpResponse(otpResponse, request);
     } catch (error) {
       this.logger.error('Error planning route with OTP:', error);
-      
+
       if (error instanceof BadRequestException || error instanceof ServiceUnavailableException) {
         throw error;
       }
-      
+
       throw new ServiceUnavailableException('Route planning service temporarily unavailable');
     }
   }
@@ -69,13 +77,13 @@ export class OtpService {
       }
 
       const url = `${this.otpUrl}/geocoding?${params.toString()}`;
-      
+
       this.logger.debug(`OTP geocoding request: ${url}`);
 
       const response = await fetch(url, {
         timeout: this.timeout,
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'User-Agent': 'OpenMaaS-RouteService/1.0',
         },
       });
@@ -87,23 +95,26 @@ export class OtpService {
       }
 
       const otpResponse = await response.json();
-      
+
       return {
         query: request.query,
-        results: otpResponse.features?.map(feature => ({
-          lat: feature.geometry.coordinates[1],
-          lon: feature.geometry.coordinates[0],
-          name: feature.properties.label || feature.properties.name,
-          stopId: feature.properties.gid?.startsWith('gtfs') ? feature.properties.source_id : undefined,
-        })) || [],
+        results:
+          otpResponse.features?.map((feature) => ({
+            lat: feature.geometry.coordinates[1],
+            lon: feature.geometry.coordinates[0],
+            name: feature.properties.label || feature.properties.name,
+            stopId: feature.properties.gid?.startsWith('gtfs')
+              ? feature.properties.source_id
+              : undefined,
+          })) || [],
       };
     } catch (error) {
       this.logger.error('Error geocoding with OTP:', error);
-      
+
       if (error instanceof ServiceUnavailableException) {
         throw error;
       }
-      
+
       throw new ServiceUnavailableException('Geocoding service temporarily unavailable');
     }
   }
@@ -132,8 +143,8 @@ export class OtpService {
     }
 
     // Walking/biking parameters
-    const maxWalkDistance = request.maxWalkDistance || 
-      this.configService.get('routePlanning.maxWalkDistance');
+    const maxWalkDistance =
+      request.maxWalkDistance || this.configService.get('routePlanning.maxWalkDistance');
     params.append('maxWalkDistance', maxWalkDistance.toString());
 
     if (request.modes?.includes(TransportMode.BICYCLE)) {
@@ -147,8 +158,8 @@ export class OtpService {
     }
 
     // Number of itineraries
-    const numItineraries = request.numItineraries || 
-      this.configService.get('routePlanning.defaultNumItineraries');
+    const numItineraries =
+      request.numItineraries || this.configService.get('routePlanning.defaultNumItineraries');
     params.append('numItineraries', numItineraries.toString());
 
     // Preferred/avoided routes
@@ -169,85 +180,99 @@ export class OtpService {
 
   private mapToOtpModes(modes: TransportMode[]): string[] {
     const otpModes = [];
-    
+
     if (modes.includes(TransportMode.WALK)) {
       otpModes.push('WALK');
     }
-    
+
     if (modes.includes(TransportMode.BICYCLE)) {
       otpModes.push('BICYCLE');
     }
-    
+
     if (modes.includes(TransportMode.CAR)) {
       otpModes.push('CAR');
     }
-    
-    if (modes.some(mode => [
-      TransportMode.TRANSIT,
-      TransportMode.BUS,
-      TransportMode.TRAM,
-      TransportMode.RAIL,
-      TransportMode.SUBWAY,
-      TransportMode.FERRY,
-    ].includes(mode))) {
+
+    if (
+      modes.some((mode) =>
+        [
+          TransportMode.TRANSIT,
+          TransportMode.BUS,
+          TransportMode.TRAM,
+          TransportMode.RAIL,
+          TransportMode.SUBWAY,
+          TransportMode.FERRY,
+        ].includes(mode),
+      )
+    ) {
       otpModes.push('TRANSIT');
     }
 
     return otpModes.length > 0 ? otpModes : ['WALK', 'TRANSIT'];
   }
 
-  private transformOtpResponse(otpResponse: any, request: RoutePlanRequestDto): RoutePlanResponseDto {
-    const itineraries = otpResponse.plan?.itineraries?.map(itinerary => ({
-      startTime: new Date(itinerary.startTime),
-      endTime: new Date(itinerary.endTime),
-      duration: itinerary.duration,
-      transfers: itinerary.transfers || 0,
-      walkDistance: itinerary.walkDistance || 0,
-      walkTime: itinerary.walkTime || 0,
-      waitingTime: itinerary.waitingTime || 0,
-      legs: itinerary.legs?.map(leg => ({
-        startTime: new Date(leg.startTime),
-        endTime: new Date(leg.endTime),
-        duration: leg.duration,
-        distance: leg.distance,
-        mode: this.mapFromOtpMode(leg.mode),
-        from: {
-          name: leg.from.name,
-          lat: leg.from.lat,
-          lon: leg.from.lon,
-          stopId: leg.from.stopId,
-          platformCode: leg.from.platformCode,
-        },
-        to: {
-          name: leg.to.name,
-          lat: leg.to.lat,
-          lon: leg.to.lon,
-          stopId: leg.to.stopId,
-          platformCode: leg.to.platformCode,
-        },
-        legGeometry: leg.legGeometry,
-        realTime: leg.realTime,
-        pathway: leg.pathway,
-        route: leg.route,
-        trip: leg.trip,
-        intermediateStops: leg.intermediateStops,
-        alerts: leg.alerts,
-      })) || [],
-      fare: itinerary.fare ? {
-        type: itinerary.fare.type,
-        currency: itinerary.fare.currency,
-        cents: itinerary.fare.cents,
-        components: itinerary.fare.details?.components || [],
-      } : undefined,
-    })) || [];
+  private transformOtpResponse(
+    otpResponse: any,
+    request: RoutePlanRequestDto,
+  ): RoutePlanResponseDto {
+    const itineraries =
+      otpResponse.plan?.itineraries?.map((itinerary) => ({
+        startTime: new Date(itinerary.startTime),
+        endTime: new Date(itinerary.endTime),
+        duration: itinerary.duration,
+        transfers: itinerary.transfers || 0,
+        walkDistance: itinerary.walkDistance || 0,
+        walkTime: itinerary.walkTime || 0,
+        waitingTime: itinerary.waitingTime || 0,
+        legs:
+          itinerary.legs?.map((leg) => ({
+            startTime: new Date(leg.startTime),
+            endTime: new Date(leg.endTime),
+            duration: leg.duration,
+            distance: leg.distance,
+            mode: this.mapFromOtpMode(leg.mode),
+            from: {
+              name: leg.from.name,
+              lat: leg.from.lat,
+              lon: leg.from.lon,
+              stopId: leg.from.stopId,
+              platformCode: leg.from.platformCode,
+            },
+            to: {
+              name: leg.to.name,
+              lat: leg.to.lat,
+              lon: leg.to.lon,
+              stopId: leg.to.stopId,
+              platformCode: leg.to.platformCode,
+            },
+            legGeometry: leg.legGeometry,
+            realTime: leg.realTime,
+            pathway: leg.pathway,
+            route: leg.route,
+            trip: leg.trip,
+            intermediateStops: leg.intermediateStops,
+            alerts: leg.alerts,
+          })) || [],
+        fare: itinerary.fare
+          ? {
+              type: itinerary.fare.type,
+              currency: itinerary.fare.currency,
+              cents: itinerary.fare.cents,
+              components: itinerary.fare.details?.components || [],
+            }
+          : undefined,
+      })) || [];
 
     return {
       itineraries,
       requestParameters: request,
-      debugOutput: this.configService.get('app.env') === 'development' ? {
-        otpUrl: this.otpUrl,
-        otpResponse: otpResponse,
-      } : undefined,
+      debugOutput:
+        this.configService.get('app.env') === 'development'
+          ? {
+              otpUrl: this.otpUrl,
+              otpResponse: otpResponse,
+            }
+          : undefined,
     };
   }
 

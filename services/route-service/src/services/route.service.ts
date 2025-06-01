@@ -2,7 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OtpService } from './otp.service';
 import { CacheService } from './cache.service';
-import { RoutePlanRequestDto, RoutePlanResponseDto, GeocodingRequestDto, GeocodingResponseDto } from '../dto/route-plan.dto';
+import {
+  RoutePlanRequestDto,
+  RoutePlanResponseDto,
+  GeocodingRequestDto,
+  GeocodingResponseDto,
+} from '../dto/route-plan.dto';
 import { TransportMode } from '@openmaas/types';
 
 @Injectable()
@@ -19,7 +24,7 @@ export class RouteService {
     try {
       // Generate cache key based on request parameters
       const cacheKey = this.generateCacheKey(request);
-      
+
       // Try to get cached result
       const cached = await this.cacheService.get<RoutePlanResponseDto>(cacheKey);
       if (cached) {
@@ -51,7 +56,7 @@ export class RouteService {
     try {
       // Generate cache key for geocoding
       const cacheKey = `geocode:${request.query}:${request.limit || 5}`;
-      
+
       // Try to get cached result
       const cached = await this.cacheService.get<GeocodingResponseDto>(cacheKey);
       if (cached) {
@@ -65,7 +70,9 @@ export class RouteService {
       // Cache the result (cache for 1 hour for geocoding)
       await this.cacheService.set(cacheKey, result, 3600);
 
-      this.logger.log(`Geocoded successfully: ${result.results.length} results for "${request.query}"`);
+      this.logger.log(
+        `Geocoded successfully: ${result.results.length} results for "${request.query}"`,
+      );
       return result;
     } catch (error) {
       this.logger.error('Error in geocoding:', error);
@@ -76,7 +83,7 @@ export class RouteService {
   async reverseGeocode(lat: number, lon: number): Promise<GeocodingResponseDto> {
     try {
       const cacheKey = `reverse:${lat.toFixed(6)}:${lon.toFixed(6)}`;
-      
+
       // Try to get cached result
       const cached = await this.cacheService.get<GeocodingResponseDto>(cacheKey);
       if (cached) {
@@ -88,11 +95,13 @@ export class RouteService {
       // a dedicated geocoding service or OTP's reverse geocoding endpoint
       const result: GeocodingResponseDto = {
         query: `${lat},${lon}`,
-        results: [{
-          lat,
-          lon,
-          name: `Location at ${lat.toFixed(4)}, ${lon.toFixed(4)}`,
-        }],
+        results: [
+          {
+            lat,
+            lon,
+            name: `Location at ${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+          },
+        ],
       };
 
       // Cache the result (cache for 1 hour)
@@ -136,11 +145,11 @@ export class RouteService {
     // - Fare information
     // - Carbon footprint calculations
     // - Weather information
-    
+
     const enriched = { ...result };
 
     // Calculate environmental impact
-    enriched.itineraries = enriched.itineraries.map(itinerary => ({
+    enriched.itineraries = enriched.itineraries.map((itinerary) => ({
       ...itinerary,
       // Add custom properties or enhance existing ones
     }));

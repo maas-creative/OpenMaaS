@@ -90,7 +90,7 @@ describe('BookingService', () => {
                 coordinates: { lat: 35.6762, lon: 139.6503 },
               },
               to: {
-                name: 'Shibuya Station', 
+                name: 'Shibuya Station',
                 coordinates: { lat: 35.6896, lon: 139.6917 },
               },
               startTime: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now

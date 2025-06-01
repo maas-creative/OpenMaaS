@@ -18,7 +18,7 @@ export class BookingSchedulerService {
     try {
       // Update expired pending bookings
       await this.bookingRepository.bulkUpdateExpiredBookings();
-      
+
       const expiredBookings = await this.bookingRepository.findExpiredBookings();
       this.logger.log(`Processed ${expiredBookings.length} expired bookings`);
     } catch (error) {
@@ -37,7 +37,7 @@ export class BookingSchedulerService {
       // This would need a proper query to find bookings in the reminder window
       // For now, we'll log that reminders would be sent
       this.logger.log('Checking for booking reminders to send...');
-      
+
       // In a real implementation:
       // const upcomingBookings = await this.bookingRepository.findBookingsInTimeRange(reminderStart, reminderEnd);
       // for (const booking of upcomingBookings) {
@@ -53,7 +53,7 @@ export class BookingSchedulerService {
     try {
       // Sync booking status with external providers
       this.logger.log('Syncing booking status with external providers...');
-      
+
       // In a real implementation, this would:
       // 1. Find bookings with provider booking IDs
       // 2. Query each provider for status updates
@@ -72,7 +72,7 @@ export class BookingSchedulerService {
       cutoffDate.setDate(cutoffDate.getDate() - 30);
 
       this.logger.log(`Cleaning up bookings older than ${cutoffDate.toISOString()}`);
-      
+
       // In a real implementation, this might:
       // 1. Archive old bookings to a separate table
       // 2. Delete very old archived bookings

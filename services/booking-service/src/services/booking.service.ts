@@ -1,10 +1,23 @@
-import { Injectable, Logger, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BookingRepository } from '../repositories/booking.repository';
 import { BookingProviderRepository } from '../repositories/booking-provider.repository';
 import { ProviderService } from './provider.service';
 import { NotificationService } from './notification.service';
-import { CreateBookingDto, UpdateBookingDto, CancelBookingDto, BookingSearchDto, BookingResponseDto, BookingListResponseDto } from '../dto/booking.dto';
+import {
+  CreateBookingDto,
+  UpdateBookingDto,
+  CancelBookingDto,
+  BookingSearchDto,
+  BookingResponseDto,
+  BookingListResponseDto,
+} from '../dto/booking.dto';
 import { BookingStatus, BookingType } from '@openmaas/types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -83,7 +96,7 @@ export class BookingService {
 
   async getBooking(userId: string, bookingId: string): Promise<BookingResponseDto> {
     const booking = await this.bookingRepository.findById(bookingId);
-    
+
     if (!booking) {
       throw new NotFoundException(`Booking with ID ${bookingId} not found`);
     }
@@ -97,7 +110,7 @@ export class BookingService {
 
   async getBookingByConfirmationCode(confirmationCode: string): Promise<BookingResponseDto> {
     const booking = await this.bookingRepository.findByConfirmationCode(confirmationCode);
-    
+
     if (!booking) {
       throw new NotFoundException(`Booking with confirmation code ${confirmationCode} not found`);
     }
@@ -105,9 +118,13 @@ export class BookingService {
     return this.toResponseDto(booking);
   }
 
-  async updateBooking(userId: string, bookingId: string, dto: UpdateBookingDto): Promise<BookingResponseDto> {
+  async updateBooking(
+    userId: string,
+    bookingId: string,
+    dto: UpdateBookingDto,
+  ): Promise<BookingResponseDto> {
     const booking = await this.bookingRepository.findById(bookingId);
-    
+
     if (!booking) {
       throw new NotFoundException(`Booking with ID ${bookingId} not found`);
     }
@@ -132,9 +149,13 @@ export class BookingService {
     return this.toResponseDto(updated);
   }
 
-  async cancelBooking(userId: string, bookingId: string, dto: CancelBookingDto): Promise<BookingResponseDto> {
+  async cancelBooking(
+    userId: string,
+    bookingId: string,
+    dto: CancelBookingDto,
+  ): Promise<BookingResponseDto> {
     const booking = await this.bookingRepository.findById(bookingId);
-    
+
     if (!booking) {
       throw new NotFoundException(`Booking with ID ${bookingId} not found`);
     }
@@ -185,7 +206,7 @@ export class BookingService {
   private async validateBookingLimits(userId: string): Promise<void> {
     const maxBookings = this.configService.get('booking.maxBookingsPerUser');
     const activeBookings = await this.bookingRepository.countActiveBookingsByUser(userId);
-    
+
     if (activeBookings >= maxBookings) {
       throw new BadRequestException(`Maximum number of active bookings (${maxBookings}) reached`);
     }
@@ -236,7 +257,7 @@ export class BookingService {
     const legCount = dto.itinerary.legs.length;
 
     const amount = baseFare * passengerCount * legCount;
-    
+
     return {
       amount,
       currency: 'JPY',
@@ -260,7 +281,11 @@ export class BookingService {
         const provider = await this.providerRepository.findByProviderId(leg.serviceProvider);
         if (provider) {
           try {
-            const providerBooking = await this.providerService.createBooking(provider, booking, leg);
+            const providerBooking = await this.providerService.createBooking(
+              provider,
+              booking,
+              leg,
+            );
             booking.providerBookingId = providerBooking.id;
             booking.providerName = provider.providerName;
           } catch (error) {

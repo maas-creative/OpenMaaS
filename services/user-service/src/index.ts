@@ -3,7 +3,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter, TransformInterceptor, LoggingInterceptor, LoggerService } from '@openmaas/common';
+import {
+  AllExceptionsFilter,
+  TransformInterceptor,
+  LoggingInterceptor,
+  LoggerService,
+} from '@openmaas/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,10 +28,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(logger));
 
   // Global interceptors
-  app.useGlobalInterceptors(
-    new LoggingInterceptor(logger),
-    new TransformInterceptor(),
-  );
+  app.useGlobalInterceptors(new LoggingInterceptor(logger), new TransformInterceptor());
 
   // Global validation pipe
   app.useGlobalPipes(

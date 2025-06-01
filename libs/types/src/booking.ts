@@ -15,7 +15,7 @@ export interface Booking {
   validFrom: Date;
   validUntil: Date;
   cancellationPolicy?: CancellationPolicy;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export enum BookingStatus {
@@ -124,7 +124,7 @@ export interface CreateBookingDto {
 
 export interface UpdateBookingDto {
   passengers?: Passenger[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CancelBookingDto {

@@ -11,7 +11,7 @@ export class NotificationService {
     try {
       // In a real implementation, this would send emails/SMS
       this.logger.log(`Sending booking confirmation for ${booking.confirmationCode}`);
-      
+
       const message = {
         type: 'booking_confirmation',
         userId: booking.userId,
@@ -31,7 +31,7 @@ export class NotificationService {
   async sendBookingCancellation(booking: any): Promise<void> {
     try {
       this.logger.log(`Sending cancellation notification for ${booking.confirmationCode}`);
-      
+
       const message = {
         type: 'booking_cancellation',
         userId: booking.userId,
@@ -49,7 +49,7 @@ export class NotificationService {
   async sendBookingReminder(booking: any): Promise<void> {
     try {
       this.logger.log(`Sending booking reminder for ${booking.confirmationCode}`);
-      
+
       const message = {
         type: 'booking_reminder',
         userId: booking.userId,
@@ -68,7 +68,7 @@ export class NotificationService {
   async sendBookingUpdate(booking: any, changes: any): Promise<void> {
     try {
       this.logger.log(`Sending booking update for ${booking.confirmationCode}`);
-      
+
       const message = {
         type: 'booking_update',
         userId: booking.userId,
@@ -86,7 +86,7 @@ export class NotificationService {
   private async sendNotification(message: any): Promise<void> {
     // Mock notification sending
     this.logger.debug(`Notification sent: ${JSON.stringify(message)}`);
-    
+
     // In production, this would integrate with:
     // - Email service (SendGrid, AWS SES, etc.)
     // - SMS service (Twilio, AWS SNS, etc.)

@@ -98,10 +98,7 @@ describe('PaymentController', () => {
       const result = await controller.createPayment({ user: mockUser }, dto);
 
       expect(result).toEqual(mockPaymentSession);
-      expect(paymentService.createPayment).toHaveBeenCalledWith(
-        mockUser.userId,
-        dto,
-      );
+      expect(paymentService.createPayment).toHaveBeenCalledWith(mockUser.userId, dto);
     });
   });
 
@@ -111,11 +108,7 @@ describe('PaymentController', () => {
 
       paymentService.processPayment.mockResolvedValue(mockPayment as any);
 
-      const result = await controller.processPayment(
-        { user: mockUser },
-        'payment-123',
-        dto,
-      );
+      const result = await controller.processPayment({ user: mockUser }, 'payment-123', dto);
 
       expect(result).toEqual(mockPayment);
       expect(paymentService.processPayment).toHaveBeenCalledWith(
@@ -130,16 +123,10 @@ describe('PaymentController', () => {
     it('should get payment details', async () => {
       paymentService.getPayment.mockResolvedValue(mockPayment as any);
 
-      const result = await controller.getPayment(
-        { user: mockUser },
-        'payment-123',
-      );
+      const result = await controller.getPayment({ user: mockUser }, 'payment-123');
 
       expect(result).toEqual(mockPayment);
-      expect(paymentService.getPayment).toHaveBeenCalledWith(
-        mockUser.userId,
-        'payment-123',
-      );
+      expect(paymentService.getPayment).toHaveBeenCalledWith(mockUser.userId, 'payment-123');
     });
   });
 
@@ -155,16 +142,10 @@ describe('PaymentController', () => {
       paymentService.getPaymentHistory.mockResolvedValue(mockHistory);
 
       const query = { limit: 20, offset: 0 };
-      const result = await controller.getPaymentHistory(
-        { user: mockUser },
-        query,
-      );
+      const result = await controller.getPaymentHistory({ user: mockUser }, query);
 
       expect(result).toEqual(mockHistory);
-      expect(paymentService.getPaymentHistory).toHaveBeenCalledWith(
-        mockUser.userId,
-        query,
-      );
+      expect(paymentService.getPaymentHistory).toHaveBeenCalledWith(mockUser.userId, query);
     });
   });
 
@@ -191,25 +172,18 @@ describe('PaymentController', () => {
       const result = await controller.createRefund({ user: mockUser }, dto);
 
       expect(result).toEqual(mockRefund);
-      expect(paymentService.createRefund).toHaveBeenCalledWith(
-        mockUser.userId,
-        dto,
-      );
+      expect(paymentService.createRefund).toHaveBeenCalledWith(mockUser.userId, dto);
     });
   });
 
   describe('getPaymentMethods', () => {
     it('should get payment methods', async () => {
-      paymentMethodService.getPaymentMethods.mockResolvedValue([
-        mockPaymentMethod as any,
-      ]);
+      paymentMethodService.getPaymentMethods.mockResolvedValue([mockPaymentMethod as any]);
 
       const result = await controller.getPaymentMethods({ user: mockUser });
 
       expect(result).toEqual([mockPaymentMethod]);
-      expect(paymentMethodService.getPaymentMethods).toHaveBeenCalledWith(
-        mockUser.userId,
-      );
+      expect(paymentMethodService.getPaymentMethods).toHaveBeenCalledWith(mockUser.userId);
     });
   });
 
@@ -220,20 +194,12 @@ describe('PaymentController', () => {
         setAsDefault: true,
       };
 
-      paymentMethodService.addPaymentMethod.mockResolvedValue(
-        mockPaymentMethod as any,
-      );
+      paymentMethodService.addPaymentMethod.mockResolvedValue(mockPaymentMethod as any);
 
-      const result = await controller.addPaymentMethod(
-        { user: mockUser },
-        dto,
-      );
+      const result = await controller.addPaymentMethod({ user: mockUser }, dto);
 
       expect(result).toEqual(mockPaymentMethod);
-      expect(paymentMethodService.addPaymentMethod).toHaveBeenCalledWith(
-        mockUser.userId,
-        dto,
-      );
+      expect(paymentMethodService.addPaymentMethod).toHaveBeenCalledWith(mockUser.userId, dto);
     });
   });
 

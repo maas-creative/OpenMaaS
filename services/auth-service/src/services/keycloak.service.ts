@@ -38,7 +38,7 @@ export class KeycloakService implements OnModuleInit {
     };
 
     await this.kcAdminClient.auth(credentials);
-    
+
     // Set up auto-refresh
     setInterval(() => {
       this.kcAdminClient.auth(credentials).catch((error) => {
@@ -71,7 +71,7 @@ export class KeycloakService implements OnModuleInit {
 
   private async ensureClientExists() {
     const clientId = this.configService.get<string>('keycloak.clientId') || 'openmaas-backend';
-    
+
     try {
       const clients = await this.kcAdminClient.clients.find({
         realm: this.realm,
@@ -233,7 +233,7 @@ export class KeycloakService implements OnModuleInit {
           realm: this.realm,
           name: roleName,
         });
-        
+
         role = await this.kcAdminClient.roles.findOneByName({
           realm: this.realm,
           name: roleName,

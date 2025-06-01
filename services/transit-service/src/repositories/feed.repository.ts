@@ -36,12 +36,9 @@ export class FeedRepository {
     return this.repository
       .createQueryBuilder('feed')
       .where('feed.isActive = :isActive', { isActive: true })
-      .andWhere(
-        '(feed.lastUpdated IS NULL OR feed.lastUpdated < :threshold)',
-        {
-          threshold: new Date(now.getTime() - 1000), // feeds that need update
-        },
-      )
+      .andWhere('(feed.lastUpdated IS NULL OR feed.lastUpdated < :threshold)', {
+        threshold: new Date(now.getTime() - 1000), // feeds that need update
+      })
       .getMany();
   }
 
@@ -55,11 +52,7 @@ export class FeedRepository {
     return this.findById(id);
   }
 
-  async updateLastFetch(
-    id: string,
-    success: boolean,
-    error?: string,
-  ): Promise<void> {
+  async updateLastFetch(id: string, success: boolean, error?: string): Promise<void> {
     const updates: Partial<FeedEntity> = {
       lastFetchAttempt: new Date(),
     };

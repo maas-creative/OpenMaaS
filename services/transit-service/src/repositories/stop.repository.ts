@@ -12,7 +12,7 @@ export class StopRepository {
 
   async findAll(feedId?: string): Promise<StopEntity[]> {
     const query = this.repository.createQueryBuilder('stop');
-    
+
     if (feedId) {
       query.where('stop.feedId = :feedId', { feedId });
     }

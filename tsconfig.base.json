@@ -29,6 +29,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "incremental": true,
+    "baseUrl": "./",
     "paths": {
       "@openmaas/common/*": ["libs/common/src/*"],
       "@openmaas/types/*": ["libs/types/src/*"],

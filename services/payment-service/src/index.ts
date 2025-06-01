@@ -2,12 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { 
-  AllExceptionsFilter, 
+import {
+  AllExceptionsFilter,
   HttpExceptionFilter,
   LoggingInterceptor,
   TimeoutInterceptor,
-  TransformInterceptor 
+  TransformInterceptor,
 } from '@openmaas/common';
 import { AppModule } from './app.module';
 
@@ -29,10 +29,7 @@ async function bootstrap() {
   );
 
   // Global filters
-  app.useGlobalFilters(
-    new AllExceptionsFilter(),
-    new HttpExceptionFilter(),
-  );
+  app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
 
   // Global interceptors
   app.useGlobalInterceptors(
@@ -56,8 +53,8 @@ async function bootstrap() {
 
   // Health check endpoint
   app.getHttpAdapter().get('/health', (req, res) => {
-    res.status(200).json({ 
-      status: 'ok', 
+    res.status(200).json({
+      status: 'ok',
       service: 'payment-service',
       timestamp: new Date().toISOString(),
     });

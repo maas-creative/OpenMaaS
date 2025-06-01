@@ -12,9 +12,9 @@ export class RefundRepository {
   ) {}
 
   async findById(id: string): Promise<RefundEntity | null> {
-    return this.repository.findOne({ 
+    return this.repository.findOne({
       where: { id },
-      relations: ['payment'] 
+      relations: ['payment'],
     });
   }
 
@@ -26,9 +26,9 @@ export class RefundRepository {
   }
 
   async findByStripeRefundId(stripeRefundId: string): Promise<RefundEntity | null> {
-    return this.repository.findOne({ 
+    return this.repository.findOne({
       where: { stripeRefundId },
-      relations: ['payment']
+      relations: ['payment'],
     });
   }
 
@@ -54,13 +54,13 @@ export class RefundRepository {
   }
 
   async updateStatus(
-    id: string, 
-    status: RefundStatus, 
-    metadata?: Partial<RefundEntity>
+    id: string,
+    status: RefundStatus,
+    metadata?: Partial<RefundEntity>,
   ): Promise<void> {
-    const updateData: Partial<RefundEntity> = { 
+    const updateData: Partial<RefundEntity> = {
       status,
-      ...metadata 
+      ...metadata,
     };
 
     if (status === RefundStatus.COMPLETED) {

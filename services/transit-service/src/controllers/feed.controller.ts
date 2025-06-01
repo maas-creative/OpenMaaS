@@ -10,12 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
@@ -73,10 +68,7 @@ export class FeedController {
     type: FeedResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Feed not found' })
-  async updateFeed(
-    @Param('id') id: string,
-    @Body() dto: UpdateFeedDto,
-  ): Promise<FeedResponseDto> {
+  async updateFeed(@Param('id') id: string, @Body() dto: UpdateFeedDto): Promise<FeedResponseDto> {
     return this.feedService.update(id, dto);
   }
 

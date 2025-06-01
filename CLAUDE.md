@@ -9,6 +9,7 @@ OpenMaaS is an open-source Mobility as a Service (MaaS) platform that integrates
 ## Architecture
 
 The system follows a microservices architecture with:
+
 - **API Gateway**: Kong (ports 8000/8001) - Central entry point with rate limiting, authentication, and routing
 - **Identity Provider**: Keycloak (port 8080) - Handles authentication and authorization
 - **Database**: PostgreSQL with PostGIS extension for geospatial data
@@ -27,6 +28,7 @@ The system follows a microservices architecture with:
 ## Common Commands
 
 ### Development Setup
+
 ```bash
 # First-time setup (checks prerequisites, starts all services)
 ./scripts/dev-setup.sh
@@ -42,6 +44,7 @@ npm run docker:down
 ```
 
 ### Development Commands
+
 ```bash
 # Start all services in dev mode (with hot reload)
 npm run dev
@@ -62,6 +65,7 @@ npm run format
 ### Service-Specific Development
 
 When working on a specific service:
+
 ```bash
 cd services/[service-name]
 npm run dev        # Start with nodemon
@@ -71,6 +75,7 @@ npm run lint       # Lint service code
 ```
 
 For User Service specifically:
+
 ```bash
 cd services/user-service
 npm run migration:generate -- -n MigrationName  # Generate migration
@@ -79,6 +84,7 @@ npm run migration:revert                        # Revert last migration
 ```
 
 For Transit Service specifically:
+
 ```bash
 cd services/transit-service
 npm run migration:generate -- -n MigrationName  # Generate migration
@@ -87,6 +93,7 @@ npm run migration:revert                        # Revert last migration
 ```
 
 For Booking Service specifically:
+
 ```bash
 cd services/booking-service
 npm run migration:generate -- -n MigrationName  # Generate migration
@@ -95,6 +102,7 @@ npm run migration:revert                        # Revert last migration
 ```
 
 For Payment Service specifically:
+
 ```bash
 cd services/payment-service
 npm run migration:generate -- -n MigrationName  # Generate migration
@@ -106,6 +114,7 @@ stripe listen --forward-to localhost:3006/webhooks/stripe
 ```
 
 ### Testing Single Files
+
 ```bash
 # Run specific test file
 cd services/[service-name]
@@ -118,7 +127,9 @@ npx jest --watch
 ## Code Architecture
 
 ### Service Structure
+
 Each microservice follows this structure:
+
 ```
 services/[service-name]/
 ├── src/
@@ -137,6 +148,7 @@ services/[service-name]/
 ```
 
 ### Shared Libraries
+
 ```
 libs/
 ├── common/               # Shared utilities, middleware, filters
@@ -169,6 +181,7 @@ libs/
 ### Database Schema
 
 The PostgreSQL database uses schemas to separate concerns:
+
 - `users` schema: User management data
 - `transit` schema: GTFS transit data
 - `booking` schema: Reservation data
@@ -177,6 +190,7 @@ The PostgreSQL database uses schemas to separate concerns:
 ### API Gateway Configuration
 
 Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
+
 - Service routing with path stripping
 - JWT authentication for protected routes
 - Rate limiting per service
@@ -207,6 +221,7 @@ Kong configuration is declarative (`infrastructure/kong/kong.yml`) with:
 This repository is hosted at: https://github.com/ukyonagata0105/OpenMaaS
 
 When the user asks to push changes to git:
+
 1. Always check if git is initialized first (`git status`)
 2. If there's a nested git repository warning, remove the nested .git directory
 3. Stage all changes with `git add .`

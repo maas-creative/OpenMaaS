@@ -159,7 +159,7 @@ export enum TransportMode {
 export interface RoutePlanResponse {
   itineraries: Itinerary[];
   requestParameters: RoutePlanRequest;
-  debugOutput?: any;
+  debugOutput?: unknown;
 }
 
 export interface Itinerary {

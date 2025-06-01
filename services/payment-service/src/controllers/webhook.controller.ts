@@ -48,11 +48,7 @@ export class WebhookController {
 
     try {
       // Verify webhook signature
-      event = this.stripe.webhooks.constructEvent(
-        request.rawBody,
-        signature,
-        this.webhookSecret,
-      );
+      event = this.stripe.webhooks.constructEvent(request.rawBody, signature, this.webhookSecret);
     } catch (err) {
       throw new BadRequestException(`Webhook signature verification failed: ${err.message}`);
     }

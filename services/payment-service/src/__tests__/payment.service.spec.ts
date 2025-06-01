@@ -18,12 +18,12 @@ describe('PaymentService', () => {
   const mockUserId = 'user-123';
   const mockPaymentId = 'payment-123';
   const mockPaymentMethodId = 'pm-123';
-  
+
   const mockPayment = {
     id: mockPaymentId,
     userId: mockUserId,
     bookingId: 'booking-123',
-    amount: 100.00,
+    amount: 100.0,
     currency: 'usd',
     status: PaymentStatus.PENDING,
     paymentMethodId: mockPaymentMethodId,
@@ -43,10 +43,12 @@ describe('PaymentService', () => {
     client_secret: 'pi_test123_secret',
     status: 'succeeded',
     charges: {
-      data: [{
-        id: 'ch_123',
-        receipt_url: 'https://receipt.url',
-      }],
+      data: [
+        {
+          id: 'ch_123',
+          receipt_url: 'https://receipt.url',
+        },
+      ],
     },
   };
 
@@ -150,9 +152,7 @@ describe('PaymentService', () => {
 
       paymentMethodRepository.findByUserAndId.mockResolvedValue(null);
 
-      await expect(service.createPayment(mockUserId, dto)).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(service.createPayment(mockUserId, dto)).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -168,11 +168,9 @@ describe('PaymentService', () => {
         status: PaymentStatus.COMPLETED,
       } as any);
 
-      const result = await service.processPayment(
-        mockUserId,
-        mockPaymentId,
-        { paymentMethodId: mockPaymentMethodId },
-      );
+      const result = await service.processPayment(mockUserId, mockPaymentId, {
+        paymentMethodId: mockPaymentMethodId,
+      });
 
       expect(result.status).toBe(PaymentStatus.COMPLETED);
       expect(paymentRepository.updateStatus).toHaveBeenCalledWith(
@@ -186,8 +184,8 @@ describe('PaymentService', () => {
       paymentRepository.findById.mockResolvedValue(null);
 
       await expect(
-        service.processPayment(mockUserId, 'invalid-id', { 
-          paymentMethodId: mockPaymentMethodId 
+        service.processPayment(mockUserId, 'invalid-id', {
+          paymentMethodId: mockPaymentMethodId,
         }),
       ).rejects.toThrow(NotFoundException);
     });
@@ -228,10 +226,7 @@ describe('PaymentService', () => {
       expect(result).toHaveProperty('id');
       expect(result.amount).toBe(50);
       expect(refundRepository.create).toHaveBeenCalled();
-      expect(paymentRepository.incrementRefundedAmount).toHaveBeenCalledWith(
-        mockPaymentId,
-        50,
-      );
+      expect(paymentRepository.incrementRefundedAmount).toHaveBeenCalledWith(mockPaymentId, 50);
     });
 
     it('should throw error for exceeding refund amount', async () => {
@@ -250,16 +245,14 @@ describe('PaymentService', () => {
       paymentRepository.findById.mockResolvedValue(completedPayment as any);
       refundRepository.getTotalRefundedAmount.mockResolvedValue(0);
 
-      await expect(service.createRefund(mockUserId, dto)).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(service.createRefund(mockUserId, dto)).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('getPaymentHistory', () => {
     it('should return payment history', async () => {
       const payments = [mockPayment, { ...mockPayment, id: 'payment-456' }];
-      
+
       paymentRepository.findAll.mockResolvedValue({
         payments: payments as any[],
         total: 2,

@@ -172,7 +172,7 @@ export class TripHistoryService {
 
   async delete(id: string, userId: string): Promise<void> {
     const trip = await this.findById(id, userId);
-    
+
     const deleted = await this.tripHistoryRepository.delete(id);
     if (!deleted) {
       throw new BadRequestException('Failed to delete trip');

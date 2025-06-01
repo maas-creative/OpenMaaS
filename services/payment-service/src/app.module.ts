@@ -30,11 +30,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: databaseConfig,
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([
-      PaymentEntity,
-      PaymentMethodEntity,
-      RefundEntity,
-    ]),
+    TypeOrmModule.forFeature([PaymentEntity, PaymentMethodEntity, RefundEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],

@@ -1,20 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Param,
-  Query,
-  Body,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Query, Body, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { TransitService } from '../services/transit.service';
 import { AgencyResponseDto } from '../dto/agency.dto';
@@ -59,9 +44,7 @@ export class TransitController {
     description: 'List of routes for the agency',
     type: [RouteResponseDto],
   })
-  async getAgencyRoutes(
-    @Param('agencyId') agencyId: string,
-  ): Promise<RouteResponseDto[]> {
+  async getAgencyRoutes(@Param('agencyId') agencyId: string): Promise<RouteResponseDto[]> {
     return this.transitService.getRoutesByAgency(agencyId);
   }
 

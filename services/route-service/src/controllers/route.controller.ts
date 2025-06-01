@@ -9,20 +9,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RouteService } from '../services/route.service';
-import { 
-  RoutePlanRequestDto, 
-  RoutePlanResponseDto, 
-  GeocodingRequestDto, 
-  GeocodingResponseDto 
+import {
+  RoutePlanRequestDto,
+  RoutePlanResponseDto,
+  GeocodingRequestDto,
+  GeocodingResponseDto,
 } from '../dto/route-plan.dto';
 
 @ApiTags('route-planning')
@@ -84,7 +78,7 @@ export class RouteController {
   @Get('health')
   @ApiOperation({ summary: 'Get route service health and metrics' })
   @ApiResponse({ status: 200, description: 'Service health information' })
-  async getHealth(): Promise<any> {
+  async getHealth(): Promise<Record<string, unknown>> {
     return this.routeService.getRouteMetrics();
   }
 }

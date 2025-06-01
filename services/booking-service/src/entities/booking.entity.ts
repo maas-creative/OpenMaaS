@@ -1,11 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
-import { 
-  BookingStatus, 
-  BookingType, 
-  Passenger, 
-  BookingItinerary, 
-  BookingFare, 
-  CancellationPolicy 
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from 'typeorm';
+import {
+  BookingStatus,
+  BookingType,
+  Passenger,
+  BookingItinerary,
+  BookingFare,
+  CancellationPolicy,
 } from '@openmaas/types';
 
 @Entity({ name: 'bookings', schema: 'booking' })

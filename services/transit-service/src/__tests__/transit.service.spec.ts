@@ -94,9 +94,7 @@ describe('TransitService', () => {
     it('should throw NotFoundException when agency not found', async () => {
       jest.spyOn(agencyRepository, 'findById').mockResolvedValue(null);
 
-      await expect(service.getAgency('non-existent')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(service.getAgency('non-existent')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -107,7 +105,7 @@ describe('TransitService', () => {
           stopId: 'stop-1',
           stopName: 'Main Street Station',
           stopLat: 40.7128,
-          stopLon: -74.0060,
+          stopLon: -74.006,
         },
       ];
 
@@ -115,18 +113,13 @@ describe('TransitService', () => {
 
       const result = await service.getStops({
         lat: 40.7128,
-        lon: -74.0060,
+        lon: -74.006,
         radius: 1000,
       });
 
       expect(result).toHaveLength(1);
       expect(result[0].stopId).toBe('stop-1');
-      expect(stopRepository.findNearby).toHaveBeenCalledWith(
-        40.7128,
-        -74.0060,
-        1000,
-        20,
-      );
+      expect(stopRepository.findNearby).toHaveBeenCalledWith(40.7128, -74.006, 1000, 20);
     });
 
     it('should search stops by text', async () => {
@@ -135,7 +128,7 @@ describe('TransitService', () => {
           stopId: 'stop-1',
           stopName: 'Central Station',
           stopLat: 40.7128,
-          stopLon: -74.0060,
+          stopLon: -74.006,
         },
       ];
 

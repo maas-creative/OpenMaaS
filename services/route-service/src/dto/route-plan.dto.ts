@@ -1,15 +1,25 @@
-import { IsNumber, IsOptional, IsString, IsBoolean, IsEnum, IsArray, IsDateString, Min, Max } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsEnum,
+  IsArray,
+  IsDateString,
+  Min,
+  Max,
+} from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { 
-  RoutePlanRequest, 
-  RoutePlanResponse, 
-  Location, 
-  TransportMode, 
+import {
+  RoutePlanRequest,
+  RoutePlanResponse,
+  Location,
+  TransportMode,
   Itinerary,
   Leg,
   Place,
-  Fare
+  Fare,
 } from '@openmaas/types';
 
 export class LocationDto implements Location {
@@ -52,15 +62,17 @@ export class RoutePlanRequestDto implements Omit<RoutePlanRequest, 'from' | 'to'
   @IsDateString()
   dateTime?: string;
 
-  @ApiPropertyOptional({ description: 'Whether dateTime is arrival time (true) or departure time (false)' })
+  @ApiPropertyOptional({
+    description: 'Whether dateTime is arrival time (true) or departure time (false)',
+  })
   @IsOptional()
   @IsBoolean()
   arriveBy?: boolean;
 
-  @ApiPropertyOptional({ 
-    enum: TransportMode, 
+  @ApiPropertyOptional({
+    enum: TransportMode,
     isArray: true,
-    description: 'Allowed transport modes' 
+    description: 'Allowed transport modes',
   })
   @IsOptional()
   @IsArray()
@@ -172,13 +184,13 @@ export class LegDto implements Leg {
   pathway?: boolean;
 
   @ApiPropertyOptional()
-  route?: any;
+  route?: Record<string, unknown>;
 
   @ApiPropertyOptional()
-  trip?: any;
+  trip?: Record<string, unknown>;
 
   @ApiPropertyOptional()
-  intermediateStops?: any[];
+  intermediateStops?: Array<Record<string, unknown>>;
 
   @ApiPropertyOptional()
   alerts?: any[];

@@ -1,18 +1,28 @@
-import { IsString, IsOptional, IsEnum, IsArray, IsNumber, IsBoolean, IsDateString, ValidateNested, Min } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsArray,
+  IsNumber,
+  IsBoolean,
+  IsDateString,
+  ValidateNested,
+  Min,
+} from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { 
-  BookingStatus, 
-  BookingType, 
-  Passenger, 
+import {
+  BookingStatus,
+  BookingType,
+  Passenger,
   PassengerType,
-  BookingItinerary, 
+  BookingItinerary,
   BookingLeg,
   BookingPlace,
   BookingFare,
   FareBreakdown,
   Discount,
-  CancellationPolicy
+  CancellationPolicy,
 } from '@openmaas/types';
 
 export class PassengerDto implements Passenger {

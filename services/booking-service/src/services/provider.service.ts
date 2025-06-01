@@ -15,12 +15,7 @@ export class ProviderService {
   async createBooking(provider: BookingProviderEntity, booking: any, leg: any): Promise<any> {
     try {
       const payload = this.buildProviderBookingPayload(booking, leg);
-      const response = await this.makeProviderRequest(
-        provider,
-        'POST',
-        '/bookings',
-        payload,
-      );
+      const response = await this.makeProviderRequest(provider, 'POST', '/bookings', payload);
 
       this.logger.log(`Booking created with provider ${provider.providerName}: ${response.id}`);
       return response;
@@ -40,7 +35,9 @@ export class ProviderService {
         payload,
       );
 
-      this.logger.log(`Booking updated with provider ${provider.providerName}: ${booking.providerBookingId}`);
+      this.logger.log(
+        `Booking updated with provider ${provider.providerName}: ${booking.providerBookingId}`,
+      );
       return response;
     } catch (error) {
       this.logger.error(`Failed to update booking with provider ${provider.providerName}:`, error);
@@ -50,13 +47,11 @@ export class ProviderService {
 
   async cancelBooking(provider: BookingProviderEntity, booking: any): Promise<void> {
     try {
-      await this.makeProviderRequest(
-        provider,
-        'DELETE',
-        `/bookings/${booking.providerBookingId}`,
-      );
+      await this.makeProviderRequest(provider, 'DELETE', `/bookings/${booking.providerBookingId}`);
 
-      this.logger.log(`Booking cancelled with provider ${provider.providerName}: ${booking.providerBookingId}`);
+      this.logger.log(
+        `Booking cancelled with provider ${provider.providerName}: ${booking.providerBookingId}`,
+      );
     } catch (error) {
       this.logger.error(`Failed to cancel booking with provider ${provider.providerName}:`, error);
       throw error;
@@ -73,7 +68,10 @@ export class ProviderService {
 
       return response;
     } catch (error) {
-      this.logger.error(`Failed to get booking status from provider ${provider.providerName}:`, error);
+      this.logger.error(
+        `Failed to get booking status from provider ${provider.providerName}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -97,7 +95,10 @@ export class ProviderService {
 
       return response.available === true;
     } catch (error) {
-      this.logger.error(`Failed to check availability with provider ${provider.providerName}:`, error);
+      this.logger.error(
+        `Failed to check availability with provider ${provider.providerName}:`,
+        error,
+      );
       return false;
     }
   }
@@ -146,7 +147,7 @@ export class ProviderService {
         tripId: leg.tripId,
       },
       preferences: {
-        wheelchairAccessible: booking.passengers.some(p => p.requiresAssistance),
+        wheelchairAccessible: booking.passengers.some((p) => p.requiresAssistance),
         seatPreferences: [],
       },
       metadata: {

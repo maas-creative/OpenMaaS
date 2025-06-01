@@ -40,9 +40,8 @@ export class StringUtils {
     }
     const visibleStart = 3;
     const visibleEnd = 4;
-    const masked = phone.substring(0, visibleStart) + 
-                  '****' + 
-                  phone.substring(phone.length - visibleEnd);
+    const masked =
+      phone.substring(0, visibleStart) + '****' + phone.substring(phone.length - visibleEnd);
     return masked;
   }
 }

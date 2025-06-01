@@ -62,7 +62,7 @@ export class UserRepository {
     // Apply filters
     if (filters.search) {
       query.andWhere(
-        '(user.email ILIKE :search OR user.profile->>\'firstName\' ILIKE :search OR user.profile->>\'lastName\' ILIKE :search)',
+        "(user.email ILIKE :search OR user.profile->>'firstName' ILIKE :search OR user.profile->>'lastName' ILIKE :search)",
         { search: `%${filters.search}%` },
       );
     }
@@ -151,7 +151,7 @@ export class UserRepository {
       createdAt: 'user.createdAt',
       updatedAt: 'user.updatedAt',
       email: 'user.email',
-      name: 'user.profile->>\'firstName\'',
+      name: "user.profile->>'firstName'",
     };
     return fieldMap[sortBy] || 'user.createdAt';
   }

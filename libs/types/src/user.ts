@@ -14,7 +14,7 @@ export interface User {
   preferences: UserPreferences;
   createdAt: Date;
   updatedAt: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UserProfile {
@@ -72,5 +72,5 @@ export interface UpdateUserDto {
   phone?: string;
   profile?: Partial<UserProfile>;
   preferences?: Partial<UserPreferences>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -43,7 +43,7 @@ export class CacheService {
         return;
       }
 
-      const expiry = Date.now() + (ttlSeconds * 1000);
+      const expiry = Date.now() + ttlSeconds * 1000;
       this.cache.set(key, { value, expiry });
     } catch (error) {
       this.logger.error(`Cache set error for key ${key}:`, error);
@@ -90,7 +90,7 @@ export class CacheService {
       }
     }
 
-    keysToDelete.forEach(key => this.cache.delete(key));
+    keysToDelete.forEach((key) => this.cache.delete(key));
 
     if (keysToDelete.length > 0) {
       this.logger.debug(`Cleaned up ${keysToDelete.length} expired cache entries`);

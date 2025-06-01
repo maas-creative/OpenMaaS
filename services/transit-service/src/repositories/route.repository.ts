@@ -15,7 +15,7 @@ export class RouteRepository {
     const query = this.repository
       .createQueryBuilder('route')
       .leftJoinAndSelect('route.agency', 'agency');
-    
+
     if (feedId) {
       query.where('route.feedId = :feedId', { feedId });
     }

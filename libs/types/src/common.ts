@@ -15,7 +15,7 @@ export interface PaginatedResponse<T> {
   hasPrevious: boolean;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: ApiError;
@@ -26,11 +26,11 @@ export interface ApiResponse<T = any> {
 export interface ApiError {
   code: string;
   message: string;
-  details?: any;
+  details?: unknown;
   stack?: string;
 }
 
-export interface Location {
+export interface GeoLocation {
   latitude: number;
   longitude: number;
   accuracy?: number;
@@ -83,7 +83,7 @@ export interface FileUpload {
 export interface NotificationPayload {
   title: string;
   body: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   icon?: string;
   badge?: string;
   sound?: string;
@@ -91,7 +91,7 @@ export interface NotificationPayload {
   ttl?: number;
 }
 
-export interface WebSocketMessage<T = any> {
+export interface WebSocketMessage<T = unknown> {
   event: string;
   data: T;
   timestamp: Date;
@@ -111,14 +111,14 @@ export interface ServiceHealth {
   status: 'up' | 'down' | 'degraded';
   responseTime?: number;
   message?: string;
-  details?: any;
+  details?: unknown;
 }
 
 export interface Feature {
   name: string;
   enabled: boolean;
   description?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RateLimitInfo {

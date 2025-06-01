@@ -14,13 +14,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { UserService } from '../services/user.service';
 import { TripHistoryService } from '../services/trip-history.service';
 import { UserPreferencesService } from '../services/user-preferences.service';
@@ -66,10 +60,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
   async findAll(@Query() query: UserQueryDto): Promise<PaginatedResponse<User>> {
     const { search, role, page, limit, sortBy, sortOrder } = query;
-    return this.userService.findAll(
-      { search, role },
-      { page, limit, sortBy, sortOrder },
-    );
+    return this.userService.findAll({ search, role }, { page, limit, sortBy, sortOrder });
   }
 
   @Get('me')
@@ -82,10 +73,7 @@ export class UserController {
   @Put('me')
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({ status: 200, description: 'User profile updated successfully', type: User })
-  async updateProfile(
-    @Request() req: any,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  async updateProfile(@Request() req: any, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.userService.findByExternalId(req.user.sub);
     return this.userService.update(user.id, updateUserDto);
   }
@@ -170,10 +158,7 @@ export class UserController {
   @Get('me/trips/stats')
   @ApiOperation({ summary: 'Get trip statistics for current user' })
   @ApiResponse({ status: 200, description: 'Trip statistics retrieved successfully' })
-  async getMyTripStats(
-    @Request() req: any,
-    @Query() query: TripStatsQueryDto,
-  ) {
+  async getMyTripStats(@Request() req: any, @Query() query: TripStatsQueryDto) {
     const user = await this.userService.findByExternalId(req.user.sub);
     return this.tripHistoryService.getTripStats(
       user.id,
@@ -185,10 +170,7 @@ export class UserController {
   @Get('me/trips/monthly-stats')
   @ApiOperation({ summary: 'Get monthly trip statistics for current user' })
   @ApiResponse({ status: 200, description: 'Monthly statistics retrieved successfully' })
-  async getMyMonthlyStats(
-    @Request() req: any,
-    @Query() query: MonthlyStatsQueryDto,
-  ) {
+  async getMyMonthlyStats(@Request() req: any, @Query() query: MonthlyStatsQueryDto) {
     const user = await this.userService.findByExternalId(req.user.sub);
     return this.tripHistoryService.getMonthlyStats(user.id, query.year, query.month);
   }

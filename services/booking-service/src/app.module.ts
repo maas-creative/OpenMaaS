@@ -38,10 +38,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: getDatabaseConfig,
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([
-      BookingEntity,
-      BookingProviderEntity,
-    ]),
+    TypeOrmModule.forFeature([BookingEntity, BookingProviderEntity]),
     ScheduleModule.forRoot(),
     PassportModule,
     JwtModule.registerAsync({

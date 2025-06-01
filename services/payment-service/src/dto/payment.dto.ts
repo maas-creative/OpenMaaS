@@ -1,12 +1,15 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsEnum, Min, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsBoolean,
+  IsEnum,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { 
-  PaymentStatus, 
-  PaymentMethodType, 
-  PaymentProvider,
-  RefundStatus 
-} from '@openmaas/types';
+import { PaymentStatus, PaymentMethodType, PaymentProvider, RefundStatus } from '@openmaas/types';
 
 export class CreatePaymentDto {
   @ApiProperty()

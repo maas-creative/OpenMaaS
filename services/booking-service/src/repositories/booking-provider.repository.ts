@@ -52,7 +52,10 @@ export class BookingProviderRepository {
     return this.repository.save(entity);
   }
 
-  async update(id: string, provider: Partial<BookingProviderEntity>): Promise<BookingProviderEntity> {
+  async update(
+    id: string,
+    provider: Partial<BookingProviderEntity>,
+  ): Promise<BookingProviderEntity> {
     await this.repository.update(id, provider);
     return this.findById(id);
   }

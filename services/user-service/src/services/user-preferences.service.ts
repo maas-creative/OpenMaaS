@@ -143,10 +143,7 @@ export class UserPreferencesService {
     return updatedUser.preferences.accessibility;
   }
 
-  async setDefaultPaymentMethod(
-    userId: string,
-    paymentMethodId: string,
-  ): Promise<UserPreferences> {
+  async setDefaultPaymentMethod(userId: string, paymentMethodId: string): Promise<UserPreferences> {
     const user = await this.userService.findById(userId);
 
     const updatedPreferences: UserPreferences = {

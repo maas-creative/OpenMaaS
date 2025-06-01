@@ -20,7 +20,8 @@ export class PaymentRepository {
     limit: number = 20,
     offset: number = 0,
   ): Promise<{ payments: PaymentEntity[]; total: number }> {
-    const query = this.repository.createQueryBuilder('payment')
+    const query = this.repository
+      .createQueryBuilder('payment')
       .leftJoinAndSelect('payment.refunds', 'refunds')
       .where('payment.userId = :userId', { userId });
 
@@ -94,7 +95,8 @@ export class PaymentRepository {
   }
 
   async getTotalAmountByUser(userId: string, status?: PaymentStatus): Promise<number> {
-    const query = this.repository.createQueryBuilder('payment')
+    const query = this.repository
+      .createQueryBuilder('payment')
       .select('SUM(payment.amount)', 'total')
       .where('payment.userId = :userId', { userId });
 
@@ -117,13 +119,13 @@ export class PaymentRepository {
   }
 
   async updateStatus(
-    id: string, 
-    status: PaymentStatus, 
-    metadata?: Partial<PaymentEntity>
+    id: string,
+    status: PaymentStatus,
+    metadata?: Partial<PaymentEntity>,
   ): Promise<void> {
-    const updateData: Partial<PaymentEntity> = { 
+    const updateData: Partial<PaymentEntity> = {
       status,
-      ...metadata 
+      ...metadata,
     };
 
     if (status === PaymentStatus.COMPLETED) {
