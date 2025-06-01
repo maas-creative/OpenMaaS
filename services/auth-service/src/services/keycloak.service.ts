@@ -1,7 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import KcAdminClient from 'keycloak-admin';
-import { Credentials } from 'keycloak-admin/lib/utils/auth';
+import KcAdminClient from '@keycloak/keycloak-admin-client';
 import { KeycloakUserInfo, RegisterRequest } from '@openmaas/types';
 
 @Injectable()
@@ -31,8 +30,8 @@ export class KeycloakService implements OnModuleInit {
   }
 
   private async authenticate() {
-    const credentials: Credentials = {
-      grantType: 'password',
+    const credentials = {
+      grantType: 'password' as const,
       clientId: 'admin-cli',
       username: this.configService.get<string>('keycloak.adminUsername') || 'admin',
       password: this.configService.get<string>('keycloak.adminPassword') || 'admin',

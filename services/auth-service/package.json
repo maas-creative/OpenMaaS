@@ -12,7 +12,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@openmaas/types": "workspace:*",
+    "@openmaas/common": "^0.1.0",
+    "@openmaas/types": "^0.1.0",
     "@nestjs/common": "^10.2.10",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.2.10",
@@ -22,8 +23,8 @@
     "@nestjs/swagger": "^7.1.16",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
-    "keycloak-admin": "^1.15.1",
-    "keycloak-connect": "^23.0.3",
+    "@keycloak/keycloak-admin-client": "^26.2.5",
+    "keycloak-connect": "^26.1.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

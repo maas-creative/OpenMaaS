@@ -12,8 +12,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@openmaas/common": "workspace:*",
-    "@openmaas/types": "workspace:*",
+    "@openmaas/common": "^0.1.0",
+    "@openmaas/types": "^0.1.0",
     "@nestjs/common": "^10.2.10",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.2.10",
