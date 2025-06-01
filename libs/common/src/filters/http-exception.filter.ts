@@ -14,7 +14,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let error: ApiError;
 
     if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-      const { message, error: errorType, ...details } = exceptionResponse as Record<string, unknown>;
+      const {
+        message,
+        error: errorType,
+        ...details
+      } = exceptionResponse as Record<string, unknown>;
       error = {
         code: (errorType as string) || HttpStatus[status],
         message: Array.isArray(message) ? message.join(', ') : (message as string),

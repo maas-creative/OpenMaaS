@@ -3,7 +3,11 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "typeRoots": ["./src/types", "../../node_modules/@types"]
+    "typeRoots": ["./src/types", "../../node_modules/@types"],
+    "paths": {
+      "@openmaas/types": ["../types/src"],
+      "@openmaas/types/*": ["../types/src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
