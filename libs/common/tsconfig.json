@@ -1,14 +1,16 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./src/types", "../../node_modules/@types"],
+    "baseUrl": "../../",
     "paths": {
-      "@openmaas/types": ["../types/src"],
-      "@openmaas/types/*": ["../types/src/*"]
+      "@openmaas/types": ["libs/types/src"],
+      "@openmaas/types/*": ["libs/types/src/*"],
+      "@openmaas/common/*": ["libs/common/src/*"],
+      "@openmaas/utils/*": ["libs/utils/src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../types/src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
