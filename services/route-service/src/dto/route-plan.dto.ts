@@ -193,7 +193,7 @@ export class LegDto implements Leg {
   intermediateStops?: Array<Record<string, unknown>>;
 
   @ApiPropertyOptional()
-  alerts?: any[];
+  alerts?: Array<Record<string, unknown>>;
 }
 
 export class ItineraryDto implements Itinerary {
@@ -233,7 +233,7 @@ export class RoutePlanResponseDto implements RoutePlanResponse {
   requestParameters: RoutePlanRequestDto;
 
   @ApiPropertyOptional()
-  debugOutput?: any;
+  debugOutput?: Record<string, unknown>;
 }
 
 export class GeocodingRequestDto {

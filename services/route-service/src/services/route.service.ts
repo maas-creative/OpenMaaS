@@ -173,7 +173,7 @@ export class RouteService {
     return keyParts.join(':');
   }
 
-  async getRouteMetrics(): Promise<any> {
+  async getRouteMetrics(): Promise<Record<string, unknown>> {
     // Return service metrics for monitoring
     return {
       service: 'route-service',

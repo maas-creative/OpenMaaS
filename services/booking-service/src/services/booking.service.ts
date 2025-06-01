@@ -18,8 +18,7 @@ import {
   BookingResponseDto,
   BookingListResponseDto,
 } from '../dto/booking.dto';
-import { BookingStatus, BookingType } from '@openmaas/types';
-import { v4 as uuidv4 } from 'uuid';
+import { BookingStatus } from '@openmaas/types';
 
 @Injectable()
 export class BookingService {

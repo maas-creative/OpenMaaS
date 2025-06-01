@@ -101,6 +101,18 @@ services:
           - PATCH
           - OPTIONS
     plugins:
+      - name: jwt
+        config:
+          key_claim_name: iss
+          secret_is_base64: false
+          run_on_preflight: false
+      - name: acl
+        config:
+          allow:
+            - user
+            - operator
+            - admin
+          hide_groups_header: true
       - name: rate-limiting
         config:
           minute: 200
@@ -129,6 +141,18 @@ services:
           - POST
           - OPTIONS
     plugins:
+      - name: jwt
+        config:
+          key_claim_name: iss
+          secret_is_base64: false
+          run_on_preflight: false
+      - name: acl
+        config:
+          allow:
+            - user
+            - operator
+            - admin
+          hide_groups_header: true
       - name: rate-limiting
         config:
           minute: 100
@@ -184,10 +208,19 @@ services:
           key_claim_name: iss
           secret_is_base64: false
           run_on_preflight: false
+      - name: acl
+        config:
+          allow:
+            - user
+            - admin
+          hide_groups_header: true
       - name: ip-restriction
         config:
           allow:
-            - 0.0.0.0/0
+            - 127.0.0.1
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
       - name: rate-limiting
         config:
           minute: 30

@@ -12,13 +12,13 @@ import {
   HttpStatus,
   Request,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { BookingService } from '../services/booking.service';
@@ -48,7 +48,7 @@ export class BookingController {
   @ApiResponse({ status: 400, description: 'Invalid booking request' })
   @ApiResponse({ status: 403, description: 'Booking limit exceeded' })
   async createBooking(
-    @Request() req: any,
+    @Request() req: ExpressRequest & { user: { userId: string } },
     @Body() dto: CreateBookingDto,
   ): Promise<BookingResponseDto> {
     return this.bookingService.createBooking(req.user.userId, dto);
@@ -62,7 +62,7 @@ export class BookingController {
     type: BookingListResponseDto,
   })
   async getBookings(
-    @Request() req: any,
+    @Request() req: ExpressRequest & { user: { userId: string } },
     @Query() search: BookingSearchDto,
   ): Promise<BookingListResponseDto> {
     return this.bookingService.getBookings(req.user.userId, search);
@@ -75,7 +75,7 @@ export class BookingController {
     description: 'List of active bookings',
     type: [BookingResponseDto],
   })
-  async getActiveBookings(@Request() req: any): Promise<BookingResponseDto[]> {
+  async getActiveBookings(@Request() req: ExpressRequest & { user: { userId: string } }): Promise<BookingResponseDto[]> {
     return this.bookingService.getUserActiveBookings(req.user.userId);
   }
 
@@ -86,7 +86,7 @@ export class BookingController {
     description: 'List of upcoming bookings',
     type: [BookingResponseDto],
   })
-  async getUpcomingBookings(@Request() req: any): Promise<BookingResponseDto[]> {
+  async getUpcomingBookings(@Request() req: ExpressRequest & { user: { userId: string } }): Promise<BookingResponseDto[]> {
     return this.bookingService.getUserUpcomingBookings(req.user.userId);
   }
 
@@ -115,7 +115,7 @@ export class BookingController {
   })
   @ApiResponse({ status: 404, description: 'Booking not found' })
   @ApiResponse({ status: 403, description: 'Access denied' })
-  async getBooking(@Request() req: any, @Param('id') id: string): Promise<BookingResponseDto> {
+  async getBooking(@Request() req: ExpressRequest & { user: { userId: string } }, @Param('id') id: string): Promise<BookingResponseDto> {
     return this.bookingService.getBooking(req.user.userId, id);
   }
 
@@ -131,7 +131,7 @@ export class BookingController {
   @ApiResponse({ status: 403, description: 'Access denied' })
   @ApiResponse({ status: 400, description: 'Cannot update booking in current status' })
   async updateBooking(
-    @Request() req: any,
+    @Request() req: ExpressRequest & { user: { userId: string } },
     @Param('id') id: string,
     @Body() dto: UpdateBookingDto,
   ): Promise<BookingResponseDto> {
@@ -151,7 +151,7 @@ export class BookingController {
   @ApiResponse({ status: 403, description: 'Access denied' })
   @ApiResponse({ status: 400, description: 'Cannot cancel booking in current status' })
   async cancelBooking(
-    @Request() req: any,
+    @Request() req: ExpressRequest & { user: { userId: string } },
     @Param('id') id: string,
     @Body() dto: CancelBookingDto,
   ): Promise<BookingResponseDto> {

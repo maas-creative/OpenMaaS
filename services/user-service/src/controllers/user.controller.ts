@@ -15,6 +15,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
+import { AuthContext } from '@openmaas/types';
 import { UserService } from '../services/user.service';
 import { TripHistoryService } from '../services/trip-history.service';
 import { UserPreferencesService } from '../services/user-preferences.service';
@@ -26,14 +28,10 @@ import {
   TripStatsQueryDto,
   MonthlyStatsQueryDto,
 } from '../dto/trip-history.dto';
-import {
-  UpdatePreferencesDto,
-  UpdateNotificationPreferencesDto,
-  UpdateAccessibilityPreferencesDto,
-} from '../dto/user-preferences.dto';
+import { UpdatePreferencesDto } from '../dto/user-preferences.dto';
 import { User } from '../entities/user.entity';
 import { TripHistory } from '../entities/trip-history.entity';
-import { UserRole, PaginatedResponse, UserPreferences } from '@openmaas/types';
+import { PaginatedResponse, UserPreferences } from '@openmaas/types';
 
 @ApiTags('Users')
 @Controller('users')
@@ -66,7 +64,7 @@ export class UserController {
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully', type: User })
-  async getProfile(@Request() req: any): Promise<User> {
+  async getProfile(@Request() req: ExpressRequest & { user: AuthContext }): Promise<User> {
     return this.userService.findByExternalId(req.user.sub);
   }
 

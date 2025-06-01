@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class CacheService {
   private readonly logger = new Logger(CacheService.name);
-  private readonly cache = new Map<string, { value: any; expiry: number }>();
+  private readonly cache = new Map<string, { value: unknown; expiry: number }>();
   private readonly redisEnabled = false; // TODO: Implement Redis integration
 
   constructor(private readonly configService: ConfigService) {
@@ -36,7 +36,7 @@ export class CacheService {
     }
   }
 
-  async set(key: string, value: any, ttlSeconds: number): Promise<void> {
+  async set(key: string, value: unknown, ttlSeconds: number): Promise<void> {
     try {
       if (this.redisEnabled) {
         // TODO: Implement Redis set

@@ -14,6 +14,65 @@ import {
 } from '../dto/route-plan.dto';
 import { TransportMode } from '@openmaas/types';
 
+// OTP API Response Types
+interface OtpPlace {
+  name: string;
+  lat: number;
+  lon: number;
+  stopId?: string;
+  platformCode?: string;
+}
+
+interface OtpLeg {
+  startTime: number;
+  endTime: number;
+  duration: number;
+  distance: number;
+  mode: string;
+  from: OtpPlace;
+  to: OtpPlace;
+  legGeometry?: Record<string, unknown>;
+  realTime?: boolean;
+  pathway?: boolean;
+  route?: Record<string, unknown>;
+  trip?: Record<string, unknown>;
+  intermediateStops?: Array<Record<string, unknown>>;
+  alerts?: Array<Record<string, unknown>>;
+}
+
+interface OtpFare {
+  type: string;
+  currency: string;
+  cents: number;
+  details?: {
+    components?: Array<Record<string, unknown>>;
+  };
+}
+
+interface OtpItinerary {
+  startTime: number;
+  endTime: number;
+  duration: number;
+  transfers?: number;
+  walkDistance?: number;
+  walkTime?: number;
+  waitingTime?: number;
+  legs?: OtpLeg[];
+  fare?: OtpFare;
+}
+
+interface OtpPlan {
+  itineraries?: OtpItinerary[];
+}
+
+interface OtpResponse {
+  plan?: OtpPlan;
+  error?: {
+    message: string;
+    id: number;
+  };
+}
+
 @Injectable()
 export class OtpService {
   private readonly logger = new Logger(OtpService.name);
@@ -46,7 +105,7 @@ export class OtpService {
         );
       }
 
-      const otpResponse = await response.json();
+      const otpResponse = (await response.json()) as OtpResponse;
 
       if (otpResponse.error) {
         throw new BadRequestException(`OTP error: ${otpResponse.error.message || 'Unknown error'}`);
@@ -94,7 +153,7 @@ export class OtpService {
         );
       }
 
-      const otpResponse = await response.json();
+      const otpResponse = (await response.json()) as OtpResponse;
 
       return {
         query: request.query,
@@ -212,7 +271,7 @@ export class OtpService {
   }
 
   private transformOtpResponse(
-    otpResponse: any,
+    otpResponse: OtpResponse,
     request: RoutePlanRequestDto,
   ): RoutePlanResponseDto {
     const itineraries =

@@ -10,10 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import {
-  AuthToken,
-  KeycloakUserInfo,
-} from '@openmaas/types';
+import { AuthToken, KeycloakUserInfo } from '@openmaas/types';
 import { AuthService } from '../services/auth.service';
 import { RegisterDto, LoginDto, ChangePasswordDto } from '../dto/auth.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
