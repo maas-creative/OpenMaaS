@@ -1,149 +1,371 @@
-# OpenMaaSへの貢献ガイド
+# Contributing to OpenMaaS
 
-OpenMaaSプロジェクトへの貢献をありがとうございます！このガイドでは、プロジェクトへの貢献方法について説明します。
+[日本語](#japanese) | [English](#english)
 
-## 行動規範
+---
 
-このプロジェクトに参加するすべての人は、[行動規範](CODE_OF_CONDUCT.md)を遵守することが求められます。
+## English
 
-## 貢献の方法
+Thank you for your interest in contributing to OpenMaaS! This document provides guidelines and information for contributors.
 
-### バグ報告
+**OpenMaaS is developed by [MaaS Creative Co. Ltd](https://maas-creative.com)**
 
-バグを見つけた場合は、以下の手順で報告してください：
+### 🤝 Code of Conduct
 
-1. 既存の[Issues](https://github.com/openmaas/openmaas/issues)を確認し、同じバグが報告されていないか確認
-2. 新しいIssueを作成し、以下の情報を含める：
-   - バグの詳細な説明
-   - 再現手順
-   - 期待される動作
-   - 実際の動作
-   - 環境情報（OS、ブラウザ、Node.jsバージョンなど）
+This project adheres to a Code of Conduct that we expect all participants to follow. Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
 
-### 機能提案
+### 🚀 Getting Started
 
-新機能の提案は大歓迎です：
+#### Prerequisites
 
-1. [Discussions](https://github.com/openmaas/openmaas/discussions)で提案を共有
-2. フィードバックを収集し、提案を洗練
-3. 合意が得られたら、Issueを作成
+- Node.js 18+ and npm 9+
+- Docker and Docker Compose
+- Git
+- Basic understanding of TypeScript, NestJS, and PostgreSQL
 
-### プルリクエスト
+#### Development Setup
+
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/OpenMaaS.git
+   cd OpenMaaS
+   ```
+
+2. **Environment Setup**
+   ```bash
+   # Run the automated setup script
+   ./scripts/dev-setup.sh
+   
+   # Or manually:
+   npm install
+   npm run docker:up
+   npm run dev
+   ```
+
+3. **Verify Setup**
+   - All services should start without errors
+   - Tests should pass: `npm run test`
+   - Linting should pass: `npm run lint`
+
+### 🏗️ Project Structure
+
+```
+OpenMaaS/
+├── services/           # Microservices
+│   ├── auth-service/   # Authentication & authorization
+│   ├── user-service/   # User management
+│   ├── transit-service/# Transit data & GTFS processing
+│   ├── route-service/  # Route planning
+│   ├── booking-service/# Booking management
+│   └── payment-service/# Payment processing
+├── libs/              # Shared libraries
+│   ├── common/        # Common utilities
+│   └── types/         # Shared TypeScript types
+├── infrastructure/    # Infrastructure configs
+└── docs/             # Documentation
+```
+
+### 🔧 Development Workflow
+
+#### 1. Create a Feature Branch
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/issue-description
+```
+
+#### 2. Make Changes
+
+- Follow existing code patterns and conventions
+- Write tests for new functionality
+- Update documentation if needed
+- Ensure TypeScript strict mode compliance
+
+#### 3. Testing
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests for specific service
+cd services/service-name
+npm run test
+
+# Run specific test file
+npx jest src/__tests__/specific.test.ts
+```
+
+#### 4. Code Quality
+
+```bash
+# Lint all code
+npm run lint
+
+# Format code
+npm run format
+
+# Type checking
+npm run build
+```
+
+#### 5. Commit Guidelines
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```bash
+# Feature
+git commit -m "feat(auth): add OAuth2 support for Google"
+
+# Bug fix
+git commit -m "fix(payment): resolve Stripe webhook validation issue"
+
+# Documentation
+git commit -m "docs: update API documentation for route service"
+
+# Refactor
+git commit -m "refactor(user): improve user preference validation"
+```
+
+#### 6. Pull Request
+
+1. Push your branch to your fork
+2. Create a Pull Request with:
+   - Clear title and description
+   - Reference related issues
+   - Screenshots/videos if UI changes
+   - Testing instructions
+
+### 📋 Coding Standards
+
+#### TypeScript Guidelines
+
+- Use strict TypeScript configuration
+- Prefer explicit types over `any`
+- Use interfaces for object shapes
+- Follow NestJS patterns and decorators
+
+#### API Design
+
+- Follow RESTful conventions
+- Use proper HTTP status codes
+- Include comprehensive error handling
+- Document APIs with Swagger decorators
+
+#### Database Guidelines
+
+- Use TypeORM entities with proper decorators
+- Follow PostgreSQL naming conventions
+- Use migrations for schema changes
+- Include proper indexes for performance
+
+#### Testing Standards
+
+- Write unit tests for services and utilities
+- Write integration tests for controllers
+- Maintain minimum 80% code coverage
+- Use descriptive test names
+
+### 🏷️ Issue Labels
+
+- `bug`: Something isn't working
+- `enhancement`: New feature request
+- `documentation`: Documentation improvements
+- `good first issue`: Good for newcomers
+- `help wanted`: Extra attention needed
+- `priority/high`: High priority issue
+- `service/auth`: Auth service related
+- `service/user`: User service related
+- etc.
+
+### 🔍 Pull Request Review Process
+
+1. **Automated Checks**: All CI checks must pass
+2. **Code Review**: At least one maintainer review required
+3. **Testing**: Manual testing if needed
+4. **Documentation**: Ensure docs are updated
+5. **Merge**: Squash and merge preferred
+
+### 🌍 Internationalization
+
+- Use i18n for all user-facing strings
+- Support both English and Japanese
+- Test with different locales
+- Consider right-to-left languages for future support
+
+### 🛡️ Security Guidelines
+
+- Never commit secrets or API keys
+- Use environment variables for sensitive data
+- Follow OWASP security practices
+- Report security vulnerabilities privately
+
+### 📚 Resources
+
+- [NestJS Documentation](https://docs.nestjs.com/)
+- [TypeORM Documentation](https://typeorm.io/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Kong Documentation](https://docs.konghq.com/)
+- [Stripe API Documentation](https://stripe.com/docs/api)
+
+### ❓ Getting Help
+
+- **GitHub Issues**: For bugs and feature requests
+- **GitHub Discussions**: For questions and community chat
+- **Documentation**: Check `/docs` directory first
+
+---
+
+## Japanese
+
+OpenMaaSへの貢献にご興味をお持ちいただき、ありがとうございます！このドキュメントは貢献者向けのガイドラインと情報を提供します。
+
+**OpenMaaSは[MaaS Creative Co. Ltd](https://maas-creative.com)によって開発されています**
+
+### 🤝 行動規範
+
+このプロジェクトは、すべての参加者に従っていただく行動規範に従います。貢献する前に[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)をお読みください。
+
+### 🚀 はじめに
+
+#### 前提条件
+
+- Node.js 18+ および npm 9+
+- Docker および Docker Compose
+- Git
+- TypeScript、NestJS、PostgreSQLの基本的な理解
 
 #### 開発環境のセットアップ
 
+1. **フォークとクローン**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/OpenMaaS.git
+   cd OpenMaaS
+   ```
+
+2. **環境設定**
+   ```bash
+   # 自動セットアップスクリプトを実行
+   ./scripts/dev-setup.sh
+   
+   # または手動で:
+   npm install
+   npm run docker:up
+   npm run dev
+   ```
+
+3. **セットアップの確認**
+   - すべてのサービスがエラーなく起動すること
+   - テストが通ること: `npm run test`
+   - リントが通ること: `npm run lint`
+
+### 🔧 開発ワークフロー
+
+#### 1. フィーチャーブランチの作成
+
 ```bash
-# フォーク & クローン
-git clone https://github.com/YOUR_USERNAME/openmaas.git
-cd openmaas
-
-# 上流リポジトリを追加
-git remote add upstream https://github.com/openmaas/openmaas.git
-
-# 開発ブランチを作成
 git checkout -b feature/your-feature-name
+# または
+git checkout -b fix/issue-description
 ```
 
-#### コーディング規約
+#### 2. 変更の実施
 
-- **TypeScript/JavaScript**: ESLint設定に従う
-- **Python**: PEP 8に準拠
-- **コミットメッセージ**: [Conventional Commits](https://www.conventionalcommits.org/)形式
+- 既存のコードパターンと規約に従う
+- 新機能にはテストを書く
+- 必要に応じてドキュメントを更新
+- TypeScriptのstrictモード準拠を確保
 
-```
-feat: ユーザー認証機能を追加
-fix: 経路検索のバグを修正
-docs: READMEを更新
-chore: 依存関係を更新
-```
-
-#### テスト
-
-すべての新機能とバグ修正にはテストを含めてください：
+#### 3. テスト
 
 ```bash
-# ユニットテストの実行
-npm test
+# すべてのテストを実行
+npm run test
 
-# E2Eテストの実行
-npm run test:e2e
+# 特定のサービスのテストを実行
+cd services/service-name
+npm run test
 
-# カバレッジレポート
-npm run test:coverage
+# 特定のテストファイルを実行
+npx jest src/__tests__/specific.test.ts
 ```
 
-#### プルリクエストのプロセス
+#### 4. コード品質
 
-1. フィーチャーブランチで開発
-2. テストを追加/更新
-3. ドキュメントを更新
-4. コミットをスクワッシュ（必要に応じて）
-5. プルリクエストを作成
+```bash
+# すべてのコードをリント
+npm run lint
 
-プルリクエストテンプレート：
+# コードをフォーマット
+npm run format
 
-```markdown
-## 概要
-
-変更の概要を記述
-
-## 変更内容
-
-- [ ] 機能A を実装
-- [ ] バグB を修正
-
-## テスト
-
-- [ ] ユニットテスト追加
-- [ ] E2Eテスト追加
-
-## チェックリスト
-
-- [ ] コードはlintを通過
-- [ ] すべてのテストが成功
-- [ ] ドキュメントを更新
+# 型チェック
+npm run build
 ```
 
-### ドキュメント
+#### 5. コミットガイドライン
 
-ドキュメントの改善も重要な貢献です：
+[Conventional Commits](https://www.conventionalcommits.org/)に従います：
 
-- APIドキュメントの更新
-- チュートリアルの作成
-- 翻訳の追加
+```bash
+# 機能追加
+git commit -m "feat(auth): add OAuth2 support for Google"
 
-### コミュニティ
+# バグ修正
+git commit -m "fix(payment): resolve Stripe webhook validation issue"
 
-- [Discord](https://discord.gg/openmaas)に参加
-- 週次オンラインミーティングに参加（毎週水曜日 20:00 JST）
-- ブログ記事やチュートリアルを作成
+# ドキュメント
+git commit -m "docs: update API documentation for route service"
 
-## 開発ワークフロー
+# リファクタリング
+git commit -m "refactor(user): improve user preference validation"
+```
 
-### ブランチ戦略
+#### 6. プルリクエスト
 
-- `main`: 安定版リリース
-- `develop`: 開発版
-- `feature/*`: 新機能
-- `fix/*`: バグ修正
-- `docs/*`: ドキュメント更新
+1. あなたのフォークにブランチをプッシュ
+2. 以下を含むプルリクエストを作成：
+   - 明確なタイトルと説明
+   - 関連する課題への参照
+   - UI変更の場合はスクリーンショット/動画
+   - テスト手順
 
-### リリースプロセス
+### 📋 コーディング標準
 
-1. `develop`から`release/vX.Y.Z`ブランチを作成
-2. リリースノートを作成
-3. `main`にマージ
-4. タグを作成
-5. `main`を`develop`にマージ
+#### TypeScriptガイドライン
 
-## 連絡先
+- strictなTypeScript設定を使用
+- `any`よりも明示的な型を優先
+- オブジェクト形状にはinterfaceを使用
+- NestJSのパターンとデコレータに従う
 
-質問がある場合は：
+#### API設計
 
-- Discord: [OpenMaaS Community](https://discord.gg/openmaas)
-- Email: contributors@openmaas.org
-- GitHub Discussions: [ディスカッション](https://github.com/openmaas/openmaas/discussions)
+- RESTful規約に従う
+- 適切なHTTPステータスコードを使用
+- 包括的なエラーハンドリングを含める
+- SwaggerデコレータでAPIを文書化
 
-## ライセンス
+#### データベースガイドライン
 
-貢献されたコードは、プロジェクトと同じMITライセンスの下で公開されます。
+- 適切なデコレータ付きTypeORMエンティティを使用
+- PostgreSQLの命名規約に従う
+- スキーマ変更にはマイグレーションを使用
+- パフォーマンスのための適切なインデックスを含める
+
+#### テスト標準
+
+- サービスとユーティリティのユニットテストを書く
+- コントローラの統合テストを書く
+- 最低80%のコードカバレッジを維持
+- 説明的なテスト名を使用
+
+### ❓ ヘルプの取得
+
+- **GitHub Issues**: バグと機能リクエスト用
+- **GitHub Discussions**: 質問とコミュニティチャット用
+- **ドキュメント**: まず`/docs`ディレクトリを確認
+
+---
+
+© 2024 MaaS Creative Co. Ltd. All rights reserved.
