@@ -1,9 +1,10 @@
-# OpenMaaS - Open Source Mobility as a Service Platform
-
 [日本語](#japanese) | [English](#english)
+
+# OpenMaaS - Open Source Mobility as a Service Platform
 
 ---
 
+<a name="english"></a>
 ## English
 
 ### Overview
@@ -163,7 +164,8 @@ For security vulnerabilities, please see our [Security Policy](SECURITY.md).
 
 ---
 
-## Japanese
+<a name="japanese"></a>
+## 日本語
 
 ### 概要
 
