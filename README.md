@@ -1,137 +1,275 @@
-# OpenMaaS - オープンソース Mobility as a Service プラットフォーム
+[日本語](#japanese) | [English](#english)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
+# OpenMaaS - Open Source Mobility as a Service Platform
 
-OpenMaaSは、公共交通、ライドシェア、バイクシェアなどの様々な交通サービスを統合する、オープンソースのMobility as a Service (MaaS)プラットフォームです。
+---
 
-## 🚀 特徴
+<a name="english"></a>
+## English
 
-- **マルチモーダル経路探索**: 複数の交通手段を組み合わせた最適な経路を提案
-- **リアルタイム情報**: GTFS-RTによる遅延・運行情報の配信
-- **統合決済**: 複数の交通サービスをワンストップで決済
-- **オープンスタンダード**: GTFS、NeTEx等の国際標準に準拠
-- **マイクロサービスアーキテクチャ**: 拡張性と保守性を重視した設計
-- **マルチプラットフォーム**: Web、iOS、Androidに対応
+### Overview
 
-## 🏗️ アーキテクチャ
+OpenMaaS is an open-source Mobility as a Service (MaaS) platform that integrates various transportation services including public transit, ride-sharing, and bike-sharing into a unified platform. Our mission is to make urban mobility more accessible, efficient, and sustainable through open-source collaboration.
+
+**Developed by [MaaS Creative Co. Ltd](https://maas-creative.com)**
+
+### 🚀 Features
+
+- **Multi-modal Transportation Integration**: Seamlessly combine public transit, ride-sharing, bike-sharing, and walking routes
+- **Real-time Transit Data**: GTFS and GTFS-RT support for accurate, up-to-date transit information
+- **Smart Route Planning**: Multi-modal journey planning with OpenTripPlanner integration
+- **Secure Payment Processing**: Integrated payment system with Stripe support and refund management
+- **User Management**: Comprehensive user profiles, preferences, and trip history
+- **Booking System**: Unified booking interface for various transportation providers
+- **Developer-Friendly API**: RESTful APIs with comprehensive documentation
+- **Microservices Architecture**: Scalable, containerized services with Kubernetes support
+
+### 🏗️ Architecture
+
+OpenMaaS follows a microservices architecture with the following components:
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Web App   │     │ Mobile App  │     │  Admin UI   │
-│   (React)   │     │  (Flutter)  │     │   (React)   │
-└──────┬──────┘     └──────┬──────┘     └──────┬──────┘
-       │                   │                   │
-       └───────────────────┴───────────────────┘
-                           │
-                    ┌──────▼──────┐
-                    │ API Gateway │
-                    │   (Kong)    │
-                    └──────┬──────┘
-                           │
-       ┌───────────────────┼───────────────────┐
-       │                   │                   │
-┌──────▼──────┐     ┌──────▼──────┐     ┌──────▼──────┐
-│    Auth     │     │    User     │     │   Route     │
-│ (Keycloak)  │     │  Service    │     │  Planning   │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                    ┌──────▼──────┐
-                    │ PostgreSQL  │
-                    │  + PostGIS  │
-                    └─────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Web Frontend  │    │  Mobile Apps    │    │  Third-party    │
+│                 │    │                 │    │  Integrations   │
+└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
+          │                      │                      │
+          └──────────────────────┼──────────────────────┘
+                                 │
+                    ┌─────────────▼──────────────┐
+                    │       Kong API Gateway     │
+                    │   (Authentication, Routing) │
+                    └─────────────┬──────────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                       │                        │
+┌───────▼────────┐    ┌─────────▼────────┐    ┌─────────▼────────┐
+│  Auth Service  │    │  User Service    │    │ Transit Service  │
+│ (Port 3001)    │    │  (Port 3002)     │    │  (Port 3003)     │
+└────────────────┘    └──────────────────┘    └──────────────────┘
+        │                       │                        │
+┌───────▼────────┐    ┌─────────▼────────┐    ┌─────────▼────────┐
+│ Route Service  │    │ Booking Service  │    │ Payment Service  │
+│ (Port 3004)    │    │  (Port 3005)     │    │  (Port 3006)     │
+└────────────────┘    └──────────────────┘    └──────────────────┘
+        │                       │                        │
+        └───────────────────────┼────────────────────────┘
+                               │
+                    ┌──────────▼───────────┐
+                    │     PostgreSQL       │
+                    │   (with PostGIS)     │
+                    └──────────────────────┘
 ```
 
-## 🛠️ 技術スタック
+### Services
 
-### バックエンド
+- **Auth Service**: JWT authentication, Keycloak integration, role-based access control
+- **User Service**: User profiles, preferences, trip history management
+- **Transit Service**: GTFS data processing, real-time transit information
+- **Route Service**: Multi-modal route planning with OpenTripPlanner
+- **Booking Service**: Reservation management and provider integration
+- **Payment Service**: Stripe payment processing, refunds, payment methods
 
-- **主要言語**: TypeScript (Node.js/NestJS)
-- **補助言語**: Python (データ処理), Java (既存ツール連携)
-- **データベース**: PostgreSQL + PostGIS, Redis
-- **認証**: Keycloak
-- **APIゲートウェイ**: Kong
+### 🛠️ Technology Stack
 
-### フロントエンド
+- **Backend**: Node.js, NestJS, TypeScript
+- **Database**: PostgreSQL with PostGIS for geospatial data
+- **Authentication**: Keycloak, JWT
+- **API Gateway**: Kong
+- **Payment**: Stripe
+- **Route Planning**: OpenTripPlanner
+- **Containerization**: Docker, Docker Compose
+- **Orchestration**: Kubernetes
+- **Cache**: Redis
+- **Documentation**: Swagger/OpenAPI
 
-- **Web**: React + TypeScript + Material-UI
-- **Mobile**: Flutter + Dart
+### 📋 Prerequisites
 
-### インフラ
-
-- **コンテナ**: Docker
-- **オーケストレーション**: Kubernetes
-- **CI/CD**: GitHub Actions
-
-## 🚦 はじめに
-
-### 前提条件
-
-- Docker & Docker Compose
-- Node.js 18+
+- Node.js 18+ and npm 9+
+- Docker and Docker Compose
 - Git
 
-### 開発環境のセットアップ
+### 🚀 Quick Start
 
-```bash
-# リポジトリのクローン
-git clone https://github.com/openmaas/openmaas.git
-cd openmaas
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ukyonagata0105/OpenMaaS.git
+   cd OpenMaaS
+   ```
 
-# 開発環境の起動
-docker-compose up -d
+2. **Environment Setup**
+   ```bash
+   # Copy environment templates
+   find . -name ".env.example" -exec cp {} {}.env \;
+   
+   # Edit environment variables as needed
+   # Each service directory contains its own .env file
+   ```
 
-# 依存関係のインストール
-npm install
+3. **Development Setup**
+   ```bash
+   # Run the automated setup script
+   ./scripts/dev-setup.sh
+   
+   # Or manually start infrastructure
+   npm run docker:up
+   
+   # Start all services in development mode
+   npm run dev
+   ```
 
-# 開発サーバーの起動
-npm run dev
-```
+4. **Verify Installation**
+   - API Gateway: http://localhost:8000
+   - Keycloak Admin: http://localhost:8080 (admin/admin)
+   - Individual service docs available at http://localhost:[port]/api
 
-詳細な開発ガイドは [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+### 📖 Documentation
 
-## 📚 ドキュメント
+- **API Documentation**: Available at each service endpoint `/api`
+- **Architecture Guide**: See `/docs` directory
+- **Development Guide**: See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-- [アーキテクチャ設計書](docs/architecture.md)
-- [API仕様書](docs/api.md)
-- [開発者ガイド](docs/developer-guide.md)
-- [デプロイメントガイド](docs/deployment.md)
+### 🤝 Contributing
 
-## 🤝 コントリビュート
+We welcome contributions from developers worldwide! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
 
-OpenMaaSはオープンソースプロジェクトです。以下の方法で貢献できます：
+- Code of conduct
+- Development workflow
+- Pull request process
+- Coding standards
+- Testing requirements
 
-- バグ報告や機能提案は[Issues](https://github.com/openmaas/openmaas/issues)へ
-- コードの貢献は[プルリクエスト](https://github.com/openmaas/openmaas/pulls)で
-- ドキュメントの改善
-- 翻訳の追加
+### 📄 License
 
-詳細は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📊 プロジェクトステータス
+### 🛡️ Security
 
-現在、プロジェクトは初期開発フェーズです。以下のロードマップに従って開発を進めています：
+For security vulnerabilities, please see our [Security Policy](SECURITY.md).
 
-- [x] プロジェクト基盤の構築
-- [ ] 認証・認可基盤の実装
-- [ ] コアサービスの開発
-- [ ] フロントエンドアプリケーションの開発
-- [ ] 本番環境へのデプロイ
+### 🌍 Community & Support
 
-## 📝 ライセンス
+- **Website**: [https://maas-creative.com](https://maas-creative.com)
+- **Issues**: [GitHub Issues](https://github.com/ukyonagata0105/OpenMaaS/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ukyonagata0105/OpenMaaS/discussions)
 
-このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
+### 📈 Roadmap
 
-## 🙏 謝辞
+- [ ] Multi-language frontend support
+- [ ] Machine learning-based route optimization
+- [ ] Integration with more transportation providers
+- [ ] Mobile SDK development
+- [ ] Advanced analytics dashboard
+- [ ] Carbon footprint tracking
 
-このプロジェクトは以下のオープンソースプロジェクトを参考にしています：
+---
 
-- [OpenTripPlanner](https://www.opentripplanner.org/)
-- [Trufi Core](https://github.com/trufi-association/trufi-core)
-- [Navitia](https://github.com/CanalTP/navitia)
+<a name="japanese"></a>
+## 日本語
 
-## 📧 連絡先
+### 概要
 
-- プロジェクトWebサイト: [https://openmaas.org](https://openmaas.org)
-- Email: contact@openmaas.org
-- Discord: [OpenMaaS Community](https://discord.gg/openmaas)
+OpenMaaSは、公共交通機関、ライドシェア、バイクシェアなどの様々な交通サービスを統一プラットフォームに統合するオープンソースのMobility as a Service（MaaS）プラットフォームです。オープンソースコラボレーションを通じて、都市のモビリティをより利用しやすく、効率的で持続可能なものにすることを使命としています。
+
+**開発元: [MaaS Creative Co. Ltd](https://maas-creative.com)**
+
+### 🚀 機能
+
+- **マルチモーダル交通統合**: 公共交通機関、ライドシェア、バイクシェア、徒歩ルートをシームレスに組み合わせ
+- **リアルタイム交通データ**: GTFS および GTFS-RT サポートによる正確で最新の交通情報
+- **スマートルート計画**: OpenTripPlanner統合によるマルチモーダル移動計画
+- **安全な決済処理**: Stripeサポートと返金管理を備えた統合決済システム
+- **ユーザー管理**: 包括的なユーザープロファイル、設定、移動履歴
+- **予約システム**: 様々な交通事業者向けの統一予約インターフェース
+- **開発者フレンドリーAPI**: 包括的なドキュメント付きRESTful API
+- **マイクロサービスアーキテクチャ**: Kubernetesサポート付きスケーラブルなコンテナ化サービス
+
+### 🛠️ 技術スタック
+
+- **バックエンド**: Node.js, NestJS, TypeScript
+- **データベース**: 地理空間データ用PostgreSQL with PostGIS
+- **認証**: Keycloak, JWT
+- **APIゲートウェイ**: Kong
+- **決済**: Stripe
+- **ルート計画**: OpenTripPlanner
+- **コンテナ化**: Docker, Docker Compose
+- **オーケストレーション**: Kubernetes
+- **キャッシュ**: Redis
+- **ドキュメント**: Swagger/OpenAPI
+
+### 📋 前提条件
+
+- Node.js 18+ および npm 9+
+- Docker および Docker Compose
+- Git
+
+### 🚀 クイックスタート
+
+1. **リポジトリのクローン**
+   ```bash
+   git clone https://github.com/ukyonagata0105/OpenMaaS.git
+   cd OpenMaaS
+   ```
+
+2. **環境設定**
+   ```bash
+   # 環境変数テンプレートをコピー
+   find . -name ".env.example" -exec cp {} {}.env \;
+   
+   # 必要に応じて環境変数を編集
+   # 各サービスディレクトリには独自の.envファイルがあります
+   ```
+
+3. **開発環境セットアップ**
+   ```bash
+   # 自動セットアップスクリプトを実行
+   ./scripts/dev-setup.sh
+   
+   # または手動でインフラストラクチャを開始
+   npm run docker:up
+   
+   # 開発モードですべてのサービスを開始
+   npm run dev
+   ```
+
+4. **インストール確認**
+   - APIゲートウェイ: http://localhost:8000
+   - Keycloak管理画面: http://localhost:8080 (admin/admin)
+   - 各サービスのドキュメント: http://localhost:[port]/api
+
+### 🤝 貢献
+
+世界中の開発者からの貢献を歓迎します！詳細については[貢献ガイド](CONTRIBUTING.md)をご覧ください：
+
+- 行動規範
+- 開発ワークフロー
+- プルリクエストプロセス
+- コーディング標準
+- テスト要件
+
+### 📄 ライセンス
+
+このプロジェクトはMITライセンスの下でライセンスされています - 詳細は[LICENSE](LICENSE)ファイルをご覧ください。
+
+### 🛡️ セキュリティ
+
+セキュリティの脆弱性については、[セキュリティポリシー](SECURITY.md)をご覧ください。
+
+### 🌍 コミュニティ & サポート
+
+- **ウェブサイト**: [https://maas-creative.com](https://maas-creative.com)
+- **課題**: [GitHub Issues](https://github.com/ukyonagata0105/OpenMaaS/issues)
+- **ディスカッション**: [GitHub Discussions](https://github.com/ukyonagata0105/OpenMaaS/discussions)
+
+### 📈 ロードマップ
+
+- [ ] 多言語フロントエンドサポート
+- [ ] 機械学習ベースのルート最適化
+- [ ] より多くの交通事業者との統合
+- [ ] モバイルSDK開発
+- [ ] 高度な分析ダッシュボード
+- [ ] カーボンフットプリント追跡
+
+---
+
+© 2024 MaaS Creative Co. Ltd. All rights reserved.
