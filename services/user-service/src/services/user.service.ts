@@ -8,9 +8,6 @@ import { UserRepository } from '../repositories/user.repository';
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import {
-  User as UserType,
-  CreateUserDto as CreateUserType,
-  UpdateUserDto as UpdateUserType,
   UserRole,
   PaginationParams,
   PaginatedResponse,
@@ -117,7 +114,7 @@ export class UserService {
   }
 
   async delete(id: string): Promise<void> {
-    const user = await this.findById(id);
+    await this.findById(id); // Verify user exists
     const deleted = await this.userRepository.delete(id);
     if (!deleted) {
       throw new BadRequestException('Failed to delete user');

@@ -18,21 +18,21 @@ import { RefundEntity } from './refund.entity';
 @Index(['createdAt'])
 export class PaymentEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'user_id' })
   @Index()
-  userId: string; // References User.id from user-service
+  userId!: string; // References User.id from user-service
 
   @Column({ name: 'booking_id', nullable: true })
   @Index()
   bookingId?: string; // References Booking.id from booking-service
 
   @Column({ name: 'amount', type: 'decimal', precision: 10, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ name: 'currency', length: 3 })
-  currency: string;
+  currency!: string;
 
   @Column({
     name: 'status',
@@ -40,17 +40,17 @@ export class PaymentEntity {
     enum: PaymentStatus,
     default: PaymentStatus.PENDING,
   })
-  status: PaymentStatus;
+  status!: PaymentStatus;
 
   @Column({ name: 'payment_method_id' })
-  paymentMethodId: string;
+  paymentMethodId!: string;
 
   @Column({
     name: 'provider',
     type: 'enum',
     enum: PaymentProvider,
   })
-  provider: PaymentProvider;
+  provider!: PaymentProvider;
 
   @Column({ name: 'provider_transaction_id', nullable: true })
   providerTransactionId?: string;
@@ -83,14 +83,14 @@ export class PaymentEntity {
   receiptUrl?: string;
 
   @Column({ name: 'refunded_amount', type: 'decimal', precision: 10, scale: 2, default: 0 })
-  refundedAmount: number;
+  refundedAmount!: number;
 
   @OneToMany(() => RefundEntity, (refund) => refund.payment)
-  refunds: RefundEntity[];
+  refunds!: RefundEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

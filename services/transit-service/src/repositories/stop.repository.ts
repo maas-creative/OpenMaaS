@@ -76,24 +76,32 @@ export class StopRepository {
   }
 
   async create(stop: Partial<StopEntity>): Promise<StopEntity> {
+    const { stopLat, stopLon, ...restStop } = stop;
     const entity = this.repository.create({
-      ...stop,
-      location: {
-        type: 'Point',
-        coordinates: [stop.stopLon, stop.stopLat],
-      },
+      ...restStop,
+      stopLat,
+      stopLon,
+      location: stopLat && stopLon ? {
+        type: 'Point' as const,
+        coordinates: [stopLon, stopLat],
+      } as any : undefined,
     });
     return this.repository.save(entity);
   }
 
   async upsert(stops: Partial<StopEntity>[]): Promise<void> {
-    const entities = stops.map((stop) => ({
-      ...stop,
-      location: {
-        type: 'Point',
-        coordinates: [stop.stopLon, stop.stopLat],
-      },
-    }));
+    const entities = stops.map((stop) => {
+      const { stopLat, stopLon, ...restStop } = stop;
+      return {
+        ...restStop,
+        stopLat,
+        stopLon,
+        location: stopLat && stopLon ? {
+          type: 'Point' as const,
+          coordinates: [stopLon, stopLat],
+        } as any : undefined,
+      };
+    });
     await this.repository.upsert(entities, ['stopId', 'feedId']);
   }
 

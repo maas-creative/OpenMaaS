@@ -79,7 +79,7 @@ export class FeedService {
       this.logger.log(`Successfully updated feed: ${feed.feedId}`);
     } catch (error) {
       this.logger.error(`Failed to update feed ${feed.feedId}:`, error);
-      await this.feedRepository.updateLastFetch(id, false, error.message);
+      await this.feedRepository.updateLastFetch(id, false, error instanceof Error ? error.message : 'Unknown error');
     }
   }
 

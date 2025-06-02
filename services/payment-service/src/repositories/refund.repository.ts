@@ -50,7 +50,11 @@ export class RefundRepository {
 
   async update(id: string, refund: Partial<RefundEntity>): Promise<RefundEntity> {
     await this.repository.update(id, refund);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Refund with id ${id} not found`);
+    }
+    return updated;
   }
 
   async updateStatus(

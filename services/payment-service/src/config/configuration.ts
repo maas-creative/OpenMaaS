@@ -1,11 +1,11 @@
 export default () => ({
   app: {
-    port: parseInt(process.env.PORT, 10) || 3006,
+    port: parseInt(process.env.PORT || '3006', 10),
     env: process.env.NODE_ENV || 'development',
   },
   database: {
     host: process.env.DATABASE_HOST || 'localhost',
-    port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+    port: parseInt(process.env.DATABASE_PORT || '5432', 10),
     username: process.env.DATABASE_USER || 'openmaas',
     password: process.env.DATABASE_PASSWORD || 'openmaas-dev',
     database: process.env.DATABASE_NAME || 'openmaas',
@@ -16,7 +16,7 @@ export default () => ({
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
     password: process.env.REDIS_PASSWORD || '',
   },
   stripe: {
@@ -27,9 +27,9 @@ export default () => ({
   },
   payment: {
     currency: process.env.PAYMENT_CURRENCY || 'JPY',
-    minAmount: parseInt(process.env.PAYMENT_MIN_AMOUNT, 10) || 100,
-    maxAmount: parseInt(process.env.PAYMENT_MAX_AMOUNT, 10) || 10000000,
-    refundWindowDays: parseInt(process.env.REFUND_WINDOW_DAYS, 10) || 30,
+    minAmount: parseInt(process.env.PAYMENT_MIN_AMOUNT || '100', 10),
+    maxAmount: parseInt(process.env.PAYMENT_MAX_AMOUNT || '10000000', 10),
+    refundWindowDays: parseInt(process.env.REFUND_WINDOW_DAYS || '30', 10),
   },
   externalServices: {
     bookingServiceUrl: process.env.BOOKING_SERVICE_URL || 'http://localhost:3005',
@@ -37,7 +37,7 @@ export default () => ({
   },
   security: {
     encryptionKey: process.env.ENCRYPTION_KEY || 'default-32-character-encryption-key-change-me',
-    webhookToleranceSeconds: parseInt(process.env.WEBHOOK_TOLERANCE_SECONDS, 10) || 300,
+    webhookToleranceSeconds: parseInt(process.env.WEBHOOK_TOLERANCE_SECONDS || '300', 10),
   },
   logging: {
     level: process.env.LOG_LEVEL || 'debug',

@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
 ## Project Overview
 
 OpenMaaS is an open-source Mobility as a Service (MaaS) platform that integrates various transportation services (public transit, ride-sharing, bike-sharing) into a unified platform. The project is currently in active development with a microservices architecture.
@@ -228,3 +234,46 @@ When the user asks to push changes to git:
 4. Create a meaningful commit message that describes what was implemented
 5. If asked to push to origin main, execute `git push origin main`
 6. The remote origin is already configured for this repository
+
+## TypeScript Build Error Patterns
+
+When fixing TypeScript strict mode errors in this codebase:
+
+### Configuration Errors
+For services with configuration files, fix parseInt/parseFloat with undefined by providing defaults:
+```typescript
+// Bad: parseInt(process.env.PORT) - can be undefined
+// Good: parseInt(process.env.PORT || '3004', 10)
+```
+
+### DTO Property Initialization  
+Use definite assignment assertions for DTO classes to satisfy strictPropertyInitialization:
+```typescript
+export class LocationDto {
+  @IsNumber()
+  lat!: number;  // Add "!" for definite assignment
+}
+```
+
+### Interface Implementation in DTOs
+Remove interface implementations from DTO classes to avoid strict type checking conflicts:
+```typescript
+// Bad: export class LocationDto implements Location
+// Good: export class LocationDto (remove implements)
+```
+
+### AuthContext vs JwtPayload
+- AuthContext has `userId: string` property
+- JwtPayload has `sub: string` property  
+- Services should use AuthContext.userId for user identification
+
+### Keycloak API Updates
+Recent Keycloak admin client uses:
+- `scopes: ['openid']` (array) instead of `scope: 'openid'` (string)
+- Always verify API method signatures match current @keycloak/keycloak-admin-client version
+
+## Current Build Status
+
+As of the most recent session, these services build successfully:
+- ✅ types, common, route-service, auth-service, user-service
+- ❌ booking-service, payment-service, transit-service (need similar TypeScript fixes)

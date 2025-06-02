@@ -18,7 +18,7 @@ import { TripEntity } from './trip.entity';
 @Index(['feedId'])
 export class RouteEntity {
   @PrimaryColumn({ name: 'route_id' })
-  routeId: string;
+  routeId!: string;
 
   @Column({ name: 'agency_id', nullable: true })
   agencyId?: string;
@@ -31,13 +31,13 @@ export class RouteEntity {
   routeShortName?: string;
 
   @Column({ name: 'route_long_name' })
-  routeLongName: string;
+  routeLongName!: string;
 
   @Column({ name: 'route_desc', nullable: true })
   routeDesc?: string;
 
   @Column({ name: 'route_type', type: 'smallint' })
-  routeType: RouteType;
+  routeType!: RouteType;
 
   @Column({ name: 'route_url', nullable: true })
   routeUrl?: string;
@@ -52,14 +52,14 @@ export class RouteEntity {
   routeSortOrder?: number;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @OneToMany(() => TripEntity, (trip) => trip.route)
-  trips: TripEntity[];
+  trips!: TripEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

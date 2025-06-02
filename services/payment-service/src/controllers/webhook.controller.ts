@@ -1,7 +1,6 @@
 import {
   Controller,
   Post,
-  Body,
   Headers,
   HttpCode,
   HttpStatus,
@@ -25,10 +24,10 @@ export class WebhookController {
     private readonly paymentService: PaymentService,
     private readonly configService: ConfigService,
   ) {
-    this.stripe = new Stripe(this.configService.get('stripe.secretKey'), {
+    this.stripe = new Stripe(this.configService.get('stripe.secretKey') || '', {
       apiVersion: '2023-10-16',
     });
-    this.webhookSecret = this.configService.get('stripe.webhookSecret');
+    this.webhookSecret = this.configService.get('stripe.webhookSecret') || '';
   }
 
   @Post('stripe')
@@ -37,7 +36,7 @@ export class WebhookController {
   @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
   @ApiResponse({ status: 400, description: 'Invalid webhook signature' })
   async handleStripeWebhook(
-    @Headers('stripe-signature') signature: string,
+    @Headers('stripe-signature') signature: string | undefined,
     @Req() request: RawBodyRequest<Request>,
   ): Promise<{ received: boolean }> {
     if (!signature) {
@@ -48,9 +47,9 @@ export class WebhookController {
 
     try {
       // Verify webhook signature
-      event = this.stripe.webhooks.constructEvent(request.rawBody, signature, this.webhookSecret);
+      event = this.stripe.webhooks.constructEvent(request.rawBody || Buffer.from(''), signature, this.webhookSecret);
     } catch (err) {
-      throw new BadRequestException(`Webhook signature verification failed: ${err.message}`);
+      throw new BadRequestException(`Webhook signature verification failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
 
     // Handle the event

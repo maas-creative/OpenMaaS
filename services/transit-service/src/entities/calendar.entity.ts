@@ -4,41 +4,41 @@ import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, Inde
 @Index(['feedId'])
 export class CalendarEntity {
   @PrimaryColumn({ name: 'service_id' })
-  serviceId: string;
+  serviceId!: string;
 
   @Column({ name: 'monday', type: 'boolean' })
-  monday: boolean;
+  monday!: boolean;
 
   @Column({ name: 'tuesday', type: 'boolean' })
-  tuesday: boolean;
+  tuesday!: boolean;
 
   @Column({ name: 'wednesday', type: 'boolean' })
-  wednesday: boolean;
+  wednesday!: boolean;
 
   @Column({ name: 'thursday', type: 'boolean' })
-  thursday: boolean;
+  thursday!: boolean;
 
   @Column({ name: 'friday', type: 'boolean' })
-  friday: boolean;
+  friday!: boolean;
 
   @Column({ name: 'saturday', type: 'boolean' })
-  saturday: boolean;
+  saturday!: boolean;
 
   @Column({ name: 'sunday', type: 'boolean' })
-  sunday: boolean;
+  sunday!: boolean;
 
   @Column({ name: 'start_date', type: 'date' })
-  startDate: Date;
+  startDate!: Date;
 
   @Column({ name: 'end_date', type: 'date' })
-  endDate: Date;
+  endDate!: Date;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

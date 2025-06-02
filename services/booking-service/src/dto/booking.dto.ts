@@ -28,7 +28,7 @@ import {
 export class PassengerDto implements Passenger {
   @ApiProperty({ enum: PassengerType })
   @IsEnum(PassengerType)
-  type: PassengerType;
+  type!: PassengerType;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -61,7 +61,7 @@ export class PassengerDto implements Passenger {
 export class BookingPlaceDto implements BookingPlace {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -69,7 +69,7 @@ export class BookingPlaceDto implements BookingPlace {
   stopId?: string;
 
   @ApiProperty()
-  coordinates: {
+  coordinates!: {
     lat: number;
     lon: number;
   };
@@ -83,25 +83,25 @@ export class BookingPlaceDto implements BookingPlace {
 export class BookingLegDto implements BookingLeg {
   @ApiProperty()
   @IsString()
-  mode: string;
+  mode!: string;
 
   @ApiProperty({ type: BookingPlaceDto })
   @ValidateNested()
   @Type(() => BookingPlaceDto)
-  from: BookingPlaceDto;
+  from!: BookingPlaceDto;
 
   @ApiProperty({ type: BookingPlaceDto })
   @ValidateNested()
   @Type(() => BookingPlaceDto)
-  to: BookingPlaceDto;
+  to!: BookingPlaceDto;
 
   @ApiProperty()
   @IsDateString()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
   @IsDateString()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -139,80 +139,80 @@ export class BookingItineraryDto implements BookingItinerary {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => BookingLegDto)
-  legs: BookingLegDto[];
+  legs!: BookingLegDto[];
 
   @ApiProperty()
   @IsDateString()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
   @IsDateString()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  duration: number;
+  duration!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  transfers: number;
+  transfers!: number;
 }
 
 export class FareBreakdownDto implements FareBreakdown {
   @ApiProperty()
   @IsString()
-  type: string;
+  type!: string;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  description!: string;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(1)
-  quantity: number;
+  quantity!: number;
 }
 
 export class DiscountDto implements Discount {
   @ApiProperty()
   @IsString()
-  code: string;
+  code!: string;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  description!: string;
 
   @ApiProperty()
   @IsNumber()
-  amount: number;
+  amount!: number;
 
   @ApiProperty({ enum: ['percentage', 'fixed'] })
   @IsEnum(['percentage', 'fixed'])
-  type: 'percentage' | 'fixed';
+  type!: 'percentage' | 'fixed';
 }
 
 export class BookingFareDto implements BookingFare {
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
   @IsString()
-  currency: string;
+  currency!: string;
 
   @ApiProperty({ type: [FareBreakdownDto] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FareBreakdownDto)
-  breakdown: FareBreakdownDto[];
+  breakdown!: FareBreakdownDto[];
 
   @ApiPropertyOptional({ type: [DiscountDto] })
   @IsOptional()
@@ -224,28 +224,28 @@ export class BookingFareDto implements BookingFare {
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  totalAmount: number;
+  totalAmount!: number;
 }
 
 export class CreateBookingDto {
   @ApiProperty()
   @IsString()
-  tripId: string;
+  tripId!: string;
 
   @ApiProperty({ enum: BookingType })
   @IsEnum(BookingType)
-  bookingType: BookingType;
+  bookingType!: BookingType;
 
   @ApiProperty({ type: [PassengerDto] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PassengerDto)
-  passengers: PassengerDto[];
+  passengers!: PassengerDto[];
 
   @ApiProperty({ type: BookingItineraryDto })
   @ValidateNested()
   @Type(() => BookingItineraryDto)
-  itinerary: BookingItineraryDto;
+  itinerary!: BookingItineraryDto;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -331,7 +331,7 @@ export class BookingSearchDto {
 export class CancellationPolicyDto implements CancellationPolicy {
   @ApiProperty()
   @IsBoolean()
-  refundable: boolean;
+  refundable!: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -354,43 +354,43 @@ export class CancellationPolicyDto implements CancellationPolicy {
 
 export class BookingResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  userId: string;
+  userId!: string;
 
   @ApiProperty()
-  tripId: string;
+  tripId!: string;
 
   @ApiProperty({ enum: BookingStatus })
-  status: BookingStatus;
+  status!: BookingStatus;
 
   @ApiProperty({ enum: BookingType })
-  bookingType: BookingType;
+  bookingType!: BookingType;
 
   @ApiProperty({ type: [PassengerDto] })
-  passengers: PassengerDto[];
+  passengers!: PassengerDto[];
 
   @ApiProperty({ type: BookingItineraryDto })
-  itinerary: BookingItineraryDto;
+  itinerary!: BookingItineraryDto;
 
   @ApiProperty({ type: BookingFareDto })
-  fare: BookingFareDto;
+  fare!: BookingFareDto;
 
   @ApiPropertyOptional()
   paymentId?: string;
 
   @ApiProperty()
-  confirmationCode: string;
+  confirmationCode!: string;
 
   @ApiPropertyOptional()
   qrCode?: string;
 
   @ApiProperty()
-  validFrom: Date;
+  validFrom!: Date;
 
   @ApiProperty()
-  validUntil: Date;
+  validUntil!: Date;
 
   @ApiPropertyOptional({ type: CancellationPolicyDto })
   cancellationPolicy?: CancellationPolicyDto;
@@ -399,22 +399,22 @@ export class BookingResponseDto {
   metadata?: Record<string, any>;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 export class BookingListResponseDto {
   @ApiProperty({ type: [BookingResponseDto] })
-  bookings: BookingResponseDto[];
+  bookings!: BookingResponseDto[];
 
   @ApiProperty()
-  total: number;
+  total!: number;
 
   @ApiProperty()
-  limit: number;
+  limit!: number;
 
   @ApiProperty()
-  offset: number;
+  offset!: number;
 }

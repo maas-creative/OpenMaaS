@@ -80,11 +80,11 @@ class UserProfileDto implements Partial<UserProfile> {
 export class CreateUserDto {
   @ApiProperty({ description: 'External ID from Keycloak' })
   @IsString()
-  externalId: string;
+  externalId!: string;
 
   @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiPropertyOptional({ example: '+81901234567' })
   @IsOptional()
@@ -135,7 +135,7 @@ export class UpdateUserRolesDto {
   @ApiProperty({ enum: UserRole, isArray: true })
   @IsArray()
   @IsEnum(UserRole, { each: true })
-  roles: UserRole[];
+  roles!: UserRole[];
 }
 
 export class UserQueryDto {

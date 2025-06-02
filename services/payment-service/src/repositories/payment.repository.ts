@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, In } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { PaymentEntity } from '../entities/payment.entity';
 import { PaymentStatus } from '@openmaas/types';
 
@@ -115,7 +115,11 @@ export class PaymentRepository {
 
   async update(id: string, payment: Partial<PaymentEntity>): Promise<PaymentEntity> {
     await this.repository.update(id, payment);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Payment with id ${id} not found`);
+    }
+    return updated;
   }
 
   async updateStatus(

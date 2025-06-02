@@ -9,7 +9,7 @@ export class ProviderService {
   private readonly timeout: number;
 
   constructor(private readonly configService: ConfigService) {
-    this.timeout = this.configService.get('providers.apiTimeout');
+    this.timeout = this.configService.get('providers.apiTimeout') || 30000;
   }
 
   async createBooking(provider: BookingProviderEntity, booking: any, leg: any): Promise<any> {
@@ -147,7 +147,7 @@ export class ProviderService {
         tripId: leg.tripId,
       },
       preferences: {
-        wheelchairAccessible: booking.passengers.some((p) => p.requiresAssistance),
+        wheelchairAccessible: booking.passengers.some((p: any) => p.requiresAssistance),
         seatPreferences: [],
       },
       metadata: {

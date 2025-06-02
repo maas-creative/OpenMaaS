@@ -5,8 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import {
   BookingStatus,
@@ -25,14 +23,14 @@ import {
 @Index(['validFrom', 'validUntil'])
 export class BookingEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'user_id' })
   @Index()
-  userId: string; // References User.id from user-service
+  userId!: string; // References User.id from user-service
 
   @Column({ name: 'trip_id' })
-  tripId: string;
+  tripId!: string;
 
   @Column({
     name: 'status',
@@ -40,48 +38,48 @@ export class BookingEntity {
     enum: BookingStatus,
     default: BookingStatus.PENDING,
   })
-  status: BookingStatus;
+  status!: BookingStatus;
 
   @Column({
     name: 'booking_type',
     type: 'enum',
     enum: BookingType,
   })
-  bookingType: BookingType;
+  bookingType!: BookingType;
 
   @Column({
     name: 'passengers',
     type: 'jsonb',
   })
-  passengers: Passenger[];
+  passengers!: Passenger[];
 
   @Column({
     name: 'itinerary',
     type: 'jsonb',
   })
-  itinerary: BookingItinerary;
+  itinerary!: BookingItinerary;
 
   @Column({
     name: 'fare',
     type: 'jsonb',
   })
-  fare: BookingFare;
+  fare!: BookingFare;
 
   @Column({ name: 'payment_id', nullable: true })
   @Index()
   paymentId?: string; // References Payment.id from payment-service
 
   @Column({ name: 'confirmation_code', unique: true })
-  confirmationCode: string;
+  confirmationCode!: string;
 
   @Column({ name: 'qr_code', nullable: true })
   qrCode?: string;
 
   @Column({ name: 'valid_from', type: 'timestamp' })
-  validFrom: Date;
+  validFrom!: Date;
 
   @Column({ name: 'valid_until', type: 'timestamp' })
-  validUntil: Date;
+  validUntil!: Date;
 
   @Column({
     name: 'cancellation_policy',
@@ -107,10 +105,10 @@ export class BookingEntity {
   externalReference?: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ name: 'cancelled_at', type: 'timestamp', nullable: true })
   cancelledAt?: Date;

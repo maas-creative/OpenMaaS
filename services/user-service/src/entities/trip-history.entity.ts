@@ -34,39 +34,39 @@ export interface TripLeg {
 @Index(['userId', 'startTime'])
 export class TripHistory {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'user_id' })
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User, (user) => user.tripHistory)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @Column({ name: 'booking_id', nullable: true })
   bookingId?: string;
 
   @Column({ name: 'start_time' })
   @Index()
-  startTime: Date;
+  startTime!: Date;
 
   @Column({ name: 'end_time' })
-  endTime: Date;
+  endTime!: Date;
 
   @Column()
-  duration: number; // seconds
+  duration!: number; // seconds
 
   @Column({ name: 'total_distance' })
-  totalDistance: number; // meters
+  totalDistance!: number; // meters
 
   @Column({ name: 'walk_distance' })
-  walkDistance: number; // meters
+  walkDistance!: number; // meters
 
   @Column()
-  transfers: number;
+  transfers!: number;
 
   @Column({ type: 'jsonb' })
-  legs: TripLeg[];
+  legs!: TripLeg[];
 
   @Column({ type: 'jsonb', nullable: true })
   fare?: {
@@ -79,7 +79,7 @@ export class TripHistory {
     enum: ['planned', 'completed', 'cancelled', 'modified'],
     default: 'planned',
   })
-  status: 'planned' | 'completed' | 'cancelled' | 'modified';
+  status!: 'planned' | 'completed' | 'cancelled' | 'modified';
 
   @Column({ type: 'jsonb', nullable: true })
   feedback?: {
@@ -89,10 +89,10 @@ export class TripHistory {
   };
 
   @Column({ type: 'jsonb', default: {} })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   // Computed properties
   get modes(): string[] {

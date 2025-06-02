@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan } from 'typeorm';
+import { Repository } from 'typeorm';
 import { FeedEntity } from '../entities/feed.entity';
 
 @Injectable()
@@ -49,7 +49,11 @@ export class FeedRepository {
 
   async update(id: string, feed: Partial<FeedEntity>): Promise<FeedEntity> {
     await this.repository.update(id, feed);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Feed with ID ${id} not found`);
+    }
+    return updated;
   }
 
   async updateLastFetch(id: string, success: boolean, error?: string): Promise<void> {
@@ -59,7 +63,7 @@ export class FeedRepository {
 
     if (success) {
       updates.lastUpdated = new Date();
-      updates.lastFetchError = null;
+      updates.lastFetchError = undefined;
     } else {
       updates.lastFetchError = error;
     }

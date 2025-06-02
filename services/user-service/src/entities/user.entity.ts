@@ -7,21 +7,21 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
-import { UserRole, UserProfile, UserPreferences, Address } from '@openmaas/types';
+import { UserRole, UserProfile, UserPreferences } from '@openmaas/types';
 import { TripHistory } from './trip-history.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true, name: 'external_id' })
   @Index()
-  externalId: string; // Keycloak ID
+  externalId!: string; // Keycloak ID
 
   @Column({ unique: true })
   @Index()
-  email: string;
+  email!: string;
 
   @Column({ nullable: true })
   phone?: string;
@@ -30,25 +30,25 @@ export class User {
     type: 'simple-array',
     default: 'user',
   })
-  roles: UserRole[];
+  roles!: UserRole[];
 
   @Column({ type: 'jsonb', default: {} })
-  profile: UserProfile;
+  profile!: UserProfile;
 
   @Column({ type: 'jsonb', default: {} })
-  preferences: UserPreferences;
+  preferences!: UserPreferences;
 
   @Column({ type: 'jsonb', default: {}, nullable: true })
   metadata?: Record<string, unknown>;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @OneToMany(() => TripHistory, (tripHistory) => tripHistory.user)
-  tripHistory: TripHistory[];
+  tripHistory!: TripHistory[];
 
   // Virtual properties
   get fullName(): string {

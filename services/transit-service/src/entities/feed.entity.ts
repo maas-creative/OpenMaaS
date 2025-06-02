@@ -11,25 +11,25 @@ import {
 @Index(['providerId'])
 export class FeedEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'feed_id', unique: true })
-  feedId: string;
+  feedId!: string;
 
   @Column({ name: 'provider_id' })
-  providerId: string;
+  providerId!: string;
 
   @Column({ name: 'provider_name' })
-  providerName: string;
+  providerName!: string;
 
   @Column({ name: 'feed_url' })
-  feedUrl: string;
+  feedUrl!: string;
 
   @Column({ name: 'feed_type', default: 'gtfs' })
-  feedType: string;
+  feedType!: string;
 
   @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'last_updated', type: 'timestamp', nullable: true })
   lastUpdated?: Date;
@@ -41,14 +41,14 @@ export class FeedEntity {
   lastFetchError?: string;
 
   @Column({ name: 'update_frequency', type: 'integer', default: 86400 })
-  updateFrequency: number; // seconds
+  updateFrequency!: number; // seconds
 
   @Column({ name: 'metadata', type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

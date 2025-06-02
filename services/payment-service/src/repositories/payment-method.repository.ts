@@ -51,7 +51,11 @@ export class PaymentMethodRepository {
     paymentMethod: Partial<PaymentMethodEntity>,
   ): Promise<PaymentMethodEntity> {
     await this.repository.update(id, paymentMethod);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`PaymentMethod with id ${id} not found`);
+    }
+    return updated;
   }
 
   async setAsDefault(userId: string, id: string): Promise<void> {

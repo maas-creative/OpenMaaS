@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LoggerModule, RequestIdMiddleware } from '@openmaas/common';
 
 import configuration from './config/configuration';
-import { databaseConfig } from './config/database.config';
+import { getDatabaseConfig } from './config/database.config';
 import { PaymentController } from './controllers/payment.controller';
 import { WebhookController } from './controllers/webhook.controller';
 import { PaymentService } from './services/payment.service';
@@ -27,7 +27,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: databaseConfig,
+      useFactory: getDatabaseConfig,
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([PaymentEntity, PaymentMethodEntity, RefundEntity]),

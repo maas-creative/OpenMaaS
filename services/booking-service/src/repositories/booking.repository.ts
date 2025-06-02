@@ -120,7 +120,11 @@ export class BookingRepository {
 
   async update(id: string, booking: Partial<BookingEntity>): Promise<BookingEntity> {
     await this.repository.update(id, booking);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Booking with id ${id} not found`);
+    }
+    return updated;
   }
 
   async updateStatus(

@@ -5,7 +5,7 @@ import { Agency } from '@openmaas/types';
 export class CreateAgencyDto implements Omit<Agency, 'agencyId'> {
   @ApiProperty()
   @IsString()
-  agencyName: string;
+  agencyName!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -14,7 +14,7 @@ export class CreateAgencyDto implements Omit<Agency, 'agencyId'> {
 
   @ApiProperty()
   @IsTimeZone()
-  agencyTimezone: string;
+  agencyTimezone!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -66,16 +66,16 @@ export class UpdateAgencyDto {
 
 export class AgencyResponseDto implements Agency {
   @ApiProperty()
-  agencyId: string;
+  agencyId!: string;
 
   @ApiProperty()
-  agencyName: string;
+  agencyName!: string;
 
   @ApiPropertyOptional()
   agencyUrl?: string;
 
   @ApiProperty()
-  agencyTimezone: string;
+  agencyTimezone!: string;
 
   @ApiPropertyOptional()
   agencyLang?: string;

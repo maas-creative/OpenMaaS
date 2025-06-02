@@ -5,19 +5,19 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateFeedDto {
   @ApiProperty()
   @IsString()
-  feedId: string;
+  feedId!: string;
 
   @ApiProperty()
   @IsString()
-  providerId: string;
+  providerId!: string;
 
   @ApiProperty()
   @IsString()
-  providerName: string;
+  providerName!: string;
 
   @ApiProperty()
   @IsUrl()
-  feedUrl: string;
+  feedUrl!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -70,25 +70,25 @@ export class UpdateFeedDto {
 
 export class FeedResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  feedId: string;
+  feedId!: string;
 
   @ApiProperty()
-  providerId: string;
+  providerId!: string;
 
   @ApiProperty()
-  providerName: string;
+  providerName!: string;
 
   @ApiProperty()
-  feedUrl: string;
+  feedUrl!: string;
 
   @ApiProperty()
-  feedType: string;
+  feedType!: string;
 
   @ApiProperty()
-  isActive: boolean;
+  isActive!: boolean;
 
   @ApiPropertyOptional()
   lastUpdated?: Date;
@@ -100,14 +100,14 @@ export class FeedResponseDto {
   lastFetchError?: string;
 
   @ApiProperty()
-  updateFrequency: number;
+  updateFrequency!: number;
 
   @ApiPropertyOptional()
   metadata?: Record<string, any>;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

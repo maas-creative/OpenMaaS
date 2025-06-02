@@ -18,22 +18,22 @@ import { StopTimeEntity } from './stop-time.entity';
 @Index(['feedId'])
 export class StopEntity {
   @PrimaryColumn({ name: 'stop_id' })
-  stopId: string;
+  stopId!: string;
 
   @Column({ name: 'stop_code', nullable: true })
   stopCode?: string;
 
   @Column({ name: 'stop_name' })
-  stopName: string;
+  stopName!: string;
 
   @Column({ name: 'stop_desc', nullable: true })
   stopDesc?: string;
 
   @Column({ name: 'stop_lat', type: 'decimal', precision: 10, scale: 8 })
-  stopLat: number;
+  stopLat!: number;
 
   @Column({ name: 'stop_lon', type: 'decimal', precision: 11, scale: 8 })
-  stopLon: number;
+  stopLon!: number;
 
   @Column({
     name: 'location',
@@ -42,7 +42,7 @@ export class StopEntity {
     srid: 4326,
     nullable: true,
   })
-  location: Point;
+  location!: Point;
 
   @Column({ name: 'zone_id', nullable: true })
   zoneId?: string;
@@ -55,7 +55,7 @@ export class StopEntity {
     type: 'smallint',
     default: LocationType.STOP,
   })
-  locationType: LocationType;
+  locationType!: LocationType;
 
   @Column({ name: 'parent_station', nullable: true })
   parentStation?: string;
@@ -65,7 +65,7 @@ export class StopEntity {
   parent?: StopEntity;
 
   @OneToMany(() => StopEntity, (stop) => stop.parent)
-  children: StopEntity[];
+  children!: StopEntity[];
 
   @Column({ name: 'stop_timezone', nullable: true })
   stopTimezone?: string;
@@ -75,17 +75,17 @@ export class StopEntity {
     type: 'smallint',
     default: WheelchairBoarding.NO_INFO,
   })
-  wheelchairBoarding: WheelchairBoarding;
+  wheelchairBoarding!: WheelchairBoarding;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @OneToMany(() => StopTimeEntity, (stopTime) => stopTime.stop)
-  stopTimes: StopTimeEntity[];
+  stopTimes!: StopTimeEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -5,29 +5,27 @@ import {
   IsBoolean,
   IsEnum,
   Min,
-  ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PaymentStatus, PaymentMethodType, PaymentProvider, RefundStatus } from '@openmaas/types';
 
 export class CreatePaymentDto {
   @ApiProperty()
   @IsString()
-  bookingId: string;
+  bookingId!: string;
 
   @ApiProperty()
   @IsNumber()
   @Min(1)
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
   @IsString()
-  currency: string;
+  currency!: string;
 
   @ApiProperty()
   @IsString()
-  paymentMethodId: string;
+  paymentMethodId!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -52,7 +50,7 @@ export class CreatePaymentDto {
 export class CreatePaymentMethodDto {
   @ApiProperty()
   @IsString()
-  stripePaymentMethodId: string;
+  stripePaymentMethodId!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -83,7 +81,7 @@ export class ProcessPaymentDto {
 export class CreateRefundDto {
   @ApiProperty()
   @IsString()
-  paymentId: string;
+  paymentId!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -99,28 +97,28 @@ export class CreateRefundDto {
 
 export class PaymentResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  userId: string;
+  userId!: string;
 
   @ApiPropertyOptional()
   bookingId?: string;
 
   @ApiProperty()
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
-  currency: string;
+  currency!: string;
 
   @ApiProperty({ enum: PaymentStatus })
-  status: PaymentStatus;
+  status!: PaymentStatus;
 
   @ApiProperty()
-  paymentMethodId: string;
+  paymentMethodId!: string;
 
   @ApiProperty({ enum: PaymentProvider })
-  provider: PaymentProvider;
+  provider!: PaymentProvider;
 
   @ApiPropertyOptional()
   providerTransactionId?: string;
@@ -135,10 +133,10 @@ export class PaymentResponseDto {
   receiptUrl?: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @ApiPropertyOptional()
   completedAt?: Date;
@@ -152,25 +150,25 @@ export class PaymentResponseDto {
 
 export class RefundResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  paymentId: string;
+  paymentId!: string;
 
   @ApiProperty()
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
-  currency: string;
+  currency!: string;
 
   @ApiProperty({ enum: RefundStatus })
-  status: RefundStatus;
+  status!: RefundStatus;
 
   @ApiPropertyOptional()
   reason?: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiPropertyOptional()
   completedAt?: Date;
@@ -181,16 +179,16 @@ export class RefundResponseDto {
 
 export class PaymentMethodResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ enum: PaymentMethodType })
-  type: PaymentMethodType;
+  type!: PaymentMethodType;
 
   @ApiProperty({ enum: PaymentProvider })
-  provider: PaymentProvider;
+  provider!: PaymentProvider;
 
   @ApiPropertyOptional()
   last4?: string;
@@ -208,33 +206,33 @@ export class PaymentMethodResponseDto {
   holderName?: string;
 
   @ApiProperty()
-  isDefault: boolean;
+  isDefault!: boolean;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 export class PaymentSessionResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  clientSecret: string;
+  clientSecret!: string;
 
   @ApiProperty()
-  paymentIntentId: string;
+  paymentIntentId!: string;
 
   @ApiProperty()
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
-  currency: string;
+  currency!: string;
 
   @ApiProperty()
-  status: string;
+  status!: string;
 
   @ApiProperty()
-  expiresAt: Date;
+  expiresAt!: Date;
 
   @ApiPropertyOptional()
   publishableKey?: string;

@@ -68,7 +68,7 @@ export class UserController {
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully', type: User })
   async getProfile(@Request() req: ExpressRequest & { user: AuthContext }): Promise<User> {
-    return this.userService.findByExternalId(req.user.sub);
+    return this.userService.findByExternalId(req.user.userId);
   }
 
   @Put('me')

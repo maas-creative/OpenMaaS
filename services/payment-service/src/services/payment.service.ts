@@ -3,7 +3,6 @@ import {
   Logger,
   NotFoundException,
   BadRequestException,
-  ConflictException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PaymentRepository } from '../repositories/payment.repository';
@@ -130,6 +129,10 @@ export class PaymentService {
 
     try {
       // Confirm payment with Stripe
+      if (!payment.stripePaymentIntentId) {
+        throw new BadRequestException('Payment intent ID not found');
+      }
+      
       const paymentIntent = await this.stripeService.confirmPaymentIntent(
         payment.stripePaymentIntentId,
         dto.paymentMethodId,
@@ -140,8 +143,8 @@ export class PaymentService {
 
       await this.paymentRepository.updateStatus(payment.id, status, {
         providerTransactionId: paymentIntent.id,
-        stripeChargeId: paymentIntent.charges?.data[0]?.id,
-        receiptUrl: paymentIntent.charges?.data[0]?.receipt_url,
+        stripeChargeId: paymentIntent.latest_charge as string || undefined,
+        receiptUrl: undefined, // Will be fetched separately if needed
       });
 
       const updatedPayment = await this.paymentRepository.findById(payment.id);
@@ -152,7 +155,7 @@ export class PaymentService {
       this.logger.error(`Error processing payment ${payment.id}:`, error);
 
       await this.paymentRepository.updateStatus(payment.id, PaymentStatus.FAILED, {
-        failureReason: error.message,
+        failureReason: error instanceof Error ? error.message : 'Unknown error',
       });
 
       throw new BadRequestException('Payment processing failed');
@@ -209,6 +212,9 @@ export class PaymentService {
 
     // Check refund window
     const refundWindowDays = this.configService.get('payment.refundWindowDays');
+    if (!payment.completedAt) {
+      throw new BadRequestException('Payment completion date not available');
+    }
     const refundDeadline = new Date(payment.completedAt);
     refundDeadline.setDate(refundDeadline.getDate() + refundWindowDays);
 
@@ -227,13 +233,13 @@ export class PaymentService {
     try {
       // Create Stripe refund
       const stripeRefund = await this.stripeService.createRefund({
-        paymentIntentId: payment.stripePaymentIntentId,
+        paymentIntentId: payment.stripePaymentIntentId || '',
         amount: Math.round(refundAmount * 100), // Convert to minor units
         reason: 'requested_by_customer',
         metadata: {
           userId,
           paymentId: payment.id,
-          reason: dto.reason,
+          reason: dto.reason || '',
         },
       });
 
@@ -303,8 +309,8 @@ export class PaymentService {
 
     await this.paymentRepository.updateStatus(payment.id, PaymentStatus.COMPLETED, {
       providerTransactionId: paymentIntent.id,
-      stripeChargeId: paymentIntent.charges?.data[0]?.id,
-      receiptUrl: paymentIntent.charges?.data[0]?.receipt_url,
+      stripeChargeId: paymentIntent.latest_charge as string || undefined,
+      receiptUrl: undefined, // Will be fetched separately if needed
     });
 
     this.logger.log(`Payment ${payment.id} marked as completed`);
@@ -419,7 +425,7 @@ export class PaymentService {
       updatedAt: entity.updatedAt,
       completedAt: entity.completedAt,
       failureReason: entity.failureReason,
-      refunds: entity.refunds?.map((r) => ({
+      refunds: entity.refunds?.map((r: any) => ({
         id: r.id,
         paymentId: r.paymentId,
         amount: r.amount,

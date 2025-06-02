@@ -24,8 +24,8 @@ export class GtfsService {
     private readonly stopRepository: StopRepository,
     private readonly routeRepository: RouteRepository,
   ) {
-    this.storagePath = this.configService.get('gtfs.storagePath');
-    this.maxFileSize = this.configService.get('gtfs.maxFileSize');
+    this.storagePath = this.configService.get('gtfs.storagePath') || '/tmp/gtfs-data';
+    this.maxFileSize = this.configService.get('gtfs.maxFileSize') || 104857600;
   }
 
   async downloadAndProcessFeed(feed: FeedEntity): Promise<void> {
@@ -93,7 +93,7 @@ export class GtfsService {
       return;
     }
 
-    const agencies = [];
+    const agencies: any[] = [];
     const parser = parse({
       columns: true,
       skip_empty_lines: true,
@@ -140,7 +140,7 @@ export class GtfsService {
       return;
     }
 
-    const stops = [];
+    const stops: any[] = [];
     const parser = parse({
       columns: true,
       skip_empty_lines: true,
@@ -197,7 +197,7 @@ export class GtfsService {
       return;
     }
 
-    const routes = [];
+    const routes: any[] = [];
     const parser = parse({
       columns: true,
       skip_empty_lines: true,

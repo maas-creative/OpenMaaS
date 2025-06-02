@@ -38,7 +38,11 @@ export class AgencyRepository {
 
   async update(agencyId: string, agency: Partial<AgencyEntity>): Promise<AgencyEntity> {
     await this.repository.update({ agencyId }, agency);
-    return this.findById(agencyId);
+    const updated = await this.findById(agencyId);
+    if (!updated) {
+      throw new Error(`Agency with ID ${agencyId} not found`);
+    }
+    return updated;
   }
 
   async upsert(agencies: Partial<AgencyEntity>[]): Promise<void> {

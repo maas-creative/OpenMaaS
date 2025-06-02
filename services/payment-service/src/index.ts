@@ -8,6 +8,7 @@ import {
   LoggingInterceptor,
   TimeoutInterceptor,
   TransformInterceptor,
+  LoggerService,
 } from '@openmaas/common';
 import { AppModule } from './app.module';
 
@@ -17,7 +18,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const port = configService.get('port');
+  const port = configService.get('app.port') || 3006;
 
   // Configure raw body for webhook routes
   app.useGlobalPipes(
@@ -29,11 +30,12 @@ async function bootstrap() {
   );
 
   // Global filters
-  app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
+  const logger = new LoggerService('PaymentService');
+  app.useGlobalFilters(new AllExceptionsFilter(logger), new HttpExceptionFilter());
 
   // Global interceptors
   app.useGlobalInterceptors(
-    new LoggingInterceptor(),
+    new LoggingInterceptor(logger),
     new TimeoutInterceptor(),
     new TransformInterceptor(),
   );
@@ -52,7 +54,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   // Health check endpoint
-  app.getHttpAdapter().get('/health', (req, res) => {
+  app.getHttpAdapter().get('/health', (_req, res) => {
     res.status(200).json({
       status: 'ok',
       service: 'payment-service',

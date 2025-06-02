@@ -46,15 +46,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openmaas/openmaas.git"
+    "url": "https://github.com/ukyonagata0105/OpenMaaS.git"
   },
   "keywords": [
     "maas",
     "mobility",
     "transit",
     "gtfs",
-    "opensource"
+    "opensource",
+    "openmaas",
+    "mobility-as-a-service",
+    "public-transport",
+    "ride-sharing",
+    "bike-sharing",
+    "multimodal",
+    "typescript",
+    "nestjs",
+    "microservices"
   ],
-  "author": "OpenMaaS Contributors",
-  "license": "MIT"
-}
+  "author": "MaaS Creative Co. Ltd <info@maas-creative.com> (https://maas-creative.com)",
+  "contributors": [
+    "OpenMaaS Contributors"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ukyonagata0105/OpenMaaS#readme",
+  "bugs": {
+    "url": "https://github.com/ukyonagata0105/OpenMaaS/issues"
+  }

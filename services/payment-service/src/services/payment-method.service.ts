@@ -57,10 +57,22 @@ export class PaymentMethodService {
         brand: stripePaymentMethod.card?.brand,
         expiryMonth: stripePaymentMethod.card?.exp_month,
         expiryYear: stripePaymentMethod.card?.exp_year,
-        holderName: stripePaymentMethod.billing_details?.name,
+        holderName: stripePaymentMethod.billing_details?.name || undefined,
         isDefault: dto.setAsDefault || existingMethods.length === 0,
         metadata: dto.metadata,
-        billingDetails: stripePaymentMethod.billing_details,
+        billingDetails: stripePaymentMethod.billing_details ? {
+          address: stripePaymentMethod.billing_details.address ? {
+            city: stripePaymentMethod.billing_details.address.city || undefined,
+            country: stripePaymentMethod.billing_details.address.country || undefined,
+            line1: stripePaymentMethod.billing_details.address.line1 || undefined,
+            line2: stripePaymentMethod.billing_details.address.line2 || undefined,
+            postal_code: stripePaymentMethod.billing_details.address.postal_code || undefined,
+            state: stripePaymentMethod.billing_details.address.state || undefined,
+          } : undefined,
+          email: stripePaymentMethod.billing_details.email || undefined,
+          name: stripePaymentMethod.billing_details.name || undefined,
+          phone: stripePaymentMethod.billing_details.phone || undefined,
+        } : undefined,
       });
 
       // Set as default if requested
@@ -179,9 +191,21 @@ export class PaymentMethodService {
             brand: stripeMethod.card?.brand,
             expiryMonth: stripeMethod.card?.exp_month,
             expiryYear: stripeMethod.card?.exp_year,
-            holderName: stripeMethod.billing_details?.name,
+            holderName: stripeMethod.billing_details?.name || undefined,
             isDefault: false,
-            billingDetails: stripeMethod.billing_details,
+            billingDetails: stripeMethod.billing_details ? {
+              address: stripeMethod.billing_details.address ? {
+                city: stripeMethod.billing_details.address.city || undefined,
+                country: stripeMethod.billing_details.address.country || undefined,
+                line1: stripeMethod.billing_details.address.line1 || undefined,
+                line2: stripeMethod.billing_details.address.line2 || undefined,
+                postal_code: stripeMethod.billing_details.address.postal_code || undefined,
+                state: stripeMethod.billing_details.address.state || undefined,
+              } : undefined,
+              email: stripeMethod.billing_details.email || undefined,
+              name: stripeMethod.billing_details.name || undefined,
+              phone: stripeMethod.billing_details.phone || undefined,
+            } : undefined,
           });
         }
       }

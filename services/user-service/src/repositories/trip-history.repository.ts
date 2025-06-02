@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { TripHistory } from '../entities/trip-history.entity';
 import { PaginationParams, PaginatedResponse } from '@openmaas/types';
 
@@ -87,7 +87,8 @@ export class TripHistoryRepository {
   }
 
   async update(id: string, updates: Partial<TripHistory>): Promise<TripHistory | null> {
-    await this.repository.update(id, updates);
+    const { user, ...updateData } = updates;
+    await this.repository.update(id, updateData);
     return this.findById(id);
   }
 

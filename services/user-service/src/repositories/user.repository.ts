@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, ILike } from 'typeorm';
+import { Repository, FindOptionsWhere } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { PaginationParams, PaginatedResponse } from '@openmaas/types';
 
@@ -33,7 +33,21 @@ export class UserRepository {
   }
 
   async update(id: string, updates: Partial<User>): Promise<User | null> {
-    await this.repository.update(id, updates);
+    const { tripHistory, metadata, profile, preferences, ...updateData } = updates;
+    const updatePayload: any = { ...updateData };
+    
+    // Handle JSONB fields separately
+    if (metadata !== undefined) {
+      updatePayload.metadata = metadata;
+    }
+    if (profile !== undefined) {
+      updatePayload.profile = profile;
+    }
+    if (preferences !== undefined) {
+      updatePayload.preferences = preferences;
+    }
+    
+    await this.repository.update(id, updatePayload);
     return this.findById(id);
   }
 
@@ -126,16 +140,16 @@ export class UserRepository {
       .getRawOne();
 
     // Get preferred mode
-    const modeResult = await this.repository
-      .createQueryBuilder('user')
-      .leftJoin('user.tripHistory', 'trip')
-      .select('trip.legs')
-      .where('user.id = :userId', { userId })
-      .andWhere('trip.status = :status', { status: 'completed' })
-      .getMany();
+    // const modeResult = await this.repository
+    //   .createQueryBuilder('user')
+    //   .leftJoin('user.tripHistory', 'trip')
+    //   .select('trip.legs')
+    //   .where('user.id = :userId', { userId })
+    //   .andWhere('trip.status = :status', { status: 'completed' })
+    //   .getMany();
 
     // Calculate preferred mode from trip legs
-    const modeCounts: Record<string, number> = {};
+    // const modeCounts: Record<string, number> = {};
     // Implementation would process trip legs to find most used mode
 
     return {

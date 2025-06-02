@@ -14,24 +14,24 @@ import { PaymentMethodType, PaymentProvider } from '@openmaas/types';
 @Index(['isActive'])
 export class PaymentMethodEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'user_id' })
-  userId: string;
+  userId!: string;
 
   @Column({
     name: 'type',
     type: 'enum',
     enum: PaymentMethodType,
   })
-  type: PaymentMethodType;
+  type!: PaymentMethodType;
 
   @Column({
     name: 'provider',
     type: 'enum',
     enum: PaymentProvider,
   })
-  provider: PaymentProvider;
+  provider!: PaymentProvider;
 
   @Column({ name: 'stripe_payment_method_id', nullable: true, unique: true })
   stripePaymentMethodId?: string;
@@ -55,10 +55,10 @@ export class PaymentMethodEntity {
   holderName?: string;
 
   @Column({ name: 'is_default', default: false })
-  isDefault: boolean;
+  isDefault!: boolean;
 
   @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'metadata', type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
@@ -79,8 +79,8 @@ export class PaymentMethodEntity {
   };
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

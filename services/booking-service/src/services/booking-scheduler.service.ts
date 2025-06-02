@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { BookingRepository } from '../repositories/booking.repository';
-import { NotificationService } from './notification.service';
 // import { BookingStatus } from '@openmaas/types'; // Currently unused
 
 @Injectable()
@@ -10,7 +9,7 @@ export class BookingSchedulerService {
 
   constructor(
     private readonly bookingRepository: BookingRepository,
-    private readonly notificationService: NotificationService,
+    // private readonly notificationService: NotificationService,
   ) {}
 
   @Cron(CronExpression.EVERY_MINUTE)
@@ -30,9 +29,9 @@ export class BookingSchedulerService {
   async sendBookingReminders(): Promise<void> {
     try {
       // Find bookings that start in the next 1-2 hours
-      const now = new Date();
+      // const now = new Date();
       // const reminderStart = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
-      const reminderEnd = new Date(now.getTime() + 120 * 60 * 1000); // 2 hours from now
+      // const reminderEnd = new Date(now.getTime() + 120 * 60 * 1000); // 2 hours from now
 
       // This would need a proper query to find bookings in the reminder window
       // For now, we'll log that reminders would be sent

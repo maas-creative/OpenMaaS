@@ -5,13 +5,13 @@ import { LineString } from 'geojson';
 @Index(['feedId'])
 export class ShapeEntity {
   @PrimaryColumn({ name: 'shape_id' })
-  shapeId: string;
+  shapeId!: string;
 
   @Column({
     name: 'shape_points',
     type: 'jsonb',
   })
-  shapePoints: Array<{
+  shapePoints!: Array<{
     shapePtLat: number;
     shapePtLon: number;
     shapePtSequence: number;
@@ -25,14 +25,14 @@ export class ShapeEntity {
     srid: 4326,
     nullable: true,
   })
-  geometry: LineString;
+  geometry!: LineString;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

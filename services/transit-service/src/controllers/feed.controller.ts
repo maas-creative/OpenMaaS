@@ -88,7 +88,7 @@ export class FeedController {
   @ApiOperation({ summary: 'Trigger manual update of a GTFS feed' })
   @ApiResponse({ status: 202, description: 'Feed update started' })
   @ApiResponse({ status: 404, description: 'Feed not found' })
-  async updateFeed(@Param('id') id: string): Promise<void> {
+  async triggerFeedUpdate(@Param('id') id: string): Promise<void> {
     await this.feedService.updateFeed(id);
   }
 }

@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    // private readonly configService: ConfigService
+  ) {}
 
   async sendBookingConfirmation(booking: any): Promise<void> {
     try {

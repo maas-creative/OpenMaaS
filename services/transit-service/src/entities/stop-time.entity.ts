@@ -18,30 +18,30 @@ import { StopEntity } from './stop.entity';
 @Index(['feedId'])
 export class StopTimeEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'trip_id' })
-  tripId: string;
+  tripId!: string;
 
   @ManyToOne(() => TripEntity, (trip) => trip.stopTimes)
   @JoinColumn({ name: 'trip_id' })
-  trip: TripEntity;
+  trip!: TripEntity;
 
   @Column({ name: 'arrival_time' })
-  arrivalTime: string;
+  arrivalTime!: string;
 
   @Column({ name: 'departure_time' })
-  departureTime: string;
+  departureTime!: string;
 
   @Column({ name: 'stop_id' })
-  stopId: string;
+  stopId!: string;
 
   @ManyToOne(() => StopEntity, (stop) => stop.stopTimes)
   @JoinColumn({ name: 'stop_id' })
-  stop: StopEntity;
+  stop!: StopEntity;
 
   @Column({ name: 'stop_sequence' })
-  stopSequence: number;
+  stopSequence!: number;
 
   @Column({ name: 'stop_headsign', nullable: true })
   stopHeadsign?: string;
@@ -51,14 +51,14 @@ export class StopTimeEntity {
     type: 'smallint',
     default: PickupDropOffType.REGULAR,
   })
-  pickupType: PickupDropOffType;
+  pickupType!: PickupDropOffType;
 
   @Column({
     name: 'drop_off_type',
     type: 'smallint',
     default: PickupDropOffType.REGULAR,
   })
-  dropOffType: PickupDropOffType;
+  dropOffType!: PickupDropOffType;
 
   @Column({
     name: 'continuous_pickup',
@@ -90,14 +90,14 @@ export class StopTimeEntity {
     type: 'smallint',
     default: Timepoint.EXACT,
   })
-  timepoint: Timepoint;
+  timepoint!: Timepoint;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

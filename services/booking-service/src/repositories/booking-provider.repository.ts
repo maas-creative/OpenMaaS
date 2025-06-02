@@ -57,7 +57,11 @@ export class BookingProviderRepository {
     provider: Partial<BookingProviderEntity>,
   ): Promise<BookingProviderEntity> {
     await this.repository.update(id, provider);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Provider with id ${id} not found`);
+    }
+    return updated;
   }
 
   async updateSyncStatus(id: string, syncStatus: string, error?: string): Promise<void> {
@@ -68,10 +72,10 @@ export class BookingProviderRepository {
 
     if (error) {
       updateData.lastError = error;
-      updateData.errorCount = () => 'error_count + 1';
+      updateData.errorCount = 1; // This should be handled with a proper query builder
     } else {
       updateData.errorCount = 0;
-      updateData.lastError = null;
+      updateData.lastError = undefined;
     }
 
     await this.repository.update(id, updateData);

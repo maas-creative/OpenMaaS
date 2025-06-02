@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserRepository } from '../repositories/user.repository';
 import { UpdatePreferencesDto } from '../dto/user-preferences.dto';
@@ -59,15 +59,23 @@ export class UserPreferencesService {
 
     // Update preferences
     const updatedPreferences: UserPreferences = {
-      ...user.preferences,
-      ...updateDto,
+      language: updateDto.language ?? user.preferences.language,
+      currency: updateDto.currency ?? user.preferences.currency,
+      timezone: updateDto.timezone ?? user.preferences.timezone,
+      notifications: user.preferences.notifications,
+      accessibility: updateDto.accessibility ?? user.preferences.accessibility,
+      defaultPaymentMethod: updateDto.defaultPaymentMethod ?? user.preferences.defaultPaymentMethod,
     };
 
     // Update nested objects
     if (updateDto.notifications) {
       updatedPreferences.notifications = {
-        ...user.preferences.notifications,
-        ...updateDto.notifications,
+        email: updateDto.notifications.email ?? user.preferences.notifications.email,
+        push: updateDto.notifications.push ?? user.preferences.notifications.push,
+        sms: updateDto.notifications.sms ?? user.preferences.notifications.sms,
+        tripReminders: updateDto.notifications.tripReminders ?? user.preferences.notifications.tripReminders,
+        serviceAlerts: updateDto.notifications.serviceAlerts ?? user.preferences.notifications.serviceAlerts,
+        promotions: updateDto.notifications.promotions ?? user.preferences.notifications.promotions,
       };
     }
 
@@ -163,7 +171,7 @@ export class UserPreferencesService {
   }
 
   async resetPreferences(userId: string): Promise<UserPreferences> {
-    const user = await this.userService.findById(userId);
+    await this.userService.findById(userId); // Verify user exists
 
     const defaultPreferences: UserPreferences = {
       language: 'ja',

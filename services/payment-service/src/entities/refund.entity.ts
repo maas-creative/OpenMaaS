@@ -17,20 +17,20 @@ import { PaymentEntity } from './payment.entity';
 @Index(['createdAt'])
 export class RefundEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'payment_id' })
-  paymentId: string;
+  paymentId!: string;
 
   @ManyToOne(() => PaymentEntity, (payment) => payment.refunds)
   @JoinColumn({ name: 'payment_id' })
-  payment: PaymentEntity;
+  payment!: PaymentEntity;
 
   @Column({ name: 'amount', type: 'decimal', precision: 10, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ name: 'currency', length: 3 })
-  currency: string;
+  currency!: string;
 
   @Column({
     name: 'status',
@@ -38,7 +38,7 @@ export class RefundEntity {
     enum: RefundStatus,
     default: RefundStatus.PENDING,
   })
-  status: RefundStatus;
+  status!: RefundStatus;
 
   @Column({ name: 'reason', nullable: true })
   reason?: string;
@@ -59,8 +59,8 @@ export class RefundEntity {
   metadata?: Record<string, any>;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

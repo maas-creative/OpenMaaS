@@ -11,16 +11,16 @@ import { RouteEntity } from './route.entity';
 @Entity({ name: 'agencies', schema: 'transit' })
 export class AgencyEntity {
   @PrimaryColumn({ name: 'agency_id' })
-  agencyId: string;
+  agencyId!: string;
 
   @Column({ name: 'agency_name' })
-  agencyName: string;
+  agencyName!: string;
 
   @Column({ name: 'agency_url', nullable: true })
   agencyUrl?: string;
 
   @Column({ name: 'agency_timezone' })
-  agencyTimezone: string;
+  agencyTimezone!: string;
 
   @Column({ name: 'agency_lang', nullable: true })
   agencyLang?: string;
@@ -32,14 +32,14 @@ export class AgencyEntity {
   agencyFareUrl?: string;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @OneToMany(() => RouteEntity, (route) => route.agency)
-  routes: RouteEntity[];
+  routes!: RouteEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

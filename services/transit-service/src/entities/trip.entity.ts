@@ -20,17 +20,17 @@ import { ShapeEntity } from './shape.entity';
 @Index(['feedId'])
 export class TripEntity {
   @PrimaryColumn({ name: 'trip_id' })
-  tripId: string;
+  tripId!: string;
 
   @Column({ name: 'route_id' })
-  routeId: string;
+  routeId!: string;
 
   @ManyToOne(() => RouteEntity, (route) => route.trips)
   @JoinColumn({ name: 'route_id' })
-  route: RouteEntity;
+  route!: RouteEntity;
 
   @Column({ name: 'service_id' })
-  serviceId: string;
+  serviceId!: string;
 
   @Column({ name: 'trip_headsign', nullable: true })
   tripHeadsign?: string;
@@ -56,24 +56,24 @@ export class TripEntity {
     type: 'smallint',
     default: WheelchairAccessible.NO_INFO,
   })
-  wheelchairAccessible: WheelchairAccessible;
+  wheelchairAccessible!: WheelchairAccessible;
 
   @Column({
     name: 'bikes_allowed',
     type: 'smallint',
     default: BikesAllowed.NO_INFO,
   })
-  bikesAllowed: BikesAllowed;
+  bikesAllowed!: BikesAllowed;
 
   @Column({ name: 'feed_id' })
-  feedId: string;
+  feedId!: string;
 
   @OneToMany(() => StopTimeEntity, (stopTime) => stopTime.trip)
-  stopTimes: StopTimeEntity[];
+  stopTimes!: StopTimeEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

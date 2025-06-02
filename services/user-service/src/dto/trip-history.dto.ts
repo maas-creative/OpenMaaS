@@ -11,6 +11,7 @@ import {
   Min,
   Max,
   ArrayMinSize,
+  MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { TripLeg } from '../entities/trip-history.entity';
@@ -18,53 +19,53 @@ import { TripLeg } from '../entities/trip-history.entity';
 class LocationDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty()
   @IsNumber()
   @Min(-90)
   @Max(90)
-  lat: number;
+  lat!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(-180)
   @Max(180)
-  lon: number;
+  lon!: number;
 }
 
 class TripLegDto implements TripLeg {
   @ApiProperty()
   @IsString()
-  mode: string;
+  mode!: string;
 
   @ApiProperty({ type: LocationDto })
   @ValidateNested()
   @Type(() => LocationDto)
-  from: LocationDto;
+  from!: LocationDto;
 
   @ApiProperty({ type: LocationDto })
   @ValidateNested()
   @Type(() => LocationDto)
-  to: LocationDto;
+  to!: LocationDto;
 
   @ApiProperty()
   @IsDateString()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
   @IsDateString()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  duration: number;
+  duration!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  distance: number;
+  distance!: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -86,11 +87,11 @@ class FareDto {
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @ApiProperty()
   @IsString()
-  currency: string;
+  currency!: string;
 }
 
 export class CreateTripHistoryDto {
@@ -101,38 +102,38 @@ export class CreateTripHistoryDto {
 
   @ApiProperty()
   @IsDateString()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty()
   @IsDateString()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  duration: number;
+  duration!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  totalDistance: number;
+  totalDistance!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  walkDistance: number;
+  walkDistance!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(0)
-  transfers: number;
+  transfers!: number;
 
   @ApiProperty({ type: [TripLegDto] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TripLegDto)
   @ArrayMinSize(1)
-  legs: TripLeg[];
+  legs!: TripLeg[];
 
   @ApiPropertyOptional({ type: FareDto })
   @IsOptional()
@@ -159,7 +160,7 @@ export class UpdateTripFeedbackDto {
   @IsNumber()
   @Min(1)
   @Max(5)
-  rating: number;
+  rating!: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -217,11 +218,11 @@ export class TripHistoryQueryDto {
 export class TripStatsQueryDto {
   @ApiProperty()
   @IsDateString()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty()
   @IsDateString()
-  endDate: Date;
+  endDate!: Date;
 }
 
 export class MonthlyStatsQueryDto {
@@ -229,11 +230,11 @@ export class MonthlyStatsQueryDto {
   @IsNumber()
   @Min(2020)
   @Max(2100)
-  year: number;
+  year!: number;
 
   @ApiProperty({ minimum: 1, maximum: 12 })
   @IsNumber()
   @Min(1)
   @Max(12)
-  month: number;
+  month!: number;
 }

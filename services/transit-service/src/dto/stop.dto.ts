@@ -11,7 +11,7 @@ export class CreateStopDto implements Omit<Stop, 'stopId'> {
 
   @ApiProperty()
   @IsString()
-  stopName: string;
+  stopName!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -23,14 +23,14 @@ export class CreateStopDto implements Omit<Stop, 'stopId'> {
   @Min(-90)
   @Max(90)
   @Transform(({ value }) => parseFloat(value))
-  stopLat: number;
+  stopLat!: number;
 
   @ApiProperty()
   @IsNumber()
   @Min(-180)
   @Max(180)
   @Transform(({ value }) => parseFloat(value))
-  stopLon: number;
+  stopLon!: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -96,22 +96,22 @@ export class StopSearchDto {
 
 export class StopResponseDto implements Stop {
   @ApiProperty()
-  stopId: string;
+  stopId!: string;
 
   @ApiPropertyOptional()
   stopCode?: string;
 
   @ApiProperty()
-  stopName: string;
+  stopName!: string;
 
   @ApiPropertyOptional()
   stopDesc?: string;
 
   @ApiProperty()
-  stopLat: number;
+  stopLat!: number;
 
   @ApiProperty()
-  stopLon: number;
+  stopLon!: number;
 
   @ApiPropertyOptional()
   zoneId?: string;

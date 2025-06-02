@@ -171,7 +171,7 @@ export class TripHistoryService {
   }
 
   async delete(id: string, userId: string): Promise<void> {
-    const trip = await this.findById(id, userId);
+    await this.findById(id, userId); // Verify ownership
 
     const deleted = await this.tripHistoryRepository.delete(id);
     if (!deleted) {

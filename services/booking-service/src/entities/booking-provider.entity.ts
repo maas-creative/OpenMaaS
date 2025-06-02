@@ -12,19 +12,19 @@ import {
 @Index(['isActive'])
 export class BookingProviderEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'provider_id', unique: true })
-  providerId: string;
+  providerId!: string;
 
   @Column({ name: 'provider_name' })
-  providerName: string;
+  providerName!: string;
 
   @Column({ name: 'provider_type' })
-  providerType: string; // 'transit', 'rideshare', 'bikeshare', etc.
+  providerType!: string; // 'transit', 'rideshare', 'bikeshare', etc.
 
   @Column({ name: 'api_endpoint' })
-  apiEndpoint: string;
+  apiEndpoint!: string;
 
   @Column({ name: 'api_key_id', nullable: true })
   apiKeyId?: string;
@@ -36,10 +36,10 @@ export class BookingProviderEntity {
   supportedRegions?: string[];
 
   @Column({ name: 'supported_modes', type: 'jsonb' })
-  supportedModes: string[];
+  supportedModes!: string[];
 
   @Column({ name: 'booking_configuration', type: 'jsonb' })
-  bookingConfiguration: {
+  bookingConfiguration!: {
     requiresAdvanceBooking: boolean;
     maxAdvanceBookingDays: number;
     cancellationPolicy: {
@@ -52,7 +52,7 @@ export class BookingProviderEntity {
   };
 
   @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'last_sync', type: 'timestamp', nullable: true })
   lastSync?: Date;
@@ -61,14 +61,14 @@ export class BookingProviderEntity {
   syncStatus?: string;
 
   @Column({ name: 'error_count', default: 0 })
-  errorCount: number;
+  errorCount!: number;
 
   @Column({ name: 'last_error', nullable: true })
   lastError?: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

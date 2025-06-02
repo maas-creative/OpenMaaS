@@ -16,7 +16,7 @@ export class CreateRouteDto implements Omit<Route, 'routeId'> {
 
   @ApiProperty()
   @IsString()
-  routeLongName: string;
+  routeLongName!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -25,7 +25,7 @@ export class CreateRouteDto implements Omit<Route, 'routeId'> {
 
   @ApiProperty({ enum: RouteType })
   @IsEnum(RouteType)
-  routeType: RouteType;
+  routeType!: RouteType;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -74,7 +74,7 @@ export class RouteSearchDto {
 
 export class RouteResponseDto implements Route {
   @ApiProperty()
-  routeId: string;
+  routeId!: string;
 
   @ApiPropertyOptional()
   agencyId?: string;
@@ -83,13 +83,13 @@ export class RouteResponseDto implements Route {
   routeShortName?: string;
 
   @ApiProperty()
-  routeLongName: string;
+  routeLongName!: string;
 
   @ApiPropertyOptional()
   routeDesc?: string;
 
   @ApiProperty({ enum: RouteType })
-  routeType: RouteType;
+  routeType!: RouteType;
 
   @ApiPropertyOptional()
   routeUrl?: string;
