@@ -159,13 +159,22 @@ export class OtpService {
       return {
         query: request.query,
         results:
-          (otpResponse as { features?: Array<{ geometry: { coordinates: [number, number] }; properties: Record<string, any> }> }).features?.map((feature) => ({
+          (
+            otpResponse as {
+              features?: Array<{
+                geometry: { coordinates: [number, number] };
+                properties: Record<string, unknown>;
+              }>;
+            }
+          ).features?.map((feature) => ({
             lat: feature.geometry.coordinates[1],
             lon: feature.geometry.coordinates[0],
             name: (feature.properties.label || feature.properties.name || '') as string,
-            stopId: typeof feature.properties.gid === 'string' && feature.properties.gid.startsWith('gtfs')
-              ? feature.properties.source_id as string
-              : undefined,
+            stopId:
+              typeof feature.properties.gid === 'string' &&
+              feature.properties.gid.startsWith('gtfs')
+                ? (feature.properties.source_id as string)
+                : undefined,
           })) || [],
       };
     } catch (error) {

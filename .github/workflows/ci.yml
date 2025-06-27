@@ -26,6 +26,11 @@ jobs:
           npm install -g turbo
           npm install
       
+      - name: Build shared libraries first
+        run: |
+          npm run build -- --filter=@openmaas/types
+          npm run build -- --filter=@openmaas/common
+      
       - name: Run linter
         run: npm run lint
 
@@ -70,6 +75,11 @@ jobs:
           npm install -g turbo
           npm install
       
+      - name: Build shared libraries first
+        run: |
+          npm run build -- --filter=@openmaas/types
+          npm run build -- --filter=@openmaas/common
+      
       - name: Run tests
         run: npm test
         env:
@@ -97,6 +107,11 @@ jobs:
         run: |
           npm install -g turbo
           npm install
+      
+      - name: Build shared libraries first
+        run: |
+          npm run build -- --filter=@openmaas/types
+          npm run build -- --filter=@openmaas/common
       
       - name: Build
         run: npm run build
@@ -127,9 +142,11 @@ jobs:
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.repository_owner == 'maas-creative'
     permissions:
       contents: read
       security-events: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       
