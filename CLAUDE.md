@@ -7,6 +7,7 @@ Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+NEVER create static HTML files - user explicitly requested Next.js implementation only.
 
 ## Project Overview
 
@@ -272,8 +273,367 @@ Recent Keycloak admin client uses:
 - `scopes: ['openid']` (array) instead of `scope: 'openid'` (string)
 - Always verify API method signatures match current @keycloak/keycloak-admin-client version
 
+## Frontend Development
+
+The project includes a Next.js 15.3.3 frontend application located in `apps/web/`.
+
+### Frontend Commands
+```bash
+cd apps/web
+
+# Development
+npm run dev          # Start Next.js dev server on localhost:3000
+
+# Production
+npm run build        # Build for production
+npm run start        # Start production server
+
+# Quality
+npm run lint         # Run ESLint
+npm run test         # Run Jest tests
+npm run test:watch   # Run tests in watch mode
+```
+
+### Frontend Architecture
+
+**Technology Stack:**
+- Next.js 15.3.3 with App Router
+- React 19 with TypeScript 5
+- Tailwind CSS 4 for styling
+- shadcn/ui for component library
+- Lucide React for icons
+- TanStack Query for API state management
+- Zustand for global state management
+- NextAuth.js for authentication
+
+**Key Features:**
+- Progressive Web App (PWA) support with manifest.json
+- Responsive design with mobile-first approach
+- Japanese language UI with internationalization support
+- Real-time dashboard with live updates
+- Interactive transit status monitoring
+- Multi-modal journey planning interface
+
+**App Structure:**
+```
+apps/web/src/
+├── app/                    # Next.js App Router pages
+│   ├── dashboard/         # Main dashboard page
+│   ├── routes/           # Route planning interface
+│   ├── bookings/         # Booking management
+│   ├── payments/         # Payment interface
+│   ├── profile/          # User profile
+│   ├── journey/          # Journey tracking
+│   ├── tickets/          # Ticket management
+│   └── admin/            # Admin interface
+├── components/           # Reusable UI components
+│   ├── ui/              # shadcn/ui base components
+│   ├── layout/          # Layout components (header, etc.)
+│   ├── journey/         # Journey-specific components
+│   ├── tickets/         # Ticket components
+│   ├── transit/         # Transit status components
+│   └── pwa/             # PWA installer component
+├── hooks/               # Custom React hooks
+├── lib/                 # Utilities and configurations
+└── providers/           # React context providers
+```
+
+### Design System
+
+The frontend uses a modern design system with:
+- Gradient backgrounds and subtle animations
+- Color-coded cards for different data types (blue, green, emerald, yellow)
+- Hover effects and smooth transitions
+- Responsive grid layouts (1-col mobile, 2-col tablet, 4-col desktop)
+- Japanese typography optimized for readability
+
+### Next.js Specific Patterns
+
+**Client Components:** Use `'use client'` directive for components requiring:
+- useState, useEffect hooks
+- useSearchParams (must be wrapped in Suspense boundary)
+- Browser APIs and event handlers
+
+**Suspense Boundaries:** Always wrap useSearchParams usage:
+```typescript
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+
+function ContentComponent() {
+  const searchParams = useSearchParams();
+  // Component logic
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ContentComponent />
+    </Suspense>
+  );
+}
+```
+
+**Environment Issues:** Some development environments may have localhost connection restrictions. The Next.js server runs correctly but browser access may be blocked by network policies.
+
+### Workspace Configuration
+Workspaces are configured in root package.json:
+```json
+"workspaces": [
+  "services/*",
+  "libs/*", 
+  "apps/*"
+]
+```
+
+## Build Dependencies
+
+The monorepo uses Turbo for build orchestration:
+
+### Build Order
+1. Shared libraries (`libs/types`, `libs/common`) build first
+2. Backend services depend on shared libraries
+3. Frontend can build independently but may consume backend APIs
+
+### Turbo Pipeline
+- `turbo run dev`: Starts all services in development mode
+- `turbo run build`: Builds all packages with dependency resolution
+- `turbo run test`: Runs tests across all packages
+- `turbo run lint`: Lints all TypeScript/JavaScript code
+
 ## Current Build Status
 
-As of the most recent session, these services build successfully:
-- ✅ types, common, route-service, auth-service, user-service
-- ❌ booking-service, payment-service, transit-service (need similar TypeScript fixes)
+- ✅ **Frontend (apps/web)**: Next.js app builds and runs successfully
+- ✅ **Shared Libraries**: types, common packages build successfully  
+- ✅ **Backend Services**: route-service, auth-service, user-service build successfully
+- ⚠️ **Backend Services**: booking-service, payment-service, transit-service need TypeScript strict mode fixes
+
+## Quick Start Commands
+
+```bash
+# Complete first-time setup (installs dependencies, starts all services)
+./scripts/dev-setup.sh
+
+# Alternative manual setup
+npm install                     # Install all dependencies
+npm run docker:up              # Start infrastructure
+npm run build                  # Build all services
+npm run dev                    # Start development mode
+```
+
+## Testing Commands
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests for a specific service
+cd services/[service-name]
+npm run test
+
+# Run a specific test file
+npx jest src/__tests__/specific.test.ts
+
+# Run tests in watch mode
+npx jest --watch
+
+# Run tests with coverage
+npx jest --coverage
+```
+
+## Database Commands
+
+```bash
+# For services with TypeORM (user, transit, booking, payment)
+cd services/[service-name]
+
+# Generate new migration based on entity changes
+npm run migration:generate -- -n MigrationName
+
+# Run pending migrations
+npm run migration:run
+
+# Revert last migration
+npm run migration:revert
+
+# Show migration status
+npm run migration:show
+```
+
+## Debug Commands
+
+```bash
+# View all running containers
+docker ps
+
+# View specific service logs
+docker logs openmaas-[service-name]-1
+
+# Access service container shell
+docker exec -it openmaas-[service-name]-1 sh
+
+# Check service health
+curl http://localhost:[port]/health
+
+# View API documentation
+# Navigate to: http://localhost:[port]/api
+```
+
+## Common Development Patterns
+
+### Adding a New Endpoint
+
+1. Create DTO with validation:
+```typescript
+// dto/create-item.dto.ts
+export class CreateItemDto {
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
+
+  @IsNumber()
+  @Min(0)
+  price!: number;
+}
+```
+
+2. Add controller method:
+```typescript
+@Post()
+@UseGuards(JwtAuthGuard)
+async create(@Body() dto: CreateItemDto, @Req() req: AuthRequest) {
+  return this.service.create(dto, req.user.userId);
+}
+```
+
+3. Implement service logic with repository pattern
+
+### Error Handling Pattern
+
+```typescript
+// Use HttpException for client errors
+throw new BadRequestException('Invalid input');
+throw new NotFoundException('Resource not found');
+throw new UnauthorizedException('Invalid credentials');
+
+// Global exception filter handles all errors consistently
+```
+
+### Environment Variables
+
+Each service requires a `.env` file. Copy from `.env.example`:
+```bash
+cd services/[service-name]
+cp .env.example .env
+```
+
+Key environment variables:
+- `NODE_ENV`: development/production
+- `PORT`: Service port
+- `DATABASE_URL`: PostgreSQL connection string
+- `JWT_SECRET`: Shared secret for service authentication
+- `KEYCLOAK_*`: Keycloak configuration
+- `STRIPE_*`: Payment service configuration
+
+## Troubleshooting
+
+### TypeScript Build Errors
+- Ensure `npm run build -- --filter=@openmaas/types` runs first
+- Check for missing `!` in DTO properties
+- Verify environment variable parsing with defaults
+
+### Docker Issues
+- Run `docker system prune -a` if out of space
+- Check `docker-compose.yml` for port conflicts
+- Ensure Docker daemon is running
+
+### Database Connection
+- Verify PostgreSQL container is running: `docker ps`
+- Check connection string in `.env`
+- Ensure PostGIS extension is enabled
+
+### Service Communication
+- All services communicate through Kong (port 8000)
+- Internal service URLs: `http://kong:8000/[service-path]`
+- Add service token for service-to-service auth
+
+## OpenMaaS開発方針
+
+### ユーザー権限別機能
+1. **一般利用者**
+   - チケット購入・表示
+   - QRコード表示（タップで表示）
+   - 旅行履歴確認
+
+2. **交通事業者**
+   - 運行状況管理
+   - 乗客データ分析
+   - 収益レポート
+
+3. **チケット提供者（旅行会社）**
+   - チケット在庫管理
+   - 価格設定
+   - 販売レポート
+
+### 重要機能
+- **QRコード機能**: チケットタップでダミーQRコード表示
+- **地図統合**: 目的地検索、ルート表示機能  
+- **デザイン統一**: シンプルで一貫性のあるUI
+
+### セキュリティ強化QRコード機能（2025年6月27日実装完了）
+**ultrahink原則に基づく徹底実装:**
+
+**実装済み機能:**
+- ✅ 30秒ごと自動更新タイマー付きQRコード
+- ✅ ユーザー名・タイムスタンプウォーターマーク
+- ✅ スクリーンキャプチャ検知（macOS/Windows対応）
+- ✅ 検知時のセキュリティオーバーレイ表示
+- ✅ JSON構造化QRデータ（checksum付き）
+- ✅ 強化されたセキュリティ警告UI
+
+**技術仕様:**
+```typescript
+// セキュアQRデータ構造
+{
+  ticket: string,           // 元のチケットデータ
+  timestamp: number,        // 生成時刻
+  userId: string,          // ユーザー識別子
+  validFor: 30,            // 有効期限（秒）
+  checksum: string         // Base64エンコードされた検証値
+}
+```
+
+**セキュリティ対策:**
+1. **時間制限** - 30秒自動更新で古いQRコード無効化
+2. **ウォーターマーク** - 半透明ユーザー情報表示で不正転載防止  
+3. **キャプチャ検知** - Cmd+Shift+3/4、PrintScreen等検知
+4. **表示制限** - 検知時の一時的QRコード隠蔽
+
+**実装ファイル:**
+- `/apps/web/src/components/tickets/digital-ticket.tsx` - QRセキュリティ機能本体
+- `/apps/web/src/app/tickets/page.tsx` - チケット一覧・選択UI
+
+### 開発手順
+1. 作業内容は必ず`memorytodo.md`に記録
+2. 作業前に計画を保存
+3. 作業後に進捗を更新
+4. Playwright MCPでUI確認を徹底
+
+### Playwright MCP トラブルシューティング
+**ブラウザインスタンスエラーの解決方法:**
+```bash
+# Playwrightがエラーになる場合は、まずChromeプロセスを終了
+pkill -f chrome
+
+# その後、Playwright MCPを使用
+mcp__playwright__browser_navigate
+```
+
+**エラー例:**
+- `Error: Browser is already in use for /Users/.../mcp-chrome-profile`
+- 解決: `pkill -f chrome` を実行してから再試行
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

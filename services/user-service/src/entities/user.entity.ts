@@ -63,7 +63,7 @@ export class User {
   }
 
   get isOperator(): boolean {
-    return this.roles.includes(UserRole.OPERATOR);
+    return this.roles.includes(UserRole.TRANSPORT_OPERATOR);
   }
 
   // Helper methods

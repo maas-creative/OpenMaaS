@@ -20,9 +20,11 @@ import { BookingService } from './services/booking.service';
 import { ProviderService } from './services/provider.service';
 import { NotificationService } from './services/notification.service';
 import { BookingSchedulerService } from './services/booking-scheduler.service';
+import { QrCodeService } from './services/qr-code.service';
 
 // Controllers
 import { BookingController } from './controllers/booking.controller';
+import { QrCodeController } from './controllers/qr-code.controller';
 
 // Strategies
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -50,7 +52,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       inject: [ConfigService],
     }),
   ],
-  controllers: [BookingController],
+  controllers: [BookingController, QrCodeController],
   providers: [
     // Repositories
     BookingRepository,
@@ -60,6 +62,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     ProviderService,
     NotificationService,
     BookingSchedulerService,
+    QrCodeService,
     // Strategies
     JwtStrategy,
   ],

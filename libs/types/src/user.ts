@@ -1,6 +1,7 @@
 export enum UserRole {
   USER = 'user',
-  OPERATOR = 'operator',
+  TRANSPORT_OPERATOR = 'transport_operator',
+  TICKET_PROVIDER = 'ticket_provider',
   ADMIN = 'admin',
 }
 
@@ -73,4 +74,47 @@ export interface UpdateUserDto {
   profile?: Partial<UserProfile>;
   preferences?: Partial<UserPreferences>;
   metadata?: Record<string, unknown>;
+}
+
+// Transport Operator specific types
+export interface TransportOperatorData {
+  operatorId: string;
+  operatorName: string;
+  operatorType: 'rail' | 'bus' | 'ferry' | 'tram' | 'subway';
+  coverageArea: string[];
+  fleetSize: number;
+  activeRoutes: number;
+  certifications: string[];
+  permissions: {
+    canManageSchedules: boolean;
+    canViewAnalytics: boolean;
+    canManageFleet: boolean;
+    canSetPricing: boolean;
+    canViewFinancials: boolean;
+    canManageStaff: boolean;
+  };
+}
+
+// Ticket Provider specific types
+export interface TicketProviderData {
+  providerId: string;
+  providerName: string;
+  providerType: 'travel_agency' | 'tour_operator' | 'online_platform';
+  supportedTransportTypes: string[];
+  commissionRate: number;
+  contractStartDate: Date;
+  contractEndDate: Date;
+  permissions: {
+    canCreatePackages: boolean;
+    canSetPricing: boolean;
+    canViewSalesData: boolean;
+    canManageInventory: boolean;
+    canIssueRefunds: boolean;
+    canAccessCustomerData: boolean;
+  };
+}
+
+// Extended User type with organization data
+export interface UserWithOrganization extends User {
+  organizationData?: TransportOperatorData | TicketProviderData;
 }
