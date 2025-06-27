@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMaaS ダッシュボード</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-hover:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease-in-out;
+        }
+        .stagger-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">ダッシュボード</h1>
+                <p class="text-sm text-gray-600" id="current-time"></p>
+            </div>
+            <button class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v15l-6 3-6-3z"/>
+                </svg>
+                <span class="sm:hidden">旅行を計画</span>
+                <span class="hidden sm:inline">新しい旅行を計画</span>
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+            <div class="stagger-item card-hover bg-white p-4 rounded-lg border shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs sm:text-sm font-medium text-gray-600">今月の旅行</h3>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div class="text-xl sm:text-2xl font-bold text-gray-900">12</div>
+                <p class="text-xs text-gray-500">先月から +20.1%</p>
+            </div>
+
+            <div class="stagger-item card-hover bg-white p-4 rounded-lg border shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs sm:text-sm font-medium text-gray-600">移動時間削減</h3>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="text-xl sm:text-2xl font-bold text-gray-900">2.5時間</div>
+                <p class="text-xs text-gray-500">効率的なルート選択により</p>
+            </div>
+
+            <div class="stagger-item card-hover bg-white p-4 rounded-lg border shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs sm:text-sm font-medium text-gray-600">CO2削減量</h3>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <div class="text-xl sm:text-2xl font-bold text-gray-900">15.2kg</div>
+                <p class="text-xs text-gray-500">公共交通機関の利用で</p>
+            </div>
+
+            <div class="stagger-item card-hover bg-white p-4 rounded-lg border shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs sm:text-sm font-medium text-gray-600">節約金額</h3>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <div class="text-xl sm:text-2xl font-bold text-gray-900">¥8,400</div>
+                <p class="text-xs text-gray-500">最適化されたルートで</p>
+            </div>
+        </div>
+
+        <!-- Real-time Transit Status -->
+        <div class="bg-white p-6 rounded-lg border shadow-sm">
+            <div class="mb-4">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2 mb-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    リアルタイム交通情報
+                </h2>
+                <p class="text-sm text-gray-600">主要路線の運行状況</p>
+            </div>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span class="font-medium">JR山手線</span>
+                    </div>
+                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">正常運行</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span class="font-medium">東京メトロ銀座線</span>
+                    </div>
+                    <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">5分遅延</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span class="font-medium">都営大江戸線</span>
+                    </div>
+                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">正常運行</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Upcoming -->
+        <div class="grid gap-4 lg:grid-cols-7">
+            <div class="lg:col-span-4 bg-white p-6 rounded-lg border shadow-sm">
+                <div class="mb-4">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900">最近の旅行</h2>
+                    <p class="text-sm text-gray-600">最近完了した旅行の一覧です</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-medium truncate">渋谷駅 → 東京駅</p>
+                            <p class="text-sm text-gray-500">今日 14:30 • 24分</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium">¥160</p>
+                            <p class="text-xs text-gray-500">電車</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-medium truncate">新宿駅 → 品川駅</p>
+                            <p class="text-sm text-gray-500">昨日 09:15 • 18分</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium">¥200</p>
+                            <p class="text-xs text-gray-500">電車</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v15l-6 3-6-3z"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-medium truncate">六本木 → 銀座</p>
+                            <p class="text-sm text-gray-500">昨日 20:45 • 25分</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium">¥220</p>
+                            <p class="text-xs text-gray-500">バス</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 bg-white p-6 rounded-lg border shadow-sm">
+                <div class="mb-4">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900">今週の予定</h2>
+                    <p class="text-sm text-gray-600">予約済みの旅行</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-3 rounded-lg border border-gray-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium">出張</p>
+                            <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">確定</span>
+                        </div>
+                        <p class="text-xs text-gray-500">明日 08:00 • 大阪</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-1">
+                                <div class="bg-blue-600 h-1 rounded-full w-full"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">準備完了</span>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-lg border border-gray-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium">会議</p>
+                            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded">保留中</span>
+                        </div>
+                        <p class="text-xs text-gray-500">金曜 15:30 • 横浜</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-1">
+                                <div class="bg-blue-600 h-1 rounded-full w-1/2"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">計画中</span>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-lg border border-gray-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium">家族旅行</p>
+                            <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">確定</span>
+                        </div>
+                        <p class="text-xs text-gray-500">土曜 10:00 • 鎌倉</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-1">
+                                <div class="bg-blue-600 h-1 rounded-full w-full"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">準備完了</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // リアルタイム時計
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleDateString('ja-JP') + ' ' + now.toLocaleTimeString('ja-JP');
+            document.getElementById('current-time').textContent = timeString;
+        }
+        
+        // 1秒ごとに時刻を更新
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // アニメーション遅延
+        document.querySelectorAll('.stagger-item').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>

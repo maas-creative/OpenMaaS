@@ -66,6 +66,14 @@ Thumbs.db
 tmp/
 temp/
 .cache/
+*.tsbuildinfo
+
+# Development files (moved to docs/)
+/memorytodo.md
+/implementation-plan.md
+/dashboard-demo.html
+/openmaas-*.html
+/オープンソースMaaS*.md
 
 # Flutter
 **/doc/api/
