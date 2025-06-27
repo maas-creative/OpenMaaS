@@ -72,7 +72,7 @@ describe('AuthController', () => {
 
       authService.login.mockResolvedValue(mockAuthToken);
 
-      const result = await controller.login({}, loginDto);
+      const result = await controller.login({} as any, loginDto);
 
       expect(authService.login).toHaveBeenCalledWith(loginDto);
       expect(result).toEqual(mockAuthToken);
@@ -85,7 +85,7 @@ describe('AuthController', () => {
 
       authService.getUserInfo.mockResolvedValue(mockUserInfo);
 
-      const result = await controller.getProfile(req);
+      const result = await controller.getProfile(req as any);
 
       expect(authService.getUserInfo).toHaveBeenCalledWith('user-123');
       expect(result).toEqual(mockUserInfo);
@@ -98,7 +98,7 @@ describe('AuthController', () => {
 
       authService.refreshToken.mockResolvedValue(mockAuthToken);
 
-      const result = await controller.refreshToken(req);
+      const result = await controller.refreshToken(req as any);
 
       expect(authService.refreshToken).toHaveBeenCalledWith('user-123');
       expect(result).toEqual(mockAuthToken);
@@ -115,7 +115,7 @@ describe('AuthController', () => {
 
       authService.changePassword.mockResolvedValue(undefined);
 
-      await controller.changePassword(req, changePasswordDto);
+      await controller.changePassword(req as any, changePasswordDto);
 
       expect(authService.changePassword).toHaveBeenCalledWith('user-123', changePasswordDto);
     });
@@ -127,7 +127,7 @@ describe('AuthController', () => {
 
       authService.deleteAccount.mockResolvedValue(undefined);
 
-      await controller.deleteAccount(req);
+      await controller.deleteAccount(req as any);
 
       expect(authService.deleteAccount).toHaveBeenCalledWith('user-123');
     });

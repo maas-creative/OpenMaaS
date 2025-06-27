@@ -34,9 +34,9 @@ export class AuthController {
         access_token: { type: 'string' },
         refresh_token: { type: 'string' },
         expires_in: { type: 'number' },
-        token_type: { type: 'string' }
-      }
-    }
+        token_type: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 409, description: 'User already exists' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
@@ -58,12 +58,15 @@ export class AuthController {
         access_token: { type: 'string' },
         refresh_token: { type: 'string' },
         expires_in: { type: 'number' },
-        token_type: { type: 'string' }
-      }
-    }
+        token_type: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Request() _req: ExpressRequest & { user: AuthContext }, @Body() loginDto: LoginDto): Promise<AuthToken> {
+  async login(
+    @Request() _req: ExpressRequest & { user: AuthContext },
+    @Body() loginDto: LoginDto,
+  ): Promise<AuthToken> {
     return this.authService.login(loginDto);
   }
 
@@ -81,12 +84,14 @@ export class AuthController {
         email: { type: 'string' },
         given_name: { type: 'string' },
         family_name: { type: 'string' },
-        preferred_username: { type: 'string' }
-      }
-    }
+        preferred_username: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@Request() req: ExpressRequest & { user: AuthContext }): Promise<KeycloakUserInfo> {
+  async getProfile(
+    @Request() req: ExpressRequest & { user: AuthContext },
+  ): Promise<KeycloakUserInfo> {
     return this.authService.getUserInfo((req.user as AuthContext).userId);
   }
 
@@ -104,9 +109,9 @@ export class AuthController {
         access_token: { type: 'string' },
         refresh_token: { type: 'string' },
         expires_in: { type: 'number' },
-        token_type: { type: 'string' }
-      }
-    }
+        token_type: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async refreshToken(@Request() req: ExpressRequest & { user: AuthContext }): Promise<AuthToken> {

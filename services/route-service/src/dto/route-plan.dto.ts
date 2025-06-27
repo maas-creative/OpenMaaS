@@ -11,9 +11,7 @@ import {
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  TransportMode,
-} from '@openmaas/types';
+import { TransportMode } from '@openmaas/types';
 
 export class LocationDto {
   @ApiProperty({ description: 'Latitude in decimal degrees' })

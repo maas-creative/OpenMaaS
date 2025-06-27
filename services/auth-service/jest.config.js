@@ -17,5 +17,9 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   moduleNameMapper: {
     '^@openmaas/types$': '<rootDir>/../../libs/types/src',
+    '@keycloak/keycloak-admin-client': '<rootDir>/__mocks__/keycloak-admin-client.js',
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@keycloak/keycloak-admin-client)/)',
+  ],
 };
