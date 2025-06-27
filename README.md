@@ -6,7 +6,7 @@
   
   *Transforming urban mobility through intelligent transportation integration*
   
-  [![Build Status](https://github.com/maas-creative/OpenMaaS/workflows/CI/badge.svg)](https://github.com/maas-creative/OpenMaaS/actions)
+  [![Build Status](https://github.com/ukyonagata0105/OpenMaaS/workflows/CI/badge.svg)](https://github.com/ukyonagata0105/OpenMaaS/actions)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -29,24 +29,24 @@
   <br><br>
   
   <!-- Social & Community Buttons -->
-  <a href="https://github.com/maas-creative/OpenMaaS/stargazers">
-    <img src="https://img.shields.io/github/stars/maas-creative/OpenMaaS?style=social" alt="GitHub Stars">
+  <a href="https://github.com/ukyonagata0105/OpenMaaS/stargazers">
+    <img src="https://img.shields.io/github/stars/ukyonagata0105/OpenMaaS?style=social" alt="GitHub Stars">
   </a>
-  <a href="https://github.com/maas-creative/OpenMaaS/network/members">
-    <img src="https://img.shields.io/github/forks/maas-creative/OpenMaaS?style=social" alt="GitHub Forks">
+  <a href="https://github.com/ukyonagata0105/OpenMaaS/network/members">
+    <img src="https://img.shields.io/github/forks/ukyonagata0105/OpenMaaS?style=social" alt="GitHub Forks">
   </a>
-  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OpenMaaS%20-%20Open%20Source%20Mobility%20as%20a%20Service%20Platform&url=https://github.com/maas-creative/OpenMaaS">
-    <img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmaas-creative%2FOpenMaaS" alt="Tweet">
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OpenMaaS%20-%20Open%20Source%20Mobility%20as%20a%20Service%20Platform&url=https://github.com/ukyonagata0105/OpenMaaS">
+    <img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fukyonagata0105%2FOpenMaaS" alt="Tweet">
   </a>
   
   <br><br>
   
   <!-- Status Badges -->
-  [![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/maas-creative/OpenMaaS/releases)
-  [![Contributors](https://img.shields.io/github/contributors/maas-creative/OpenMaaS)](https://github.com/maas-creative/OpenMaaS/graphs/contributors)
-  [![Issues](https://img.shields.io/github/issues/maas-creative/OpenMaaS)](https://github.com/maas-creative/OpenMaaS/issues)
-  [![Last Commit](https://img.shields.io/github/last-commit/maas-creative/OpenMaaS)](https://github.com/maas-creative/OpenMaaS/commits/main)
-  [![Code Size](https://img.shields.io/github/languages/code-size/maas-creative/OpenMaaS)](https://github.com/maas-creative/OpenMaaS)
+  [![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/ukyonagata0105/OpenMaaS/releases)
+  [![Contributors](https://img.shields.io/github/contributors/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/graphs/contributors)
+  [![Issues](https://img.shields.io/github/issues/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/issues)
+  [![Last Commit](https://img.shields.io/github/last-commit/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/commits/main)
+  [![Code Size](https://img.shields.io/github/languages/code-size/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS)
   
   <!-- Feature Highlight -->
   <br><br>
@@ -220,7 +220,7 @@ OpenMaaS follows a microservices architecture with the following components:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/maas-creative/OpenMaaS.git
+   git clone https://github.com/ukyonagata0105/OpenMaaS.git
    cd OpenMaaS
    ```
 
@@ -325,8 +325,8 @@ For security vulnerabilities, please see our [Security Policy](SECURITY.md).
 ### 🌍 Community & Support
 
 - **Website**: [https://maas-creative.com](https://maas-creative.com)
-- **Issues**: [GitHub Issues](https://github.com/maas-creative/OpenMaaS/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/maas-creative/OpenMaaS/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ukyonagata0105/OpenMaaS/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ukyonagata0105/OpenMaaS/discussions)
 
 ### 📈 Roadmap
 
@@ -406,7 +406,7 @@ OpenMaaSは、公共交通機関、ライドシェア、バイクシェアなど
 
 1. **リポジトリのクローン**
    ```bash
-   git clone https://github.com/maas-creative/OpenMaaS.git
+   git clone https://github.com/ukyonagata0105/OpenMaaS.git
    cd OpenMaaS
    ```
 
@@ -457,8 +457,8 @@ OpenMaaSは、公共交通機関、ライドシェア、バイクシェアなど
 ### 🌍 コミュニティ & サポート
 
 - **ウェブサイト**: [https://maas-creative.com](https://maas-creative.com)
-- **課題**: [GitHub Issues](https://github.com/maas-creative/OpenMaaS/issues)
-- **ディスカッション**: [GitHub Discussions](https://github.com/maas-creative/OpenMaaS/discussions)
+- **課題**: [GitHub Issues](https://github.com/ukyonagata0105/OpenMaaS/issues)
+- **ディスカッション**: [GitHub Discussions](https://github.com/ukyonagata0105/OpenMaaS/discussions)
 
 ### 📈 ロードマップ
 
