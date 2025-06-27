@@ -75,6 +75,9 @@ temp/
 /openmaas-*.html
 /オープンソースMaaS*.md
 
+# Claude Code project instructions (keep local only)
+CLAUDE.md
+
 # Flutter
 **/doc/api/
 **/ios/Flutter/flutter_export_environment.sh
