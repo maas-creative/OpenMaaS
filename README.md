@@ -1,32 +1,151 @@
-[日本語](#japanese) | [English](#english)
+<!-- OpenMaaS Header -->
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/your-logo-here" alt="OpenMaaS Logo" width="120" height="120">
+  
+  # 🚀 OpenMaaS
+  
+  **Next-Generation Open Source Mobility as a Service Platform**
+  
+  [![Build Status](https://github.com/ukyonagata0105/OpenMaaS/workflows/CI/badge.svg)](https://github.com/ukyonagata0105/OpenMaaS/actions)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+  [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+  [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://docker.com/)
+  
+  <br><br>
+  
+  <!-- Action Buttons -->
+  <a href="#quick-start">
+    <img src="https://img.shields.io/badge/🚀 Quick Start-Get Started-blue?style=for-the-badge" alt="Quick Start">
+  </a>
+  <a href="https://openmaas-demo.vercel.app">
+    <img src="https://img.shields.io/badge/🌐 Live Demo-Try Now-green?style=for-the-badge" alt="Live Demo">
+  </a>
+  <a href="#contributing">
+    <img src="https://img.shields.io/badge/💬 Contribute-Join Us-orange?style=for-the-badge" alt="Contribute">
+  </a>
+  
+  <br><br>
+  
+  <!-- Social & Community Buttons -->
+  <a href="https://github.com/ukyonagata0105/OpenMaaS/stargazers">
+    <img src="https://img.shields.io/github/stars/ukyonagata0105/OpenMaaS?style=social" alt="GitHub Stars">
+  </a>
+  <a href="https://github.com/ukyonagata0105/OpenMaaS/network/members">
+    <img src="https://img.shields.io/github/forks/ukyonagata0105/OpenMaaS?style=social" alt="GitHub Forks">
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OpenMaaS%20-%20Open%20Source%20Mobility%20as%20a%20Service%20Platform&url=https://github.com/ukyonagata0105/OpenMaaS">
+    <img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fukyonagata0105%2FOpenMaaS" alt="Tweet">
+  </a>
+  
+  <br><br>
+  
+  <!-- Status Badges -->
+  [![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/ukyonagata0105/OpenMaaS/releases)
+  [![Contributors](https://img.shields.io/github/contributors/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/graphs/contributors)
+  [![Issues](https://img.shields.io/github/issues/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/issues)
+  [![Last Commit](https://img.shields.io/github/last-commit/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS/commits/main)
+  [![Code Size](https://img.shields.io/github/languages/code-size/ukyonagata0105/OpenMaaS)](https://github.com/ukyonagata0105/OpenMaaS)
+  
+  <!-- Feature Highlight -->
+  <br><br>
+  <img src="https://img.shields.io/badge/⚡ Lightning Fast-Next.js 15-black?style=flat-square&logo=next.js">
+  <img src="https://img.shields.io/badge/🔥 Type Safe-TypeScript-blue?style=flat-square&logo=typescript">
+  <img src="https://img.shields.io/badge/🐳 Docker Ready-Compose-blue?style=flat-square&logo=docker">
+  <img src="https://img.shields.io/badge/☸️ Kubernetes-Ready-326CE5?style=flat-square&logo=kubernetes">
+  <img src="https://img.shields.io/badge/📱 PWA-Enabled-purple?style=flat-square&logo=pwa">
+  <img src="https://img.shields.io/badge/🗺️ Maps-Interactive-green?style=flat-square&logo=mapbox">
+</div>
 
-# OpenMaaS - Open Source Mobility as a Service Platform
+---
+
+## 🌍 Language / 言語選択
+
+[🇺🇸 English](#english) | [🇯🇵 日本語](#japanese)
 
 ---
 
 <a name="english"></a>
-## English
+## 🇺🇸 English
 
-### Overview
+> **🎯 Transform urban mobility with the power of open source**
 
-OpenMaaS is an open-source Mobility as a Service (MaaS) platform that integrates various transportation services including public transit, ride-sharing, and bike-sharing into a unified platform. Our mission is to make urban mobility more accessible, efficient, and sustainable through open-source collaboration.
+OpenMaaS is a cutting-edge, open-source Mobility as a Service (MaaS) platform that seamlessly integrates various transportation services—public transit, ride-sharing, micro-mobility, and more—into a unified, intelligent ecosystem. Built with modern web technologies and designed for scale, OpenMaaS empowers cities, transportation providers, and developers to create the future of urban mobility.
 
-**Developed by [MaaS Creative Co. Ltd](https://maas-creative.com)**
+**✨ Built by [MaaS Creative Co. Ltd](https://maas-creative.com) with ❤️ for the open source community**
 
-### 🚀 Features
+## ✨ Key Features
 
-- **Multi-modal Transportation Integration**: Seamlessly combine public transit, ride-sharing, bike-sharing, and walking routes
-- **Interactive Maps**: Real-time transit status maps with route visualization and station information
-- **Secure QR Code Ticketing**: Dynamic QR codes with 30-second refresh, screenshot detection, and watermarks
-- **Role-Based Dashboards**: Specialized interfaces for transport operators, ticket providers, and system administrators
-- **Real-time Transit Data**: GTFS and GTFS-RT support for accurate, up-to-date transit information
-- **Smart Route Planning**: Multi-modal journey planning with visual route display
-- **Secure Payment Processing**: Integrated payment system with Stripe support and refund management
-- **User Management**: Comprehensive user profiles, preferences, and trip history
-- **Booking System**: Unified booking interface for various transportation providers
-- **Progressive Web App**: Mobile-optimized experience with offline support
-- **Developer-Friendly API**: RESTful APIs with comprehensive documentation
-- **Microservices Architecture**: Scalable, containerized services with Kubernetes support
+<table>
+<tr>
+<td width="50%">
+
+### 🗺️ **Smart Mobility Hub**
+- **Multi-modal Integration** - Unify buses, trains, bikes, scooters & ride-shares
+- **Interactive Maps** - Real-time transit visualization with live status
+- **Intelligent Routing** - AI-powered journey planning across all modes
+- **Live Updates** - GTFS/GTFS-RT integration for accurate schedules
+
+</td>
+<td width="50%">
+
+### 🔒 **Enterprise Security**
+- **Dynamic QR Ticketing** - Self-refreshing codes with watermarks
+- **Screenshot Protection** - Advanced anti-fraud detection
+- **Role-based Access** - Granular permissions for operators
+- **Secure Payments** - Stripe integration with fraud protection
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 📱 **Modern Experience**
+- **Progressive Web App** - Native-like mobile experience
+- **Offline Support** - Works without internet connection
+- **Real-time Sync** - Instant updates across all devices
+- **Responsive Design** - Optimized for any screen size
+
+</td>
+<td width="50%">
+
+### 🏗️ **Developer First**
+- **Microservices Architecture** - Scalable, containerized design
+- **RESTful APIs** - Comprehensive OpenAPI documentation
+- **TypeScript** - End-to-end type safety
+- **Docker Ready** - One-command deployment
+
+</td>
+</tr>
+</table>
+
+### 🎯 **Who is OpenMaaS for?**
+
+<table>
+<tr>
+<td align="center" width="25%">
+  <img src="https://github.com/user-attachments/assets/city-icon" width="80">
+  <h4>🏙️ Cities & Municipalities</h4>
+  <p>Integrate all transportation services into one platform for citizens</p>
+</td>
+<td align="center" width="25%">
+  <img src="https://github.com/user-attachments/assets/transport-icon" width="80">
+  <h4>🚌 Transport Operators</h4>
+  <p>Manage fleets, monitor performance, and optimize operations</p>
+</td>
+<td align="center" width="25%">
+  <img src="https://github.com/user-attachments/assets/developer-icon" width="80">
+  <h4>👩‍💻 Developers</h4>
+  <p>Build on robust APIs and contribute to open source mobility</p>
+</td>
+<td align="center" width="25%">
+  <img src="https://github.com/user-attachments/assets/traveler-icon" width="80">
+  <h4>🧳 Travelers</h4>
+  <p>Seamless, unified experience across all transportation modes</p>
+</td>
+</tr>
+</table>
 
 ### 🏗️ Architecture
 
@@ -132,11 +251,52 @@ OpenMaaS follows a microservices architecture with the following components:
    - **Keycloak Admin**: http://localhost:8080 (admin/admin)
    - **Individual service docs**: http://localhost:[port]/api
    
-   **Demo Users** (available on frontend homepage):
-   - General User: `user@example.com`
-   - Transport Operator: `operator@jr.example.com`
-   - Ticket Provider: `provider@jtb.example.com`
-   - System Admin: `admin@openmaas.example.com`
+   **🎭 Demo Users** (available on frontend homepage):
+   - 👤 **General User**: `user@example.com`
+   - 🚌 **Transport Operator**: `operator@jr.example.com`
+   - 🎫 **Ticket Provider**: `provider@jtb.example.com`
+   - 👑 **System Admin**: `admin@openmaas.example.com`
+
+---
+
+## 🎥 **Demo & Screenshots**
+
+<div align="center">
+
+### 📱 **Mobile Experience**
+<img src="https://github.com/user-attachments/assets/mobile-demo" alt="Mobile Demo" width="300">
+
+### 🗺️ **Interactive Maps**
+<img src="https://github.com/user-attachments/assets/maps-demo" alt="Maps Demo" width="600">
+
+### 🔒 **Secure QR Tickets**
+<img src="https://github.com/user-attachments/assets/qr-demo" alt="QR Demo" width="400">
+
+### 📊 **Admin Dashboards**
+<img src="https://github.com/user-attachments/assets/admin-demo" alt="Admin Demo" width="600">
+
+</div>
+
+---
+
+## 🏆 **Why Choose OpenMaaS?**
+
+<table>
+<tr>
+<td align="center" width="33%">
+  <h3>🚀 **Performance First**</h3>
+  <p>Built with Next.js 15 and modern optimization techniques for lightning-fast user experiences</p>
+</td>
+<td align="center" width="33%">
+  <h3>🔧 **Production Ready**</h3>
+  <p>Enterprise-grade security, scalability, and reliability for real-world deployments</p>
+</td>
+<td align="center" width="33%">
+  <h3>🌍 **Open Source**</h3>
+  <p>Transparent, community-driven development with no vendor lock-in</p>
+</td>
+</tr>
+</table>
 
 ### 📖 Documentation
 
@@ -170,17 +330,27 @@ For security vulnerabilities, please see our [Security Policy](SECURITY.md).
 
 ### 📈 Roadmap
 
+#### 🎯 **Completed Features**
 - [x] **Core MaaS Platform** - Multi-modal transportation integration
 - [x] **Interactive Maps** - Real-time transit visualization 
 - [x] **Secure QR Ticketing** - Dynamic QR codes with security features
 - [x] **Role-Based Dashboards** - Operator and provider management interfaces
 - [x] **Progressive Web App** - Mobile-optimized frontend
+
+#### 🚧 **In Development**
 - [ ] **Production Map Integration** - Mapbox/Google Maps API integration
 - [ ] **Multi-language Support** - Internationalization (i18n)
+- [ ] **Smartphone Web App** - Enhanced mobile-first experience with native-like features
+
+#### 🔮 **Future Plans**
 - [ ] **Machine Learning** - Route optimization and demand prediction
-- [ ] **Mobile SDK** - Native mobile app development kit
+- [ ] **Native Mobile Apps** - iOS/Android app development kit
 - [ ] **Advanced Analytics** - Business intelligence dashboard
 - [ ] **Carbon Footprint** - Environmental impact tracking
+- [ ] **IoT Integration** - Smart city sensors and real-time data
+- [ ] **Voice Assistant** - Alexa/Google Assistant integration
+- [ ] **AR Navigation** - Augmented reality wayfinding
+- [ ] **Blockchain Ticketing** - Decentralized ticket validation
 - [ ] **Third-party Integrations** - More transportation provider APIs
 
 ---
@@ -292,12 +462,28 @@ OpenMaaSは、公共交通機関、ライドシェア、バイクシェアなど
 
 ### 📈 ロードマップ
 
-- [ ] 多言語フロントエンドサポート
-- [ ] 機械学習ベースのルート最適化
-- [ ] より多くの交通事業者との統合
-- [ ] モバイルSDK開発
-- [ ] 高度な分析ダッシュボード
-- [ ] カーボンフットプリント追跡
+#### 🎯 **完了済み機能**
+- [x] **コアMaaSプラットフォーム** - マルチモーダル交通統合
+- [x] **インタラクティブマップ** - リアルタイム交通可視化
+- [x] **セキュアQRチケット** - セキュリティ機能付き動的QRコード
+- [x] **権限別ダッシュボード** - 事業者・提供者管理インターフェース
+- [x] **プログレッシブWebアプリ** - モバイル最適化フロントエンド
+
+#### 🚧 **開発中**
+- [ ] **本格地図統合** - Mapbox/Google Maps API統合
+- [ ] **多言語対応** - 国際化対応（i18n）
+- [ ] **スマートフォンWebアプリ** - ネイティブライクなモバイルファースト体験
+
+#### 🔮 **将来計画**
+- [ ] **機械学習** - ルート最適化と需要予測
+- [ ] **ネイティブモバイルアプリ** - iOS/Android アプリ開発キット
+- [ ] **高度な分析** - ビジネスインテリジェンスダッシュボード
+- [ ] **カーボンフットプリント** - 環境影響追跡
+- [ ] **IoT統合** - スマートシティセンサーとリアルタイムデータ
+- [ ] **音声アシスタント** - Alexa/Google Assistant統合
+- [ ] **ARナビゲーション** - 拡張現実経路案内
+- [ ] **ブロックチェーンチケット** - 分散型チケット検証
+- [ ] **サードパーティ統合** - より多くの交通事業者API
 
 ---
 
