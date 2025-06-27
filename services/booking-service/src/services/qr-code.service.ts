@@ -2,7 +2,6 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
-  ForbiddenException,
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,7 +25,7 @@ interface QrCode {
   validFor: number;
 }
 
-interface QrCodeHistory {
+export interface QrCodeHistory {
   id: string;
   action: 'generated' | 'validated' | 'invalidated' | 'expired';
   timestamp: Date;
@@ -128,10 +127,8 @@ export class QrCodeService {
       }
 
       // Verify checksum
-      const expectedChecksum = this.generateChecksum({
-        ...qrCodeData,
-        checksum: '',
-      });
+      const { checksum, ...dataWithoutChecksum } = qrCodeData;
+      const expectedChecksum = this.generateChecksum(dataWithoutChecksum);
 
       if (qrCodeData.checksum !== expectedChecksum) {
         this.logger.warn(`Invalid checksum for QR code: ${qrCodeData.bookingId}`);
@@ -195,7 +192,7 @@ export class QrCodeService {
         message: 'QR code is valid',
       };
     } catch (error) {
-      this.logger.error(`Error validating QR code: ${error.message}`);
+      this.logger.error(`Error validating QR code: ${error instanceof Error ? error.message : 'Unknown error'}`);
       return {
         valid: false,
         message: 'Invalid QR code format',
@@ -298,16 +295,10 @@ export class QrCodeService {
       }
     }
 
-    // Clean used QR codes older than 1 hour
-    const oneHourAgo = Date.now() - 3600000;
-    for (const qrId of this.usedQrCodes) {
-      const [, nonce] = qrId.split(':');
-      // Simple check based on nonce pattern (in production, store timestamp)
-      if (this.usedQrCodes.size > 10000) {
-        this.usedQrCodes.clear();
-        this.logger.warn('Cleared used QR codes cache due to size limit');
-        break;
-      }
+    // Clean used QR codes when cache gets too large
+    if (this.usedQrCodes.size > 10000) {
+      this.usedQrCodes.clear();
+      this.logger.warn('Cleared used QR codes cache due to size limit');
     }
 
     if (cleaned > 0) {

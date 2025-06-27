@@ -16,11 +16,15 @@ OpenMaaS is an open-source Mobility as a Service (MaaS) platform that integrates
 ### 🚀 Features
 
 - **Multi-modal Transportation Integration**: Seamlessly combine public transit, ride-sharing, bike-sharing, and walking routes
+- **Interactive Maps**: Real-time transit status maps with route visualization and station information
+- **Secure QR Code Ticketing**: Dynamic QR codes with 30-second refresh, screenshot detection, and watermarks
+- **Role-Based Dashboards**: Specialized interfaces for transport operators, ticket providers, and system administrators
 - **Real-time Transit Data**: GTFS and GTFS-RT support for accurate, up-to-date transit information
-- **Smart Route Planning**: Multi-modal journey planning with OpenTripPlanner integration
+- **Smart Route Planning**: Multi-modal journey planning with visual route display
 - **Secure Payment Processing**: Integrated payment system with Stripe support and refund management
 - **User Management**: Comprehensive user profiles, preferences, and trip history
 - **Booking System**: Unified booking interface for various transportation providers
+- **Progressive Web App**: Mobile-optimized experience with offline support
 - **Developer-Friendly API**: RESTful APIs with comprehensive documentation
 - **Microservices Architecture**: Scalable, containerized services with Kubernetes support
 
@@ -72,12 +76,16 @@ OpenMaaS follows a microservices architecture with the following components:
 
 ### 🛠️ Technology Stack
 
+- **Frontend**: Next.js 15.3.3, React 19, TypeScript, Tailwind CSS 4
+- **UI Components**: shadcn/ui, Radix UI primitives
 - **Backend**: Node.js, NestJS, TypeScript
 - **Database**: PostgreSQL with PostGIS for geospatial data
-- **Authentication**: Keycloak, JWT
-- **API Gateway**: Kong
-- **Payment**: Stripe
-- **Route Planning**: OpenTripPlanner
+- **Authentication**: Keycloak, JWT, Role-based access control
+- **API Gateway**: Kong with rate limiting and service discovery
+- **Payment**: Stripe with webhook integration
+- **Maps**: Interactive demo maps (Mapbox/Google Maps ready)
+- **QR Security**: Dynamic generation with security features
+- **Route Planning**: OpenTripPlanner integration
 - **Containerization**: Docker, Docker Compose
 - **Orchestration**: Kubernetes
 - **Cache**: Redis
@@ -119,9 +127,16 @@ OpenMaaS follows a microservices architecture with the following components:
    ```
 
 4. **Verify Installation**
-   - API Gateway: http://localhost:8000
-   - Keycloak Admin: http://localhost:8080 (admin/admin)
-   - Individual service docs available at http://localhost:[port]/api
+   - **Frontend Application**: http://localhost:3000
+   - **API Gateway**: http://localhost:8000
+   - **Keycloak Admin**: http://localhost:8080 (admin/admin)
+   - **Individual service docs**: http://localhost:[port]/api
+   
+   **Demo Users** (available on frontend homepage):
+   - General User: `user@example.com`
+   - Transport Operator: `operator@jr.example.com`
+   - Ticket Provider: `provider@jtb.example.com`
+   - System Admin: `admin@openmaas.example.com`
 
 ### 📖 Documentation
 
@@ -155,12 +170,18 @@ For security vulnerabilities, please see our [Security Policy](SECURITY.md).
 
 ### 📈 Roadmap
 
-- [ ] Multi-language frontend support
-- [ ] Machine learning-based route optimization
-- [ ] Integration with more transportation providers
-- [ ] Mobile SDK development
-- [ ] Advanced analytics dashboard
-- [ ] Carbon footprint tracking
+- [x] **Core MaaS Platform** - Multi-modal transportation integration
+- [x] **Interactive Maps** - Real-time transit visualization 
+- [x] **Secure QR Ticketing** - Dynamic QR codes with security features
+- [x] **Role-Based Dashboards** - Operator and provider management interfaces
+- [x] **Progressive Web App** - Mobile-optimized frontend
+- [ ] **Production Map Integration** - Mapbox/Google Maps API integration
+- [ ] **Multi-language Support** - Internationalization (i18n)
+- [ ] **Machine Learning** - Route optimization and demand prediction
+- [ ] **Mobile SDK** - Native mobile app development kit
+- [ ] **Advanced Analytics** - Business intelligence dashboard
+- [ ] **Carbon Footprint** - Environmental impact tracking
+- [ ] **Third-party Integrations** - More transportation provider APIs
 
 ---
 
@@ -176,22 +197,30 @@ OpenMaaSは、公共交通機関、ライドシェア、バイクシェアなど
 ### 🚀 機能
 
 - **マルチモーダル交通統合**: 公共交通機関、ライドシェア、バイクシェア、徒歩ルートをシームレスに組み合わせ
+- **インタラクティブマップ**: リアルタイム交通状況マップとルート可視化、駅情報表示
+- **セキュアQRコードチケット**: 30秒更新、スクリーンショット検知、ウォーターマーク付き動的QRコード
+- **権限別ダッシュボード**: 交通事業者、チケット提供者、システム管理者向け専用インターフェース
 - **リアルタイム交通データ**: GTFS および GTFS-RT サポートによる正確で最新の交通情報
-- **スマートルート計画**: OpenTripPlanner統合によるマルチモーダル移動計画
+- **スマートルート計画**: 視覚的ルート表示付きマルチモーダル移動計画
 - **安全な決済処理**: Stripeサポートと返金管理を備えた統合決済システム
 - **ユーザー管理**: 包括的なユーザープロファイル、設定、移動履歴
 - **予約システム**: 様々な交通事業者向けの統一予約インターフェース
+- **プログレッシブWebアプリ**: オフラインサポート付きモバイル最適化体験
 - **開発者フレンドリーAPI**: 包括的なドキュメント付きRESTful API
 - **マイクロサービスアーキテクチャ**: Kubernetesサポート付きスケーラブルなコンテナ化サービス
 
 ### 🛠️ 技術スタック
 
+- **フロントエンド**: Next.js 15.3.3, React 19, TypeScript, Tailwind CSS 4
+- **UIコンポーネント**: shadcn/ui, Radix UI プリミティブ
 - **バックエンド**: Node.js, NestJS, TypeScript
 - **データベース**: 地理空間データ用PostgreSQL with PostGIS
-- **認証**: Keycloak, JWT
-- **APIゲートウェイ**: Kong
-- **決済**: Stripe
-- **ルート計画**: OpenTripPlanner
+- **認証**: Keycloak, JWT, ロールベースアクセス制御
+- **APIゲートウェイ**: レート制限とサービス発見機能付きKong
+- **決済**: Webhookインテグレーション付きStripe
+- **マップ**: インタラクティブデモマップ（Mapbox/Google Maps対応準備済み）
+- **QRセキュリティ**: セキュリティ機能付き動的生成
+- **ルート計画**: OpenTripPlanner統合
 - **コンテナ化**: Docker, Docker Compose
 - **オーケストレーション**: Kubernetes
 - **キャッシュ**: Redis
