@@ -1,10 +1,10 @@
 <!-- OpenMaaS Header -->
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/your-logo-here" alt="OpenMaaS Logo" width="120" height="120">
+  <img src="./assets/images/openmaas-logo.jpg" alt="OpenMaaS Logo" width="400" height="auto">
   
-  # 🚀 OpenMaaS
+  **🌍 Next-Generation Open Source Mobility as a Service Platform**
   
-  **Next-Generation Open Source Mobility as a Service Platform**
+  *Transforming urban mobility through intelligent transportation integration*
   
   [![Build Status](https://github.com/ukyonagata0105/OpenMaaS/workflows/CI/badge.svg)](https://github.com/ukyonagata0105/OpenMaaS/actions)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
