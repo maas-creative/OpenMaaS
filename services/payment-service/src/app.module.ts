@@ -11,6 +11,7 @@ import { PaymentController } from './controllers/payment.controller';
 import { WebhookController } from './controllers/webhook.controller';
 import { PaymentService } from './services/payment.service';
 import { PaymentMethodService } from './services/payment-method.service';
+import { ReceiptService } from './services/receipt.service';
 import { StripeService } from './services/stripe.service';
 import { PaymentEntity } from './entities/payment.entity';
 import { PaymentMethodEntity } from './entities/payment-method.entity';
@@ -45,6 +46,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   providers: [
     PaymentService,
     PaymentMethodService,
+    ReceiptService,
     StripeService,
     PaymentRepository,
     PaymentMethodRepository,

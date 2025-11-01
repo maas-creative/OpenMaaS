@@ -281,4 +281,49 @@ export class KeycloakService implements OnModuleInit {
       throw error;
     }
   }
+
+  async getUserAttribute(userId: string, attributeName: string): Promise<string | undefined> {
+    try {
+      const user = await this.kcAdminClient.users.findOne({
+        realm: this.realm,
+        id: userId,
+      });
+      
+      if (user.attributes && user.attributes[attributeName]) {
+        return Array.isArray(user.attributes[attributeName])
+          ? user.attributes[attributeName][0]
+          : user.attributes[attributeName];
+      }
+      
+      return undefined;
+    } catch (error) {
+      this.logger.error('Failed to get user attribute', error);
+      return undefined;
+    }
+  }
+
+  async setUserAttribute(userId: string, attributeName: string, value: string): Promise<void> {
+    try {
+      const user = await this.kcAdminClient.users.findOne({
+        realm: this.realm,
+        id: userId,
+      });
+      
+      const attributes = user.attributes || {};
+      attributes[attributeName] = value ? [value] : [];
+      
+      await this.kcAdminClient.users.update(
+        {
+          realm: this.realm,
+          id: userId,
+        },
+        {
+          attributes,
+        },
+      );
+    } catch (error) {
+      this.logger.error('Failed to set user attribute', error);
+      throw error;
+    }
+  }
 }

@@ -60,6 +60,24 @@ export interface AccessibilityPreferences {
   preferredWalkingSpeed?: 'slow' | 'normal' | 'fast';
 }
 
+export interface Favorite {
+  id: string;
+  name: string;
+  type: 'location' | 'route';
+  location?: {
+    lat: number;
+    lon: number;
+    address?: string;
+  };
+  route?: {
+    from: { lat: number; lon: number; address?: string };
+    to: { lat: number; lon: number; address?: string };
+    routeId?: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface CreateUserDto {
   externalId: string;
   email: string;

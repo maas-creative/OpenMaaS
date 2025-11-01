@@ -57,3 +57,23 @@ export interface KeycloakUserInfo {
   family_name?: string;
   email?: string;
 }
+
+export interface MfaSetupResponse {
+  secret: string;
+  qrCodeUrl: string;
+  backupCodes: string[];
+}
+
+export interface VerifyMfaRequest {
+  token: string;
+}
+
+export interface EnableMfaRequest {
+  token: string;
+}
+
+export interface LoginWithMfaRequest {
+  email: string;
+  password: string;
+  mfaToken?: string;
+}
