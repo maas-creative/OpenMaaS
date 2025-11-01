@@ -49,6 +49,11 @@ export class LoginDto {
   @ApiProperty({ example: 'SecurePass123!' })
   @IsString()
   password!: string;
+
+  @ApiProperty({ example: '123456', required: false, description: 'MFA token if MFA is enabled' })
+  @IsOptional()
+  @IsString()
+  mfaToken?: string;
 }
 
 export class ChangePasswordDto {

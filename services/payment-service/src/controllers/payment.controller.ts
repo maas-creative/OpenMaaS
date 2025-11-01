@@ -16,6 +16,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@ne
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PaymentService } from '../services/payment.service';
 import { PaymentMethodService } from '../services/payment-method.service';
+import { ReceiptService } from '../services/receipt.service';
 import {
   CreatePaymentDto,
   ProcessPaymentDto,
@@ -36,6 +37,7 @@ export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly paymentMethodService: PaymentMethodService,
+    private readonly receiptService: ReceiptService,
   ) {}
 
   @Post()
@@ -184,5 +186,25 @@ export class PaymentController {
   @ApiResponse({ status: 204, description: 'Payment methods synced successfully' })
   async syncPaymentMethods(@Request() req: any): Promise<void> {
     return this.paymentMethodService.syncStripePaymentMethods(req.user.userId);
+  }
+
+  @Get(':id/receipt')
+  @ApiOperation({ summary: 'Generate or retrieve receipt for a payment' })
+  @ApiParam({ name: 'id', description: 'Payment ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Receipt URL generated successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        receiptUrl: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Payment not found' })
+  @ApiResponse({ status: 400, description: 'Receipt cannot be generated for this payment' })
+  async generateReceipt(@Request() req: any, @Param('id') id: string): Promise<{ receiptUrl: string }> {
+    const receiptUrl = await this.receiptService.generateReceipt(req.user.userId, id);
+    return { receiptUrl };
   }
 }

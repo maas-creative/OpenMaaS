@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { KeycloakService } from './services/keycloak.service';
+import { MfaService } from './services/mfa.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import configuration from './config/configuration';
@@ -27,8 +28,8 @@ import configuration from './config/configuration';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, KeycloakService, JwtStrategy, LocalStrategy],
-  exports: [AuthService],
+  controllers: [AuthController, MfaController],
+  providers: [AuthService, KeycloakService, MfaService, JwtStrategy, LocalStrategy],
+  exports: [AuthService, MfaService],
 })
 export class AppModule {}

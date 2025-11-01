@@ -41,6 +41,21 @@ export class User {
   @Column({ type: 'jsonb', default: {}, nullable: true })
   metadata?: Record<string, unknown>;
 
+  @Column({ type: 'jsonb', default: [], nullable: true })
+  favorites?: Array<{
+    id: string;
+    name: string;
+    type: 'location' | 'route';
+    location?: { lat: number; lon: number; address?: string };
+    route?: {
+      from: { lat: number; lon: number; address?: string };
+      to: { lat: number; lon: number; address?: string };
+      routeId?: string;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 

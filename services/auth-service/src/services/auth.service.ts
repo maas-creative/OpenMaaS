@@ -10,6 +10,7 @@ import {
   ChangePasswordRequest,
 } from '@openmaas/types';
 import { KeycloakService } from './keycloak.service';
+import { MfaService } from './mfa.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly keycloakService: KeycloakService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly mfaService: MfaService,
   ) {}
 
   async register(registerData: RegisterRequest): Promise<AuthToken> {
@@ -44,13 +46,27 @@ export class AuthService {
     }
   }
 
-  async login(loginData: LoginRequest): Promise<AuthToken> {
-    const { email, password } = loginData;
+  async login(loginData: LoginRequest & { mfaToken?: string }): Promise<AuthToken> {
+    const { email, password, mfaToken } = loginData;
 
     // Validate credentials with Keycloak
     const userInfo = await this.keycloakService.validateUser(email, password);
     if (!userInfo) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Check if MFA is enabled for this user
+    const mfaEnabled = await this.mfaService.isMfaEnabled(userInfo.sub);
+    if (mfaEnabled) {
+      if (!mfaToken) {
+        throw new UnauthorizedException('MFA token required');
+      }
+
+      // Verify MFA token
+      const isValid = await this.mfaService.verifyMfa(userInfo.sub, mfaToken);
+      if (!isValid) {
+        throw new UnauthorizedException('Invalid MFA token');
+      }
     }
 
     // Generate tokens

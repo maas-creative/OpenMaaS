@@ -62,6 +62,13 @@ export class PaymentRepository {
     });
   }
 
+  async findByIdAndUserId(id: string, userId: string): Promise<PaymentEntity | null> {
+    return this.repository.findOne({
+      where: { id, userId },
+      relations: ['refunds'],
+    });
+  }
+
   async findByIdempotencyKey(idempotencyKey: string): Promise<PaymentEntity | null> {
     return this.repository.findOne({
       where: { idempotencyKey },

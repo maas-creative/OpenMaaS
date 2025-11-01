@@ -33,7 +33,7 @@ export class UserRepository {
   }
 
   async update(id: string, updates: Partial<User>): Promise<User | null> {
-    const { tripHistory, metadata, profile, preferences, ...updateData } = updates;
+    const { tripHistory, metadata, profile, preferences, favorites, ...updateData } = updates;
     const updatePayload: any = { ...updateData };
     
     // Handle JSONB fields separately
@@ -45,6 +45,9 @@ export class UserRepository {
     }
     if (preferences !== undefined) {
       updatePayload.preferences = preferences;
+    }
+    if (favorites !== undefined) {
+      updatePayload.favorites = favorites;
     }
     
     await this.repository.update(id, updatePayload);

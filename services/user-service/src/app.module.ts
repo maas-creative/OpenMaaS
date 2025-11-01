@@ -4,7 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserController } from './controllers/user.controller';
+import { FavoriteController } from './controllers/favorite.controller';
 import { UserService } from './services/user.service';
+import { FavoriteService } from './services/favorite.service';
 import { TripHistoryService } from './services/trip-history.service';
 import { UserPreferencesService } from './services/user-preferences.service';
 import { HealthService } from './services/health.service';
@@ -40,9 +42,10 @@ import { getDatabaseConfig } from './config/database.config';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UserController],
+  controllers: [UserController, FavoriteController],
   providers: [
     UserService,
+    FavoriteService,
     TripHistoryService,
     UserPreferencesService,
     HealthService,
