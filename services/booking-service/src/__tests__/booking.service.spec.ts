@@ -10,7 +10,6 @@ import { BookingStatus, BookingType, PassengerType } from '@openmaas/types';
 describe('BookingService', () => {
   let service: BookingService;
   let bookingRepository: BookingRepository;
-  let providerRepository: BookingProviderRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -61,7 +60,6 @@ describe('BookingService', () => {
 
     service = module.get<BookingService>(BookingService);
     bookingRepository = module.get<BookingRepository>(BookingRepository);
-    providerRepository = module.get<BookingProviderRepository>(BookingProviderRepository);
   });
 
   it('should be defined', () => {

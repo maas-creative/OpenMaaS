@@ -4,10 +4,6 @@ import { Injectable, Logger } from '@nestjs/common';
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
 
-  constructor(
-    // private readonly configService: ConfigService
-  ) {}
-
   async sendBookingConfirmation(booking: any): Promise<void> {
     try {
       // In a real implementation, this would send emails/SMS
