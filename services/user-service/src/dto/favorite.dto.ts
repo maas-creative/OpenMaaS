@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEnum, IsOptional, IsNumber, ValidateIf, IsObject } from 'class-validator';
+import { IsString, IsEnum, IsOptional, ValidateIf, IsObject } from 'class-validator';
 
 export class CreateFavoriteDto {
   @ApiProperty({ example: '自宅', description: 'Name of the favorite' })
