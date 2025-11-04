@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './controllers/auth.controller';
+import { MfaController } from './controllers/mfa.controller';
 import { AuthService } from './services/auth.service';
 import { KeycloakService } from './services/keycloak.service';
 import { MfaService } from './services/mfa.service';

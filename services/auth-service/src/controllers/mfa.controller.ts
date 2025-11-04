@@ -14,7 +14,6 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { Request as ExpressRequest } from 'express';
 import { AuthContext, MfaSetupResponse } from '@openmaas/types';
 import { MfaService } from '../services/mfa.service';
-import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { EnableMfaDto, VerifyMfaDto } from '../dto/mfa.dto';
 
@@ -23,7 +22,6 @@ import { EnableMfaDto, VerifyMfaDto } from '../dto/mfa.dto';
 export class MfaController {
   constructor(
     private readonly mfaService: MfaService,
-    private readonly authService: AuthService,
   ) {}
 
   @Post('setup')
