@@ -8,6 +8,7 @@ import { KeycloakService } from './services/keycloak.service';
 import { MfaService } from './services/mfa.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { MfaController } from './controllers/mfa.controller';
 import configuration from './config/configuration';
 
 @Module({
