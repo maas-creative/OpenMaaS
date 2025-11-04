@@ -7,11 +7,7 @@ import {
 import { UserRepository } from '../repositories/user.repository';
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
-import {
-  UserRole,
-  PaginationParams,
-  PaginatedResponse,
-} from '@openmaas/types';
+import { UserRole, PaginationParams, PaginatedResponse } from '@openmaas/types';
 
 @Injectable()
 export class UserService {

@@ -87,7 +87,7 @@ export class TripHistoryRepository {
   }
 
   async update(id: string, updates: Partial<TripHistory>): Promise<TripHistory | null> {
-    const { user, ...updateData } = updates;
+    const { user: _user, ...updateData } = updates;
     await this.repository.update(id, updateData);
     return this.findById(id);
   }

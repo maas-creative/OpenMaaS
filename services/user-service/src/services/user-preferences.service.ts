@@ -73,8 +73,10 @@ export class UserPreferencesService {
         email: updateDto.notifications.email ?? user.preferences.notifications.email,
         push: updateDto.notifications.push ?? user.preferences.notifications.push,
         sms: updateDto.notifications.sms ?? user.preferences.notifications.sms,
-        tripReminders: updateDto.notifications.tripReminders ?? user.preferences.notifications.tripReminders,
-        serviceAlerts: updateDto.notifications.serviceAlerts ?? user.preferences.notifications.serviceAlerts,
+        tripReminders:
+          updateDto.notifications.tripReminders ?? user.preferences.notifications.tripReminders,
+        serviceAlerts:
+          updateDto.notifications.serviceAlerts ?? user.preferences.notifications.serviceAlerts,
         promotions: updateDto.notifications.promotions ?? user.preferences.notifications.promotions,
       };
     }

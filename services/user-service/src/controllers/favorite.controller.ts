@@ -54,9 +54,7 @@ export class FavoriteController {
       },
     },
   })
-  async getFavorites(
-    @Request() req: ExpressRequest & { user: AuthContext },
-  ): Promise<Favorite[]> {
+  async getFavorites(@Request() req: ExpressRequest & { user: AuthContext }): Promise<Favorite[]> {
     const userId = req.user.userId;
     return this.favoriteService.getFavorites(userId);
   }

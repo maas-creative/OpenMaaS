@@ -9,7 +9,10 @@ export class FavoriteService {
   /**
    * Add a favorite location or route for a user
    */
-  async addFavorite(userId: string, favorite: Omit<Favorite, 'id' | 'createdAt' | 'updatedAt'>): Promise<Favorite> {
+  async addFavorite(
+    userId: string,
+    favorite: Omit<Favorite, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<Favorite> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
