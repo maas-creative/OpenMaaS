@@ -290,7 +290,9 @@ export class KeycloakService implements OnModuleInit {
       });
 
       if (!user || !user.attributes) {
-        this.logger.warn(`User ${userId} not found or has no attributes when retrieving ${attributeName}`);
+        this.logger.warn(
+          `User ${userId} not found or has no attributes when retrieving ${attributeName}`,
+        );
         return undefined;
       }
 

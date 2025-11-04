@@ -36,7 +36,6 @@ export class MfaController {
   ): Promise<MfaSetupResponse> {
     const userId = req.user.userId;
     const email = req.user.email;
-
     return this.mfaService.setupMfa(userId, email);
   }
 
@@ -73,11 +72,9 @@ export class MfaController {
   ): Promise<{ valid: boolean }> {
     const userId = req.user.userId;
     const isValid = await this.mfaService.verifyMfa(userId, verifyMfaDto.token);
-    
     if (!isValid) {
       throw new UnauthorizedException('Invalid MFA token');
     }
-    
     return { valid: true };
   }
 
@@ -113,9 +110,7 @@ export class MfaController {
     description: 'MFA successfully disabled',
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async disableMfa(
-    @Request() req: ExpressRequest & { user: AuthContext },
-  ): Promise<void> {
+  async disableMfa(@Request() req: ExpressRequest & { user: AuthContext }): Promise<void> {
     const userId = req.user.userId;
     await this.mfaService.disableMfa(userId);
   }

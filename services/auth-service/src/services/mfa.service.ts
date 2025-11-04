@@ -14,7 +14,7 @@ export class MfaService {
     private readonly configService: ConfigService,
   ) {
     this.issuer = this.configService.get<string>('MFA_ISSUER') || 'OpenMaaS';
-    
+
     // Set TOTP options
     authenticator.options = {
       window: [1, 1], // Allow 1 time step before and after
@@ -26,25 +26,20 @@ export class MfaService {
    * Generate a new MFA secret and QR code for a user
    */
   async setupMfa(userId: string, email: string): Promise<MfaSetupResponse> {
-    // Generate a secret
     const secret = authenticator.generateSecret();
-    
-    // Generate service name and account name for QR code
     const serviceName = this.issuer;
     const accountName = email;
     const otpAuthUrl = authenticator.keyuri(accountName, serviceName, secret);
-
-    // Generate QR code as data URL
     const qrCodeUrl = await QRCode.toDataURL(otpAuthUrl);
-
-    // Generate backup codes (10 codes, 8 characters each)
     const backupCodes = this.generateBackupCodes(10);
 
-    // Store the secret and backup codes temporarily in Keycloak attributes
-    // Note: In production, you might want to encrypt the secret
     await this.keycloakService.setUserAttribute(userId, 'mfa_secret', secret);
-    await this.keycloakService.setUserAttribute(userId, 'mfa_backup_codes', JSON.stringify(backupCodes));
-    await this.keycloakService.setUserAttribute(userId, 'mfa_enabled', 'false'); // Not enabled until verified
+    await this.keycloakService.setUserAttribute(
+      userId,
+      'mfa_backup_codes',
+      JSON.stringify(backupCodes),
+    );
+    await this.keycloakService.setUserAttribute(userId, 'mfa_enabled', 'false');
 
     return {
       secret,
@@ -95,7 +90,7 @@ export class MfaService {
 
     // Verify the token
     const isValidToken = this.verifyToken(secret, token);
-    
+
     // If token is invalid, check backup codes
     if (!isValidToken) {
       const backupCodes = await this.keycloakService.getUserAttribute(userId, 'mfa_backup_codes');
@@ -105,7 +100,11 @@ export class MfaService {
         if (index !== -1) {
           // Remove used backup code
           codes.splice(index, 1);
-          await this.keycloakService.setUserAttribute(userId, 'mfa_backup_codes', JSON.stringify(codes));
+          await this.keycloakService.setUserAttribute(
+            userId,
+            'mfa_backup_codes',
+            JSON.stringify(codes),
+          );
           return true;
         }
       }
@@ -149,7 +148,7 @@ export class MfaService {
   private generateBackupCodes(count: number): string[] {
     const codes: string[] = [];
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    
+
     for (let i = 0; i < count; i++) {
       let code = '';
       for (let j = 0; j < 8; j++) {
@@ -157,7 +156,7 @@ export class MfaService {
       }
       codes.push(code);
     }
-    
+
     return codes;
   }
 
@@ -166,7 +165,11 @@ export class MfaService {
    */
   async regenerateBackupCodes(userId: string): Promise<string[]> {
     const backupCodes = this.generateBackupCodes(10);
-    await this.keycloakService.setUserAttribute(userId, 'mfa_backup_codes', JSON.stringify(backupCodes));
+    await this.keycloakService.setUserAttribute(
+      userId,
+      'mfa_backup_codes',
+      JSON.stringify(backupCodes),
+    );
     return backupCodes;
   }
 }
