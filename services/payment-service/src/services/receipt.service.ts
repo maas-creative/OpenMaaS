@@ -4,7 +4,6 @@ import PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PaymentRepository } from '../repositories/payment.repository';
-import { PaymentEntity } from '../entities/payment.entity';
 
 @Injectable()
 export class ReceiptService {

@@ -2,7 +2,7 @@ import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
-import { MfaSetupResponse, VerifyMfaRequest, EnableMfaRequest } from '@openmaas/types';
+import { MfaSetupResponse, EnableMfaRequest } from '@openmaas/types';
 import { KeycloakService } from './keycloak.service';
 
 @Injectable()

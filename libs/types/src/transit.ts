@@ -1,3 +1,5 @@
+import * as GeoJSON from 'geojson';
+
 // GTFS-based types
 export interface Agency {
   agencyId: string;

@@ -11,7 +11,9 @@
     "lint": "eslint src --ext .ts",
     "test": "jest --passWithNoTests"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/geojson": "^7946.0.14"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.10",
     "@types/node": "^20.10.0",

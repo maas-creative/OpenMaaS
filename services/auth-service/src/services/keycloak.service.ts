@@ -289,7 +289,7 @@ export class KeycloakService implements OnModuleInit {
         id: userId,
       });
       
-      if (user.attributes && user.attributes[attributeName]) {
+      if (user && user.attributes && user.attributes[attributeName]) {
         return Array.isArray(user.attributes[attributeName])
           ? user.attributes[attributeName][0]
           : user.attributes[attributeName];
@@ -308,6 +308,10 @@ export class KeycloakService implements OnModuleInit {
         realm: this.realm,
         id: userId,
       });
+      
+      if (!user) {
+        throw new Error(`User not found: ${userId}`);
+      }
       
       const attributes = user.attributes || {};
       attributes[attributeName] = value ? [value] : [];
