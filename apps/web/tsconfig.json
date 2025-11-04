@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@openmaas/types": ["../../libs/types/src"],
+      "@openmaas/types/*": ["../../libs/types/src/*"],
+      "@openmaas/common": ["../../libs/common/src"],
+      "@openmaas/common/*": ["../../libs/common/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
