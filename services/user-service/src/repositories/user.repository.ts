@@ -33,9 +33,16 @@ export class UserRepository {
   }
 
   async update(id: string, updates: Partial<User>): Promise<User | null> {
-    const { tripHistory, metadata, profile, preferences, favorites, ...updateData } = updates;
-    const updatePayload: any = { ...updateData };
-    
+    const {
+      tripHistory: _tripHistory,
+      metadata,
+      profile,
+      preferences,
+      favorites,
+      ...updateData
+    } = updates;
+    const updatePayload: Partial<User> = { ...updateData };
+
     // Handle JSONB fields separately
     if (metadata !== undefined) {
       updatePayload.metadata = metadata;
@@ -49,7 +56,7 @@ export class UserRepository {
     if (favorites !== undefined) {
       updatePayload.favorites = favorites;
     }
-    
+
     await this.repository.update(id, updatePayload);
     return this.findById(id);
   }

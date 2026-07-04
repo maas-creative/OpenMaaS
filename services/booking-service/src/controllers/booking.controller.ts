@@ -13,13 +13,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { BookingService } from '../services/booking.service';
 import {
@@ -75,7 +69,9 @@ export class BookingController {
     description: 'List of active bookings',
     type: [BookingResponseDto],
   })
-  async getActiveBookings(@Request() req: ExpressRequest & { user: { userId: string } }): Promise<BookingResponseDto[]> {
+  async getActiveBookings(
+    @Request() req: ExpressRequest & { user: { userId: string } },
+  ): Promise<BookingResponseDto[]> {
     return this.bookingService.getUserActiveBookings(req.user.userId);
   }
 
@@ -86,7 +82,9 @@ export class BookingController {
     description: 'List of upcoming bookings',
     type: [BookingResponseDto],
   })
-  async getUpcomingBookings(@Request() req: ExpressRequest & { user: { userId: string } }): Promise<BookingResponseDto[]> {
+  async getUpcomingBookings(
+    @Request() req: ExpressRequest & { user: { userId: string } },
+  ): Promise<BookingResponseDto[]> {
     return this.bookingService.getUserUpcomingBookings(req.user.userId);
   }
 
@@ -115,7 +113,10 @@ export class BookingController {
   })
   @ApiResponse({ status: 404, description: 'Booking not found' })
   @ApiResponse({ status: 403, description: 'Access denied' })
-  async getBooking(@Request() req: ExpressRequest & { user: { userId: string } }, @Param('id') id: string): Promise<BookingResponseDto> {
+  async getBooking(
+    @Request() req: ExpressRequest & { user: { userId: string } },
+    @Param('id') id: string,
+  ): Promise<BookingResponseDto> {
     return this.bookingService.getBooking(req.user.userId, id);
   }
 

@@ -288,14 +288,21 @@ export class KeycloakService implements OnModuleInit {
         realm: this.realm,
         id: userId,
       });
-      
-      if (user.attributes && user.attributes[attributeName]) {
-        return Array.isArray(user.attributes[attributeName])
-          ? user.attributes[attributeName][0]
-          : user.attributes[attributeName];
+
+      if (!user || !user.attributes) {
+        this.logger.warn(
+          `User ${userId} not found or has no attributes when retrieving ${attributeName}`,
+        );
+        return undefined;
       }
-      
-      return undefined;
+
+      const attribute = user.attributes[attributeName];
+
+      if (!attribute) {
+        return undefined;
+      }
+
+      return Array.isArray(attribute) ? attribute[0] : attribute;
     } catch (error) {
       this.logger.error('Failed to get user attribute', error);
       return undefined;
@@ -308,10 +315,16 @@ export class KeycloakService implements OnModuleInit {
         realm: this.realm,
         id: userId,
       });
-      
-      const attributes = user.attributes || {};
+
+      if (!user) {
+        const message = `User ${userId} not found when setting attribute ${attributeName}`;
+        this.logger.error(message);
+        throw new Error(message);
+      }
+
+      const attributes = { ...(user.attributes ?? {}) };
       attributes[attributeName] = value ? [value] : [];
-      
+
       await this.kcAdminClient.users.update(
         {
           realm: this.realm,

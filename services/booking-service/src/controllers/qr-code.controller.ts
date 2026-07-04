@@ -9,13 +9,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { QrCodeService } from '../services/qr-code.service';
 import { AuthRequest } from '../interfaces/auth-request.interface';
@@ -54,14 +48,8 @@ export class QrCodeController {
       },
     },
   })
-  async generateQrCode(
-    @Body() dto: GenerateQrCodeDto,
-    @Req() req: AuthRequest,
-  ) {
-    const qrCode = await this.qrCodeService.generateQrCode(
-      dto.bookingId,
-      req.user.userId,
-    );
+  async generateQrCode(@Body() dto: GenerateQrCodeDto, @Req() req: AuthRequest) {
+    const qrCode = await this.qrCodeService.generateQrCode(dto.bookingId, req.user.userId);
 
     return {
       qrData: qrCode.data,
@@ -115,14 +103,8 @@ export class QrCodeController {
       },
     },
   })
-  async getCurrentQrCode(
-    @Param('bookingId') bookingId: string,
-    @Req() req: AuthRequest,
-  ) {
-    const qrCode = await this.qrCodeService.getCurrentQrCode(
-      bookingId,
-      req.user.userId,
-    );
+  async getCurrentQrCode(@Param('bookingId') bookingId: string, @Req() req: AuthRequest) {
+    const qrCode = await this.qrCodeService.getCurrentQrCode(bookingId, req.user.userId);
 
     if (!qrCode) {
       throw new NotFoundException('No active QR code found for this booking');
@@ -142,10 +124,7 @@ export class QrCodeController {
     status: 200,
     description: 'QR codes invalidated successfully',
   })
-  async invalidateQrCodes(
-    @Param('bookingId') bookingId: string,
-    @Req() req: AuthRequest,
-  ) {
+  async invalidateQrCodes(@Param('bookingId') bookingId: string, @Req() req: AuthRequest) {
     await this.qrCodeService.invalidateQrCodes(bookingId, req.user.userId);
     return { message: 'QR codes invalidated successfully' };
   }
@@ -169,14 +148,8 @@ export class QrCodeController {
       },
     },
   })
-  async getQrCodeHistory(
-    @Param('bookingId') bookingId: string,
-    @Req() req: AuthRequest,
-  ) {
-    const history = await this.qrCodeService.getQrCodeHistory(
-      bookingId,
-      req.user.userId,
-    );
+  async getQrCodeHistory(@Param('bookingId') bookingId: string, @Req() req: AuthRequest) {
+    const history = await this.qrCodeService.getQrCodeHistory(bookingId, req.user.userId);
     return history;
   }
 }

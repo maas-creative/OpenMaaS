@@ -281,12 +281,12 @@ export class UserController {
   @ApiResponse({ status: 503, description: 'Service is unhealthy' })
   async health() {
     const healthStatus = await this.healthService.getHealthStatus();
-    
+
     // Return appropriate HTTP status based on health
     if (healthStatus.status === 'unhealthy') {
       throw new HttpException(healthStatus, HttpStatus.SERVICE_UNAVAILABLE);
     }
-    
+
     return healthStatus;
   }
 }

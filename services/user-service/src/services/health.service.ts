@@ -54,9 +54,13 @@ export class HealthService {
     ]);
 
     return {
-      database: database.status === 'fulfilled' ? database.value : this.createFailCheck(database.reason),
+      database:
+        database.status === 'fulfilled' ? database.value : this.createFailCheck(database.reason),
       memory: memory.status === 'fulfilled' ? memory.value : this.createFailCheck(memory.reason),
-      dependencies: dependencies.status === 'fulfilled' ? dependencies.value : this.createFailCheck(dependencies.reason),
+      dependencies:
+        dependencies.status === 'fulfilled'
+          ? dependencies.value
+          : this.createFailCheck(dependencies.reason),
     };
   }
 
@@ -105,14 +109,10 @@ export class HealthService {
   private async checkDependencies(): Promise<HealthCheck> {
     try {
       // Check if critical environment variables are set
-      const requiredEnvVars = [
-        'DATABASE_URL',
-        'JWT_SECRET',
-        'KEYCLOAK_URL',
-      ];
+      const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET', 'KEYCLOAK_URL'];
 
       const missingVars = requiredEnvVars.filter(
-        (varName) => !this.configService.get(varName.toLowerCase().replace('_', '.'))
+        (varName) => !this.configService.get(varName.toLowerCase().replace('_', '.')),
       );
 
       if (missingVars.length > 0) {
@@ -141,10 +141,12 @@ export class HealthService {
     };
   }
 
-  private determineOverallStatus(checks: Record<string, HealthCheck>): 'healthy' | 'unhealthy' | 'degraded' {
+  private determineOverallStatus(
+    checks: Record<string, HealthCheck>,
+  ): 'healthy' | 'unhealthy' | 'degraded' {
     const checkValues = Object.values(checks);
-    const hasFailures = checkValues.some(check => check.status === 'fail');
-    const hasWarnings = checkValues.some(check => check.status === 'warn');
+    const hasFailures = checkValues.some((check) => check.status === 'fail');
+    const hasWarnings = checkValues.some((check) => check.status === 'warn');
 
     if (hasFailures) return 'unhealthy';
     if (hasWarnings) return 'degraded';

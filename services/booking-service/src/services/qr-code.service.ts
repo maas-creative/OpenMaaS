@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createHash, randomBytes } from 'crypto';
@@ -68,7 +63,7 @@ export class QrCodeService {
     // Create QR code data
     const timestamp = Date.now();
     const nonce = randomBytes(16).toString('hex');
-    
+
     const qrData: QrCodeData = {
       bookingId,
       userId,
@@ -127,10 +122,10 @@ export class QrCodeService {
       }
 
       // Verify checksum
-      const { checksum, ...dataWithoutChecksum } = qrCodeData;
+      const { checksum: receivedChecksum, ...dataWithoutChecksum } = qrCodeData;
       const expectedChecksum = this.generateChecksum(dataWithoutChecksum);
 
-      if (qrCodeData.checksum !== expectedChecksum) {
+      if (receivedChecksum !== expectedChecksum) {
         this.logger.warn(`Invalid checksum for QR code: ${qrCodeData.bookingId}`);
         return {
           valid: false,
@@ -141,7 +136,7 @@ export class QrCodeService {
       // Check expiration
       const now = Date.now();
       const expiresAt = qrCodeData.timestamp + qrCodeData.validFor * 1000;
-      
+
       if (now > expiresAt) {
         this.logger.warn(`Expired QR code: ${qrCodeData.bookingId}`);
         return {
@@ -152,7 +147,7 @@ export class QrCodeService {
 
       // Fetch booking
       const booking = await this.bookingRepository.findOne({
-        where: { 
+        where: {
           id: qrCodeData.bookingId,
           userId: qrCodeData.userId,
         },
@@ -192,7 +187,9 @@ export class QrCodeService {
         message: 'QR code is valid',
       };
     } catch (error) {
-      this.logger.error(`Error validating QR code: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.logger.error(
+        `Error validating QR code: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
       return {
         valid: false,
         message: 'Invalid QR code format',
@@ -259,19 +256,19 @@ export class QrCodeService {
       ...data,
       secret: this.SECRET_KEY,
     });
-    
+
     return createHash('sha256').update(content).digest('base64');
   }
 
   private addHistory(bookingId: string, entry: QrCodeHistory): void {
     const history = this.qrCodeHistory.get(bookingId) || [];
     history.push(entry);
-    
+
     // Keep only last 100 entries
     if (history.length > 100) {
       history.shift();
     }
-    
+
     this.qrCodeHistory.set(bookingId, history);
   }
 
