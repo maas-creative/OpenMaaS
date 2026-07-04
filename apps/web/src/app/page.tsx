@@ -246,6 +246,51 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Operations Snapshot Section */}
+      <div className="container mx-auto px-4 pb-16">
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="border-blue-100 bg-blue-50/60">
+            <CardHeader>
+              <div className="flex items-center gap-3 text-blue-700">
+                <Bus className="h-6 w-6" />
+                <CardTitle className="text-lg">運行ネットワーク</CardTitle>
+              </div>
+              <CardDescription>鉄道・バス・フェリーを横断して運行状況を確認</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-blue-900">128</p>
+              <p className="text-sm text-blue-700">連携中の路線</p>
+            </CardContent>
+          </Card>
+          <Card className="border-emerald-100 bg-emerald-50/60">
+            <CardHeader>
+              <div className="flex items-center gap-3 text-emerald-700">
+                <Bike className="h-6 w-6" />
+                <CardTitle className="text-lg">ラストワンマイル</CardTitle>
+              </div>
+              <CardDescription>シェアサイクルと徒歩接続を含めた移動提案</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-emerald-900">42</p>
+              <p className="text-sm text-emerald-700">利用可能なモビリティ拠点</p>
+            </CardContent>
+          </Card>
+          <Card className="border-violet-100 bg-violet-50/60">
+            <CardHeader>
+              <div className="flex items-center gap-3 text-violet-700">
+                <Users className="h-6 w-6" />
+                <CardTitle className="text-lg">利用者サポート</CardTitle>
+              </div>
+              <CardDescription>予約・決済・遅延通知をまとめて追跡</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-violet-900">24/7</p>
+              <p className="text-sm text-violet-700">サポート監視</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       {/* Demo Users Section */}
       <div className="container mx-auto px-4 py-16">
         <Card>
