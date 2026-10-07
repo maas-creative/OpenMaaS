@@ -9,12 +9,5 @@ license, or (at your option) any later version.
 This program is provided without warranty, including the implied warranties
 of merchantability or fitness for a particular purpose.
 
-License transition date: 2026-10-08.
-Versions published through commit 6611dae were distributed under the MIT
-License. Those existing grants remain valid. The MIT copyright, permission
-and disclaimer notices for inherited material are retained in LICENSES/MIT.txt.
-The current combined project is distributed under AGPL-3.0-or-later; retaining
-the legacy notice does not offer new project modifications under MIT.
-
 Third-party dependencies retain their respective licenses. This project
 license does not replace licenses or terms for external APIs or datasets.

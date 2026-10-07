@@ -52,4 +52,4 @@ Node.js 22.16以上。Next.js / OpenNext、TypeScript / Hono、Cloudflare Worker
 
 ソースコードは[GitHub](https://github.com/maas-creative/OpenMaaS)で公開しています。導入先が改変して提供する場合は、画面のソースコードリンクを実際に稼働している版のソースへ向けてください。ビルド時の`NEXT_PUBLIC_OPENMAAS_SOURCE_URL`で指定できます。APIキー・利用者情報の公開を求めるものではありません。
 
-2026年10月8日にAGPLへ移行しました。それ以前にMITで公開した版の許諾は取り消しません。既存MIT部分の著作権・許諾・免責は[LICENSES/MIT.txt](LICENSES/MIT.txt)と[NOTICE](NOTICE)に保持します。依存ライブラリ・取得データ・外部APIにはそれぞれの利用条件が適用されます。利用・導入の相談は[MaaS Creative](https://maas-creative.com)へお問い合わせください。
+著作権・免責事項は[NOTICE](NOTICE)を参照してください。依存ライブラリ・取得データ・外部APIにはそれぞれの利用条件が適用されます。利用・導入の相談は[MaaS Creative](https://maas-creative.com)へお問い合わせください。
