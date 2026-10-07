@@ -1,0 +1,26 @@
+[
+  {
+    "kind": "gtfs",
+    "url": "https://www.bart.gov/dev/schedules/google_transit.zip",
+    "status": "passed",
+    "records": 102426,
+    "at": "2026-10-07T09:44:56.675Z",
+    "scope": "Public feed retrieval and parsing"
+  },
+  {
+    "kind": "gtfs-rt",
+    "url": "https://cdn.mbta.com/realtime/TripUpdates.pb",
+    "status": "passed",
+    "records": 1411,
+    "at": "2026-10-07T09:44:58.577Z",
+    "scope": "Protobuf decoding only; static feed identity matching not verified"
+  },
+  {
+    "kind": "gbfs",
+    "url": "https://gbfs.citibikenyc.com/gbfs/2.3/gbfs.json",
+    "status": "passed",
+    "records": 5042,
+    "at": "2026-10-07T09:45:03.770Z",
+    "scope": "Public feed retrieval and parsing"
+  }
+]

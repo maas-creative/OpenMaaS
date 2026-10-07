@@ -9,14 +9,22 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
+    "dev": "npm run dev --workspace=@openmaas/platform",
+    "build": "npm run build --workspace=@openmaas/platform && npm run build --workspace=@openmaas/web",
+    "test": "npm run test --workspace=@openmaas/platform",
+    "lint": "npm run lint --workspace=@openmaas/web",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f"
+    "docker:logs": "docker-compose logs -f",
+    "dev:web": "npm run dev --workspace=@openmaas/web",
+    "legacy:build": "turbo run build",
+    "legacy:test": "turbo run test",
+    "config:validate": "tsx scripts/platform/config.ts validate",
+    "config:schema": "tsx scripts/platform/config.ts schema",
+    "config:bootstrap": "tsx scripts/platform/config.ts bootstrap",
+    "feeds:smoke": "tsx scripts/platform/feed-smoke.ts",
+    "platform": "tsx scripts/platform/deploy.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -32,7 +40,7 @@
     "typescript": "^5.3.2"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.16.0",
     "npm": ">=9.0.0"
   },
   "lint-staged": {
@@ -46,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ukyonagata0105/OpenMaaS.git"
+    "url": "https://github.com/maas-creative/OpenMaaS.git"
   },
   "keywords": [
     "maas",
@@ -69,8 +77,8 @@
     "OpenMaaS Contributors"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/ukyonagata0105/OpenMaaS#readme",
+  "homepage": "https://github.com/maas-creative/OpenMaaS#readme",
   "bugs": {
-    "url": "https://github.com/ukyonagata0105/OpenMaaS/issues"
+    "url": "https://github.com/maas-creative/OpenMaaS/issues"
   }
 }

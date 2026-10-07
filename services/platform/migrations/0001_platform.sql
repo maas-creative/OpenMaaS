@@ -1,0 +1,13 @@
+PRAGMA foreign_keys = ON;
+CREATE TABLE settings (id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL);
+CREATE TABLE source_state (id TEXT PRIMARY KEY, status TEXT NOT NULL, last_attempt TEXT, last_success TEXT, next_attempt TEXT, error TEXT, version TEXT);
+CREATE TABLE records (source_id TEXT NOT NULL, kind TEXT NOT NULL, id TEXT NOT NULL, body TEXT NOT NULL, version TEXT NOT NULL, PRIMARY KEY(source_id,kind,id,version));
+CREATE INDEX records_version ON records(source_id,version,kind);
+CREATE TABLE plans (id TEXT PRIMARY KEY, owner TEXT NOT NULL, body TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+CREATE INDEX plans_owner ON plans(owner);
+CREATE TABLE sessions (id TEXT PRIMARY KEY, owner TEXT NOT NULL, name TEXT NOT NULL, expires_at INTEGER NOT NULL);
+CREATE TABLE oidc_pending (id TEXT PRIMARY KEY, verifier TEXT NOT NULL, nonce TEXT NOT NULL, expires_at INTEGER NOT NULL);
+CREATE TABLE orders (id TEXT PRIMARY KEY, owner TEXT NOT NULL, request_key TEXT NOT NULL, product_id TEXT NOT NULL, amount INTEGER NOT NULL CHECK(amount>0), currency TEXT NOT NULL CHECK(currency='JPY'), product TEXT NOT NULL, status TEXT NOT NULL, checkout_id TEXT UNIQUE, checkout_url TEXT, payment_id TEXT UNIQUE, ticket_token TEXT NOT NULL UNIQUE, expires_at TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, UNIQUE(owner,request_key));
+CREATE TABLE webhook_events (id TEXT PRIMARY KEY, type TEXT NOT NULL, body TEXT NOT NULL, processed INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL);
+CREATE TABLE jobs (id TEXT PRIMARY KEY, order_id TEXT NOT NULL REFERENCES orders(id), kind TEXT NOT NULL, status TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, next_attempt TEXT NOT NULL, error TEXT);
+CREATE TABLE audit (id INTEGER PRIMARY KEY AUTOINCREMENT, actor TEXT NOT NULL, action TEXT NOT NULL, target TEXT NOT NULL, created_at TEXT NOT NULL);

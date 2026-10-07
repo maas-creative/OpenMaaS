@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "name": "観光周遊",
+  "region": "設定してください",
+  "language": "ja",
+  "timezone": "Asia/Tokyo",
+  "contact": "導入先の問い合わせ先",
+  "features": {
+    "activities": true,
+    "transit": true,
+    "accommodations": true,
+    "commerce": false
+  },
+  "sources": [
+    {
+      "id": "luma",
+      "kind": "luma",
+      "enabled": false,
+      "label": "Luma",
+      "intervalSeconds": 300,
+      "attribution": "Luma",
+      "termsUrl": "https://docs.luma.com/reference/getting-started-with-your-api",
+      "region": "設定してください",
+      "params": {},
+      "secretRef": "LUMA_API_KEY"
+    },
+    {
+      "id": "connpass",
+      "kind": "connpass",
+      "enabled": false,
+      "label": "connpass",
+      "intervalSeconds": 300,
+      "attribution": "connpass",
+      "termsUrl": "https://connpass.com/about/api/v2/",
+      "region": "設定してください",
+      "params": {
+        "keyword": "地域名"
+      },
+      "secretRef": "CONNPASS_API_KEY"
+    },
+    {
+      "id": "rakuten",
+      "kind": "rakuten",
+      "enabled": false,
+      "label": "楽天トラベル",
+      "intervalSeconds": 300,
+      "attribution": "楽天トラベル",
+      "termsUrl": "https://webservice.rakuten.co.jp/documentation/simple-hotel-search",
+      "region": "設定してください",
+      "params": {
+        "applicationId": "replace",
+        "hotelNo": "replace"
+      },
+      "secretRef": "RAKUTEN_ACCESS_KEY"
+    },
+    {
+      "id": "local-gtfs",
+      "kind": "gtfs",
+      "enabled": false,
+      "label": "地域の公共交通",
+      "intervalSeconds": 300,
+      "attribution": "地域の公共交通",
+      "termsUrl": "https://example.com/gtfs.zip",
+      "region": "設定してください",
+      "params": {},
+      "url": "https://example.com/gtfs.zip"
+    },
+    {
+      "id": "local-gbfs",
+      "kind": "gbfs",
+      "enabled": false,
+      "label": "地域のシェア交通",
+      "intervalSeconds": 300,
+      "attribution": "地域のシェア交通",
+      "termsUrl": "https://example.com/gbfs.json",
+      "region": "設定してください",
+      "params": {},
+      "url": "https://example.com/gbfs.json"
+    }
+  ],
+  "products": [],
+  "journey": {
+    "provider": "none",
+    "routerId": "default"
+  },
+  "admins": [],
+  "validators": []
+}

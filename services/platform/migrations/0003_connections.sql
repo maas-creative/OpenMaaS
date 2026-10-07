@@ -1,0 +1,11 @@
+CREATE TABLE connection_checks (source_id TEXT PRIMARY KEY, status TEXT NOT NULL, body TEXT NOT NULL, checked_at TEXT NOT NULL);
+CREATE TABLE provider_offers (id TEXT PRIMARY KEY, owner TEXT NOT NULL, source_id TEXT NOT NULL, body TEXT NOT NULL, expires_at TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE TABLE provider_reservations (id TEXT PRIMARY KEY, owner TEXT NOT NULL, source_id TEXT NOT NULL, offer_id TEXT NOT NULL, request_key TEXT NOT NULL, external_id TEXT, status TEXT NOT NULL, body TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, UNIQUE(owner,request_key));
+CREATE INDEX provider_reservations_owner ON provider_reservations(owner);
+CREATE TABLE provider_operations (id TEXT PRIMARY KEY, reservation_id TEXT NOT NULL, kind TEXT NOT NULL, status TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, next_attempt TEXT NOT NULL, body TEXT NOT NULL, UNIQUE(reservation_id,kind));
+CREATE TABLE provider_history (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id TEXT NOT NULL, status TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE TABLE oauth_connections (source_id TEXT NOT NULL, owner TEXT NOT NULL, encrypted TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(source_id,owner));
+CREATE TABLE oauth_states (id TEXT PRIMARY KEY, source_id TEXT NOT NULL, owner TEXT NOT NULL, verifier TEXT NOT NULL, expires_at INTEGER NOT NULL);
+CREATE TABLE calendar_links (plan_id TEXT NOT NULL, owner TEXT NOT NULL, source_id TEXT NOT NULL, calendar_id TEXT NOT NULL, event_id TEXT NOT NULL, etag TEXT, PRIMARY KEY(plan_id,source_id,calendar_id));
+CREATE TABLE provider_notifications (id TEXT PRIMARY KEY, source_id TEXT NOT NULL, reservation_id TEXT NOT NULL, processed INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL);
+CREATE TABLE cancellation_quotes (reservation_id TEXT PRIMARY KEY, owner TEXT NOT NULL, digest TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL);

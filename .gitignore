@@ -121,3 +121,16 @@ wheels/
 gradle/
 gradlew
 gradlew.bat
+# Cloudflare local state and secrets
+.wrangler/
+.open-next/
+.dev.vars
+.dev.vars.*
+.playwright-cli/
+
+.next-dev/
+
+!.dev.vars.example
+
+# Per-deployment generated configuration
+/deployment/

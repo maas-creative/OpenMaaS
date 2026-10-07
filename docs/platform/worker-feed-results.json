@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-07T10:14:03.993155+00:00",
+  "runtime": "Wrangler local Worker + D1",
+  "source": "Citi Bike public GBFS 2.3",
+  "status": "passed",
+  "records": 5042,
+  "stationStatuses": 2520,
+  "scope": "Actual Worker upstream fetch, D1 version publication, public API read; no vehicle booking",
+  "sourceUrl": "https://gbfs.citibikenyc.com/gbfs/2.3/gbfs.json"
+}

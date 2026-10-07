@@ -1,0 +1,69 @@
+# 接続台帳
+
+確認日：2026-10-07。公式仕様の存在、接続実装、資格情報による実接続、実取引を分けます。APIの公開は無契約での再配布・販売を意味しません。以下の保存・表示欄は導入時の確認事項であり、全データの保存許諾を取得済みという意味ではありません。
+
+## 初期接続
+
+| 対象・公式仕様                                                                                                                                               | 実装する操作・項目                                                                                                                | 認証／対象範囲                                                      | 更新・保存・表示条件                                                                                                           | 検証状態                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| [GTFS Schedule](https://gtfs.org/documentation/schedule/reference/)                                                                                          | ZIP/CSVのagency・stops・routes・trips・stop_times・calendar等。運行日と例外、24時超を扱う                                         | 発行者が公開したフィード。地域・ライセンスは発行者単位              | 間隔設定。D1の公開版を切替。原本はR2。帰属・再配布条件を登録                                                                   | BART公開フィード実取得・解析。D1 fixture検証                                |
+| [GTFS Realtime](https://gtfs.org/documentation/realtime/reference/)                                                                                          | protobuf tripUpdate/vehicle/alert、ヘッダー時刻とstaticSourceId                                                                   | static GTFSと同じ発行元のID体系を選ぶ                               | 鮮度と取得成功時刻を区別。差分フィードは現在未対応（FULL_DATASETのみ導入する）                                                 | MBTA実取得・decode。別GTFSとの照合は未検証                                  |
+| [GBFS](https://github.com/MobilityData/gbfs/blob/v3.0/gbfs.md)                                                                                               | 2.3/3.0 station_information/status、free_bike_status/vehicle_status、system_information、pricing。予約しない                      | 公開URL。対象地域はシステム単位                                     | TTLを反映。last_updatedを表示。ライセンスと帰属を確認                                                                          | Citi Bike 2.3実取得、3.0 fixture                                            |
+| [ODPT](https://developer.odpt.org/)                                                                                                                          | Station・StationTimetable・TrainTimetable・TrainInformation。駅・時刻表・運行情報                                                 | consumerKey、契約に許された事業者・用途                             | 定期照会、dc:date。サービスの利用規約・クレジットを確認                                                                        | 公式仕様fixture。キー無し、実取得未検証                                     |
+| [OTP GTFS GraphQL](https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/planConnection)                                                         | planConnectionで到着・出発指定、座標、経路legs                                                                                    | 導入先が動かすOTPのHTTPS endpoint                                   | 元データはOTP側へ投入。現在のRESTは[廃止済み](https://docs.opentripplanner.org/en/latest/apis/Apis/)                           | リクエストfixture。実OTP探索未検証                                          |
+| [駅すぱあと](https://docs.ekispert.com/v1/api/search/course/extreme.html)                                                                                    | search/course/extreme、WGS84 viaList、到着・出発、Course                                                                          | APIキー・契約。データ収録地域・交通種別による                       | 日時は導入timezone。保存・画面帰属は契約で確認                                                                                 | リクエスト実装。資格情報無し                                                |
+| [Luma API](https://docs.luma.com/reference/getting-started-with-your-api)、[利用条件](https://help.luma.com/p/luma-api)                                      | calendars/events/list・organizations/events/listの公開イベント、events/getの公開詳細、開始・終了、公開会場、参加URL。外部参加案内 | x-luma-api-key。キーに権限のあるカレンダー。契約・API利用資格を確認 | cursor全ページ。after/before。定期照会・429待機。参加者／非公開会場を取得・表示しない。中止はAPIが明示しない場合消失として扱う | 現行flat応答・privacy・key・paging契約fixture。実キー無し                   |
+| [connpass API v2](https://connpass.com/about/api/v2/)                                                                                                        | events検索、タイトル・catch・日時・会場・外部参加URL                                                                              | X-API-Key。対象条件params                                           | ページ取得を1秒以上離す。429待機。API規約・データ表示条件を確認                                                                | fixture。実キー無し                                                         |
+| [楽天トラベルAPI](https://travel.rakuten.co.jp/webservice/)、[施設検索](https://webservice.rakuten.co.jp/documentation/simple-hotel-search)                  | SimpleHotelSearch/20260731、VacantHotelSearch/20170426。施設・座標、空室検索、提供元URL                                           | applicationId＋accessKey。利用登録と旅行APIの条件                   | 導入paramsで検索条件・対象期間。価格・残室の予約保証はしない。利用規約・クレジット・保持条件を確認                             | fixture。実キー無し。日付・大人人数の空室検索フォームと期間キャッシュを実装 |
+| [iCalendar RFC 5545](https://www.rfc-editor.org/rfc/rfc5545)                                                                                                 | 保存予定のICS出力。時刻UTC、改行・カンマのescape、UTF8折返し、中止状態                                                            | 予定の所有者のみ                                                    | 現在の開催時刻を使用。任意のカレンダーからの逆同期はしない                                                                     | D1 owner分離・時刻変更・ICSテスト                                           |
+| [Stripe Checkout](https://docs.stripe.com/api/checkout/sessions)、[Webhook](https://docs.stripe.com/webhooks)、[Refund](https://docs.stripe.com/api/refunds) | 導入先商品Checkout・確定照会・一回券・返金。API version2025-03-31.basil                                                           | 導入先Stripe秘密鍵・Webhook署名鍵。事業者決済の代理課金には使わない | webhook＋再照会＋ジョブ。金額・通貨・Checkout照合。顧客情報を独自収集しない                                                    | fixtureのみ。実テストモード決済・返金未検証                                 |
+
+全接続のURLsはHTTPS。公開設定にはsecretRefの名前だけを保持し、資格情報を公開APIへ返しません。接続停止・認証失敗・429は情報源状態に残します。自動取込範囲の消失を中止と断定しません。時刻変更・中止の通知は保存予定の再表示時に反映するもので、メール・push送信ではありません。
+
+## 追加接続の実装・契約テスト
+
+Masabiを除き、下表のサービスの固有HTTPコードを実装しています。対応範囲・秘密情報の名前・支払モードは[導入手順](deployment.md)に記載しています。試験は公式仕様を照合したHTTP fixtureと実D1です。実アカウントでの接続・実取引の成功を確認したものではありません。
+
+ODPTはStation・StationTimetable・TrainTimetable・TrainInformationを取得します。駅・時刻表の表示ではODPT calendarの選択を必須とし、日付だけから休日ダイヤを推測しません。GTFS-RTは対応GTFS trip IDの照合と不一致状態を実装し、fixtureで検証しています。
+
+| 対象・公式仕様                                                                                                                              | 能力・共通モデルへの対応                                                                            | 認証・契約・地域／導入時の確認                                     | 更新・保持・表示                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [Eventbrite](https://www.eventbrite.com/platform/new/api)                                                                                   | event→Activity/Occurrence、organization権限でorders/attendees→Reservation。公開検索と組織注文を区別 | OAuth/token。利用者・組織の権限。誰の注文を見られるかを限定        | Webhook/照会の利用可能イベントを確認。参加者情報は最小化          |
+| [Ticketmaster Discovery](https://developer.ticketmaster.com/products-and-docs/apis/discovery/v2/)                                           | event/venue→Activity/Place、URL→external Action                                                     | Discovery key、地域・販売対象。発券・購入は承認Partner APIの別契約 | Discovery更新・レート、帰属・画像保持。Discoveryを購入APIとしない |
+| [Viator](https://docs.viator.com/partner-api)                                                                                               | product→Activity、availability/pricing→Offer、booking→Reservation、voucher→Entitlement              | affiliate案内契約とbooking権限契約を区別。対象商品・地域・通貨     | 変更/取消・差分商品更新・価格有効期限、画像・説明の保存条件       |
+| [Square Bookings](https://developer.squareup.com/reference/square/bookings-api)                                                             | service/variation→Activity、availability→Offer、booking→Reservation                                 | 加盟店access token/OAuth scopes、国・契約・seller/customer権限     | Webhook・照会。予約とPaymentは同一操作ではない                    |
+| [Uber Guest Rides](https://developer.uber.com/docs/guest-rides/introduction)                                                                | estimate→Offer、ride request→Reservation、ride status→予定状態                                      | 法人環境・OAuth・承認・地域。一般個人の配車APIと同一扱いしない     | Webhook＋状態照会、乗降地/連絡先の保存最小化                      |
+| [TomTom Parking Availability](https://docs.tomtom.com/parking-availability-api/documentation/parking-availability-api/parking-availability) | facility→Activity/Place、availability→空き情報。reserve能力無し                                     | key、商用契約、収録国・施設                                        | 空き時刻・TTL・表示条件。駐車予約の確定にしない                   |
+| [Booking.com Demand](https://developers.booking.com/demand/docs)                                                                            | accommodation→Activity、availability→Offer、orders→Reservation                                      | affiliate/partner契約、API credentials、許可されたbook/manage範囲  | 価格・取消期限・支払責任・施設説明保持条件、照会                  |
+| [Expedia Rapid](https://developers.expediagroup.com/rapid/lodging?locale=en_US)                                                             | property→Activity、shopping→Offer、booking/retrieve/cancel→Reservation                              | partner契約・API key/署名、販売市場・paymentモデル                 | content差分、pricecheck、応答不明retrieve、取消と返金条件         |
+| [Masabi Justride](https://api.justride.com/)                                                                                                | 商品→Offer、販売→Reservation、交通利用権→Entitlement                                                | 交通事業者との合意、環境・資格情報・販売権                         | 商品同期、利用権状態、取消・返金・認証の事業者仕様                |
+| [Google Calendar](https://developers.google.com/workspace/calendar/api/v3/reference/events)                                                 | Plan→calendar Event、外部ID保持で更新                                                               | 利用者OAuth、必要最小scope、許可calendarのみ                       | etag、更新・削除、push/同期token。任意Calendarの無断収集はしない  |
+
+予約接続の必須契約試験：同じキーの再要求、見積期限切れ、権限外対象、応答不明後の照会、確定後のみ利用権表示、取消失敗を確定取消と表示しない、返金保留、提供元決済の商品をStripeへ渡さない。検索だけのサービスには未対応操作を要求しません。固有コードとfixture試験は、商用資格による実接続・実取引の証拠とは区別します。
+
+現在の固有接続の範囲は次の通りです。
+
+- Eventbrite：組織の公開イベントを取得し、管理者のみ注文ID・状態を照会。参加者名簿と利用者予約の自動照合は取得しません。Webhookは未実装です。
+- Ticketmaster：Discovery検索と外部案内。承認Partner販売APIは未実装です。
+- TomTom：駐車施設とParking Availability。予約操作は提供しません。
+- Square：catalog・locations・availability・顧客作成・booking作成／照会／取消。Bookingsを支払完了にしません。署名Webhookと定期照会に対応します。
+- Uber：法人Guest Ridesのzones・estimates・trips作成／照会／取消、署名Webhook。sandbox環境・organization・sandboxRunIdを設定します。
+- Viator：products・booking-questions・availability/check・cart/hold・cart/book・status・cancel-quote・cancel-reasons・cancel。API予約はiframe支払モード。確定時だけvoucher URLを表示します。
+- Booking.com：Demand v3.2 search/details・orders/preview/create/details/cancel。施設IDを限定し、external/card/walletを区別します。
+- Expedia：Rapid v3 content・availability・pricecheck・itineraries作成／取得／取消。固定APIホストの提供元linkを使い、cardモードに対応します。
+- Google Calendar：利用者OAuth・PKCE、所有calendarList、予定登録・更新、固定event ID・etag、終日宿泊。認可解除後も登録済みEventは残ります。自動更新・逆同期・Event削除は未実装です。
+- Masabi：正式仕様・接続環境の取得待ちで未実装です。公開ドキュメント入口が認証を要求するためendpointを推測していません。
+
+Booking.com／Expediaのカード取扱資格・販売認証、3DS追加認証、全支払方式は導入先ごとの確認事項です。追加3DSフローは未実装です。Viatorの条件付き質問・言語ガイド等は対象商品のsandboxで個別確認してください。
+
+## 標準の照合対象
+
+| 標準                                                                             | 照合する領域                                        | この実装との関係                                                   |
+| -------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------ |
+| [TOMP-API](https://github.com/TOMP-WG/TOMP-API)                                  | 交通事業者とMaaS側のplanning/booking/trip/payment   | 能力・予約状態の拡張時に照合。TOMP事業者へ実接続するコードは未導入 |
+| [OSDM](https://osdm.io/)                                                         | 鉄道等のOffer/Booking/fulfillment/refund            | Offer・Reservation・Entitlementの区別を維持。準拠認証は未実施      |
+| [COMmmmONS](https://www.mlit.go.jp/commmmons/)                                   | MaaS関連の共通データ／連携仕様                      | 提供仕様・版・接続条件を取得して照合する対象。GTFSと同義と扱わない |
+| [OpenTravel](https://opentravel.org/)                                            | 宿泊・旅行商品のメッセージ／モデル                  | 共通の宿泊予約APIの存在とは別。楽天の独自APIを直接正規化           |
+| [観光庁PMS標準データセット](https://www.mlit.go.jp/kankocho/topics06_00050.html) | 2026年公表のPMS等データ連携・標準データセット定義書 | 参照対象。今回特定版の標準準拠は実装・検証していない               |
+
+仕様の存在と使えるサービスの存在は分けます。非公開国内APIは仕様取得・利用条件確認前に接続済みとは表記しません。

@@ -1,0 +1,31 @@
+{
+  "name": "@openmaas/platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply DB --local",
+    "db:remote": "wrangler d1 migrations apply DB --remote",
+    "import:gtfs": "tsx ../../scripts/platform/import-gtfs.ts"
+  },
+  "dependencies": {
+    "csv-parse": "^5.6.0",
+    "fflate": "^0.8.2",
+    "gtfs-realtime-bindings": "^1.1.1",
+    "hono": "^4.0.0",
+    "jose": "^6.0.0",
+    "zod": "^3.24.0",
+    "zod-to-json-schema": "^3.25.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "miniflare": "^4.20260730.0",
+    "tsx": "^4.19.0",
+    "vitest": "^3.2.0",
+    "wrangler": "^4.0.0"
+  }
+}

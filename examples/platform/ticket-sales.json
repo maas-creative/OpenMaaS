@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "name": "乗車券販売",
+  "region": "設定してください",
+  "language": "ja",
+  "timezone": "Asia/Tokyo",
+  "contact": "導入先の問い合わせ先",
+  "features": {
+    "activities": true,
+    "transit": true,
+    "accommodations": false,
+    "commerce": true
+  },
+  "sources": [],
+  "products": [
+    {
+      "id": "reference-single",
+      "title": "参照用一回券",
+      "amount": 100,
+      "currency": "JPY",
+      "validHours": 24,
+      "enabled": true,
+      "terms": "未使用・有効期限内は全額返金。実交通での利用は未検証。",
+      "seller": "導入先を設定",
+      "contact": "導入先を設定"
+    }
+  ],
+  "journey": {
+    "provider": "none",
+    "routerId": "default"
+  },
+  "admins": [],
+  "validators": []
+}
