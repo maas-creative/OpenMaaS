@@ -28,6 +28,14 @@ export function PlatformHeader() {
         <Link href="/explore">出かける</Link>
         <Link href="/services">サービス申込み</Link>
         <Link href="/my-plans">自分の予定</Link>
+        <a
+          href={
+            process.env.NEXT_PUBLIC_OPENMAAS_SOURCE_URL ||
+            'https://github.com/maas-creative/OpenMaaS'
+          }
+        >
+          ソースコード
+        </a>
         {cfg?.features.commerce && <Link href="/catalog">乗車券</Link>}
         {session?.admin && <Link href="/connections">導入設定</Link>}
         {session?.validator && <Link href="/validate">乗車確認</Link>}

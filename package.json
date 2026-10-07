@@ -76,7 +76,7 @@
   "contributors": [
     "OpenMaaS Contributors"
   ],
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "homepage": "https://github.com/maas-creative/OpenMaaS#readme",
   "bugs": {
     "url": "https://github.com/maas-creative/OpenMaaS/issues"

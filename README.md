@@ -48,6 +48,8 @@ Node.js 22.16以上。Next.js / OpenNext、TypeScript / Hono、Cloudflare Worker
 
 ## ライセンスとコードの公開方針
 
-既存の[MIT License](LICENSE)を継承します。著作権・許諾・免責の表示を維持し、依存ライブラリ・取得データ・外部APIの利用条件もそれぞれ適用されます。
+現在のOpenMaaSは[GNU Affero General Public License v3.0 or later](LICENSE)（SPDX: `AGPL-3.0-or-later`）で提供します。改変した対象プログラムの配布にはAGPLの条件が適用され、改変版をネットワーク経由で提供する場合は、その利用者へ対応するソースコードを無償で入手する手段を提示する必要があります。商用利用・有料サービスの提供は可能です。
 
-ソースコードは[GitHub](https://github.com/maas-creative/OpenMaaS)で公開しています。MITライセンスの条件に従って利用・改変・再配布できます。導入先の資格情報や個別設定は公開コードに含めず、各導入先で管理します。利用・導入の相談は[MaaS Creative](https://maas-creative.com)へお問い合わせください。
+ソースコードは[GitHub](https://github.com/maas-creative/OpenMaaS)で公開しています。導入先が改変して提供する場合は、画面のソースコードリンクを実際に稼働している版のソースへ向けてください。ビルド時の`NEXT_PUBLIC_OPENMAAS_SOURCE_URL`で指定できます。APIキー・利用者情報の公開を求めるものではありません。
+
+2026年10月8日にAGPLへ移行しました。それ以前にMITで公開した版の許諾は取り消しません。既存MIT部分の著作権・許諾・免責は[LICENSES/MIT.txt](LICENSES/MIT.txt)と[NOTICE](NOTICE)に保持します。依存ライブラリ・取得データ・外部APIにはそれぞれの利用条件が適用されます。利用・導入の相談は[MaaS Creative](https://maas-creative.com)へお問い合わせください。
