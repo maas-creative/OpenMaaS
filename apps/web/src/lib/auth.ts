@@ -155,16 +155,16 @@ const mockUsers: Record<string, UserWithOrganization> = {
 // Permission checking utility
 export function checkPermission(user: UserWithOrganization | null, permission: string): boolean {
   if (!user) return false;
-  
+
   // Admin has all permissions
   if (user.roles.includes(UserRole.ADMIN)) return true;
-  
+
   // Check organization-specific permissions
   if (user.organizationData && 'permissions' in user.organizationData) {
     const permissions = user.organizationData.permissions as Record<string, boolean>;
     return !!permissions[permission];
   }
-  
+
   return false;
 }
 
@@ -182,7 +182,7 @@ export function getMockUser(email: string): UserWithOrganization | null {
 // Check if user can access admin routes
 export function canAccessAdmin(user: UserWithOrganization | null): boolean {
   if (!user) return false;
-  
+
   return (
     user.roles.includes(UserRole.ADMIN) ||
     user.roles.includes(UserRole.TRANSPORT_OPERATOR) ||
@@ -193,19 +193,19 @@ export function canAccessAdmin(user: UserWithOrganization | null): boolean {
 // Get user dashboard path based on role
 export function getUserDashboardPath(user: UserWithOrganization | null): string {
   if (!user) return '/';
-  
+
   if (user.roles.includes(UserRole.ADMIN)) {
     return '/admin';
   }
-  
+
   if (user.roles.includes(UserRole.TRANSPORT_OPERATOR)) {
     return '/admin/transporter';
   }
-  
+
   if (user.roles.includes(UserRole.TICKET_PROVIDER)) {
     return '/admin/provider';
   }
-  
+
   return '/dashboard';
 }
 

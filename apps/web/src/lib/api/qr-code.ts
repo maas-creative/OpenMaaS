@@ -21,7 +21,7 @@ interface QrCodeHistory {
 
 export async function generateQrCode(bookingId: string): Promise<QrCodeResponse> {
   const token = localStorage.getItem('access_token');
-  
+
   const response = await fetch(`${SERVICE_ENDPOINTS.booking}/qr-codes/generate`, {
     method: 'POST',
     headers: {
@@ -40,7 +40,7 @@ export async function generateQrCode(bookingId: string): Promise<QrCodeResponse>
 
 export async function validateQrCode(qrData: string): Promise<QrCodeValidationResponse> {
   const token = localStorage.getItem('access_token');
-  
+
   const response = await fetch(`${SERVICE_ENDPOINTS.booking}/qr-codes/validate`, {
     method: 'POST',
     headers: {
@@ -59,7 +59,7 @@ export async function validateQrCode(qrData: string): Promise<QrCodeValidationRe
 
 export async function getCurrentQrCode(bookingId: string): Promise<QrCodeResponse | null> {
   const token = localStorage.getItem('access_token');
-  
+
   const response = await fetch(`${SERVICE_ENDPOINTS.booking}/qr-codes/booking/${bookingId}/current`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -79,7 +79,7 @@ export async function getCurrentQrCode(bookingId: string): Promise<QrCodeRespons
 
 export async function invalidateQrCodes(bookingId: string): Promise<void> {
   const token = localStorage.getItem('access_token');
-  
+
   const response = await fetch(`${SERVICE_ENDPOINTS.booking}/qr-codes/booking/${bookingId}/invalidate`, {
     method: 'POST',
     headers: {
@@ -94,7 +94,7 @@ export async function invalidateQrCodes(bookingId: string): Promise<void> {
 
 export async function getQrCodeHistory(bookingId: string): Promise<QrCodeHistory[]> {
   const token = localStorage.getItem('access_token');
-  
+
   const response = await fetch(`${SERVICE_ENDPOINTS.booking}/qr-codes/booking/${bookingId}/history`, {
     headers: {
       'Authorization': `Bearer ${token}`,
