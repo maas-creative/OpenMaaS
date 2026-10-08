@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenMaaS — 移動と、その先の目的をつなぐOSS | MaaS Creative</title>
+<meta name="description" content="OpenMaaSは交通・イベント・体験・宿泊を組み合わせるOSS。地域と接続先の設定から自分たちのMaaSを構成できます。機能、API連携、導入方法と本番稼働までの支援を紹介します。">
+<link rel="canonical" href="https://maas-creative.com/openmaas">
+<meta property="og:type" content="website"><meta property="og:title" content="OpenMaaS — 移動と、その先の目的をつなぐOSS">
+<meta property="og:description" content="共通のソフトウェアを使い、地域の移動と活動をつなぐ。導入方法と本番稼働までの支援をご案内します。">
+<meta property="og:url" content="https://maas-creative.com/openmaas"><meta property="og:locale" content="ja_JP">
+<link rel="icon" href="favicon.png"><link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="openmaas.css">
+</head>
+<body class="openmaas-page">
+<header class="header"><div class="container"><div class="header-content"><a href="https://maas-creative.com/" class="logo"><img src="logo-wordmark.png" class="logo-img logo-img--wordmark" alt="MaaS Creative"></a><a href="https://github.com/maas-creative/OpenMaaS">GitHub</a></div></div></header>
+<main id="main-content">
+<section class="om-hero"><div class="container">
+
+<h1>OpenMaaS</h1>
+<p class="om-intro">イベントへ行く。地域を巡る。日々の用事を済ませる。<br>その目的と交通を、ひとつの予定として組み合わせるためのオープンソースソフトウェアです。</p>
+<div class="om-actions"><a class="cta-button cta-button--solid" href="https://github.com/maas-creative/OpenMaaS">GitHubでコードを見る <span aria-hidden="true">↗</span></a><a class="cta-button" href="#support">本番稼働の支援を相談する</a></div>
+
+</div></section>
+<nav class="om-nav" aria-label="このページの内容"><div class="container"><a href="#idea">考え方</a><a href="#experience">利用体験</a><a href="#usecases">導入例</a><a href="#connections">連携と機能</a><a href="#start">導入方法</a><a href="#support">導入支援</a></div></nav>
+<section class="section" id="idea"><div class="container om-copy">
+<h2 class="section-title">ソフトウェアを共有し、地域のサービスづくりに力を注ぐ</h2>
+<p>MaaS（Mobility as a Service）は、複数の移動手段を利用者の目的に合わせて組み合わせ、検索・予約・利用までをつなぐ考え方です。OpenMaaSは、その目的となるイベント・体験・施設・宿泊も交通と結び付けます。</p>
+<p>地域ごとに同じ検索画面や接続処理を作り直す負担を減らせば、交通事業者や活動の提供者との連携、利用者の困りごとの理解、サービスを続ける仕組みに力を注げます。OpenMaaSは、そのための共通のソフトウェアを提供します。</p>
+<p>対象地域、情報源、利用サービス、接続資格情報を導入先が設定します。運営や販売の主体、事業者との契約は導入先が担います。</p>
+</div></section>
+<section class="section om-tint" id="experience"><div class="container">
+<h2 class="section-title">目的の検索から、移動・申込み・予定の確認まで</h2>
+<ol class="om-steps"><li><h3>目的を選ぶ</h3><p>日時・場所・カテゴリからイベント、体験、施設、宿泊を探す。</p></li><li><h3>移動を調べる</h3><p>開始時刻に間に合う往路と、終了後の帰路を検索する。</p></li><li><h3>申し込む</h3><p>サービスが提供する申込み先や、対応するAPI予約を利用する。</p></li><li><h3>予定を確認する</h3><p>活動、交通、宿泊、券をまとめ、変更や中止を確認する。</p></li></ol>
+<p class="om-note">保存した予定と確定予約は区別します。複数サービスを追加しても、一括予約・一括取消が成立したとは扱いません。オンラインイベントには移動案内を付けず、終了時刻や会場座標が不明な場合は必要な情報の入力を求めます。</p>
+</div></section>
+<section class="section" id="usecases"><div class="container">
+<h2 class="section-title">四つの導入例</h2>
+<div class="om-grid"><article class="om-card"><h3>イベントからの交通案内</h3><p>Luma・connpassのイベントから、会場への到着検索と帰路検索へ。参加申込みは提供元へ案内します。</p></article><article class="om-card"><h3>観光周遊</h3><p>体験、宿泊、公共交通、シェア交通を予定へ。地域で利用できるサービスを組み合わせます。</p></article><article class="om-card"><h3>生活交通案内</h3><p>停留所・時刻表・運行情報やシェア交通の空き状況を、日々の移動の判断につなげます。</p></article><article class="om-card"><h3>導入先商品の券販売</h3><p>Stripe Checkoutを使い、購入・発券・オンライン認証・返金を扱います。参照用一回券を同梱しています。</p></article></div>
+<p class="om-note">四つの設定例を同梱しています。利用する接続・対象地域・取得条件・表示順・対応操作を設定で切り替えられます。</p>
+</div></section>
+<section class="section om-tint" id="connections"><div class="container">
+<h2 class="section-title">交通と、移動の目的になるサービスを接続。</h2>
+<p class="section-lead">情報取得、外部サイトへの案内、API予約はサービスごとに異なります。対応する操作だけを利用できる構成です。</p>
+<div class="om-table-wrap" tabindex="0" aria-label="連携サービス一覧。横にスクロールできます"><table class="om-table"><thead><tr><th scope="col">分野</th><th scope="col">接続・標準</th><th scope="col">実装している範囲</th></tr></thead><tbody>
+<tr><th scope="row">公共・シェア交通</th><td>GTFS / GTFS-RT / ODPT / GBFS</td><td>時刻表、停留所、運行情報、ポート・車両の空き状況とデータの鮮度。</td></tr>
+<tr><th scope="row">経路検索</th><td>OpenTripPlanner / 駅すぱあと</td><td>出発・到着日時を指定した検索。導入先が経路検索サービスを選択。</td></tr>
+<tr><th scope="row">イベント</th><td>Luma / connpass / Eventbrite / Ticketmaster</td><td>権限・契約の範囲内で取得し、参加・購入先へ案内。Luma参加者名簿は取り込みません。</td></tr>
+<tr><th scope="row">宿泊</th><td>楽天トラベル / Booking.com Demand / Expedia Rapid</td><td>楽天は施設・空室検索と外部予約案内。Booking.com・Expediaは対応する契約・支払方式のAPI予約・照会・取消。</td></tr>
+<tr><th scope="row">体験・施設・配車</th><td>Viator / Square Bookings / Uber Guest Rides</td><td>提供元の仕様に沿った検索、予約、状態照会、取消。利用資格・対象地域の確認が必要。</td></tr>
+<tr><th scope="row">駐車場</th><td>TomTom Parking Availability</td><td>空き状況の取得。駐車場の予約機能ではありません。</td></tr>
+<tr><th scope="row">予定・導入先商品の決済</th><td>iCalendar / Google Calendar / Stripe Checkout</td><td>ICS出力、利用者認可による予定登録・更新、導入先商品の決済・照会・返金。</td></tr>
+</tbody></table></div>
+<p class="om-note">提供元が決済するサービスは、その購入フローを利用します。OpenMaaSのStripe決済で重ねて請求しません。APIの存在だけで利用資格や販売契約が得られるわけではありません。</p>
+<a class="om-link" href="https://github.com/maas-creative/OpenMaaS/blob/main/docs/platform/connectors.md">認証・契約条件・対応操作を接続台帳で確認する ↗</a>
+</div></section>
+<section class="section" id="start"><div class="container om-copy">
+<h2 class="section-title">設定と資格情報から、導入を始める。</h2>
+<ol class="om-start"><li><h3>構成を選ぶ</h3><p>四つの設定例から選び、地域・Web/APIのURL・OIDC認証を設定します。</p></li><li><h3>利用する接続を設定する</h3><p>データのURL、対象カレンダー、取得期間などを設定し、APIキーはSecretsに登録します。管理画面で接続を診断します。</p></li><li><h3>配置して、利用を確かめる</h3><p>Next.js / OpenNextとHono APIをCloudflare Workers・D1・R2に配置し、実際の利用範囲で確認します。配置CLIと導入手順を同梱しています。</p></li></ol>
+<div class="om-actions"><a class="cta-button" href="https://github.com/maas-creative/OpenMaaS#ローカル起動">READMEを読む ↗</a><a class="om-link" href="https://github.com/maas-creative/OpenMaaS/blob/main/docs/platform/deployment.md">配置・設定の手順 ↗</a></div>
+<aside class="om-status"><h3>現在の検証範囲</h3><p>自動試験56件、API型検査、Web本番ビルド、Worker bundle、公開交通フィードの取得・ローカル取込とブラウザー操作を確認しています。商用接続は仕様に基づく試験用応答で検証しています。</p><p>商用アカウントでの実取引とOpenMaaSアプリの本番配置は未検証です。Masabiの固有発券接続と追加3DS認証フローは未実装です。導入時には接続資格・利用条件と実環境での成立・取消・復旧を確認します。</p><a class="om-link" href="https://github.com/maas-creative/OpenMaaS/blob/main/docs/platform/verification.md">検証結果・未確認範囲 ↗</a></aside>
+</div></section>
+<section class="section om-tint"><div class="container om-copy"><h2 class="section-title">コードの公開とAGPLライセンス</h2><p>コードを公開し、AGPL-3.0-or-laterで提供します。商用利用も可能です。改変版をネットワーク経由で提供する場合は、利用者に対応するソースコードを入手する手段を提示します。地域で生まれた改善を共有できることを、ソフトウェアの基盤にしています。</p><p>APIキーや利用者情報を公開する必要はありません。取得データ・外部API・依存ライブラリには、それぞれの利用条件が適用されます。</p><a class="om-link" href="https://github.com/maas-creative/OpenMaaS/blob/main/LICENSE">ライセンスを確認する ↗</a></div></section>
+<section class="section om-support" id="support"><div class="container om-copy"><h2 class="section-title">本番稼働までの支援は、<br>MaaS Creativeへ。</h2><p>OpenMaaSの本番稼働までをサポートするプランについては、問い合わせフォームからご相談ください。</p><a class="cta-button cta-button--solid" href="https://maas-creative.com/company#contact">導入支援を相談する <span aria-hidden="true">→</span></a></div></section>
+</main><footer class="footer"><div class="container"><p class="copyright">© MaaS Creative.</p></div></footer>
+
+</body></html>
