@@ -5,7 +5,7 @@ import { ErrorMessage, Loading } from './shell';
 import Reservations from './reservations';
 import CalendarConnect from './calendar-connect';
 const labels: Record<string, string> = {
-  saved: '保存した予定（未予約）',
+  saved: '未予約',
   external: '外部サイトへ案内',
   pending: '支払い待ち',
   paid: '利用可能',

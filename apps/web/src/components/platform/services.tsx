@@ -309,7 +309,7 @@ export default function Services() {
           <option value="">選択してください</option>
           {connections.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.label} · {c.environment === 'sandbox' ? '試験環境' : '本番環境'}
+              {c.label}
             </option>
           ))}
         </select>

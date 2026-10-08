@@ -35,9 +35,9 @@ export default function Reservations() {
   }
   return (
     <section className="space-y-3">
-      <h2 className="text-xl font-semibold">接続サービスの予約</h2>
+      <h2 className="text-xl font-semibold">予約</h2>
       {error && <p role="alert">{error}</p>}
-      {rows.length === 0 && <p>APIで確認した予約はありません。</p>}
+      {rows.length === 0 && <p>予約はありません。</p>}
       {rows.map((r) => (
         <article className="border rounded p-4 space-y-2" key={r.id}>
           <h3>
