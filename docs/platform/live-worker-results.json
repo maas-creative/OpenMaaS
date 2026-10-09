@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-09T09:33:21.763Z",
+  "scope": "Live GBFS → syncSource → isolated D1/R2 → application API; not commercial transactions",
+  "sync": "updated",
+  "records": 5040,
+  "feeds": [
+    "system_information",
+    "station_information",
+    "station_status",
+    "system_pricing_plans"
+  ],
+  "freshStatusRecords": 2519,
+  "privatePlansStatus": 401,
+  "status": "passed"
+}

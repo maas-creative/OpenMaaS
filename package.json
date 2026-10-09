@@ -24,7 +24,8 @@
     "config:schema": "tsx scripts/platform/config.ts schema",
     "config:bootstrap": "tsx scripts/platform/config.ts bootstrap",
     "feeds:smoke": "tsx scripts/platform/feed-smoke.ts",
-    "platform": "tsx scripts/platform/deploy.ts"
+    "platform": "tsx scripts/platform/deploy.ts",
+    "live:smoke": "tsx services/platform/scripts/live-smoke.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
