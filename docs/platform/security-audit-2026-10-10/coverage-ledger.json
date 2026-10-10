@@ -1,0 +1,439 @@
+[
+  {
+    "coverage_id": ".github%2Fworkflows%2Fci.yml%23verify::.github%2Fworkflows%2Fci.yml%23jobs.verify::deployment::ATTACK-CLASSES.md%23Feature%20abuse%20and%20data%20leakage",
+    "canonical_refs": {
+      "surface": ".github/workflows/ci.yml#verify",
+      "boundary": ".github/workflows/ci.yml#jobs.verify",
+      "subsystem": "deployment",
+      "attack_class": "ATTACK-CLASSES.md#Feature abuse and data leakage"
+    },
+    "surface": "Build and CI dependencies",
+    "boundary": "Repository to runner authority",
+    "subsystem": "deployment",
+    "attack_class": "Feature abuse and data leakage",
+    "starting_paths": [".github/workflows/ci.yml", "package.json", "package-lock.json"],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Feature abuse and data leakage",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_deployment",
+    "reviewed_paths": [".github/workflows/ci.yml", "package.json", "package-lock.json"],
+    "local_checks": [
+      {
+        "agent_id": "security_deployment",
+        "reviewed_paths": [".github/workflows/ci.yml", "package.json", "package-lock.json"],
+        "invariant": "Repository to runner authority",
+        "method": "source",
+        "result": "npm ci integrity; no pull_request_target/deploy secret step; mutable tags treated as hardening only.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "apps%2Fweb%2Fsrc%2Fapp%2Flayout.tsx%23RootLayout::apps%2Fweb%2Fpublic%2Fsw.js%23activate::apps%2Fweb::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "apps/web/src/app/layout.tsx#RootLayout",
+      "boundary": "apps/web/public/sw.js#activate",
+      "subsystem": "apps/web",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "Browser rendering and cache",
+    "boundary": "Browser account/origin isolation",
+    "subsystem": "apps/web",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "apps/web/src/app/layout.tsx",
+      "apps/web/public/sw.js",
+      "apps/web/src/components/platform/plans.tsx",
+      "apps/web/src/components/platform/reservations.tsx",
+      "apps/web/src/lib/platform.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "security_boundaries",
+    "reviewed_paths": [
+      "apps/web/src/app/layout.tsx",
+      "apps/web/public/sw.js",
+      "apps/web/src/components/platform/plans.tsx",
+      "apps/web/src/components/platform/reservations.tsx",
+      "apps/web/src/lib/platform.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_boundaries",
+        "reviewed_paths": [
+          "apps/web/src/app/layout.tsx",
+          "apps/web/public/sw.js",
+          "apps/web/src/components/platform/plans.tsx",
+          "apps/web/src/components/platform/reservations.tsx",
+          "apps/web/src/lib/platform.ts"
+        ],
+        "invariant": "Browser account/origin isolation",
+        "method": "source",
+        "result": "React text escaping and safe links; legacy worker retired; previously deployed cache requires validation.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": ["openmaas/legacy-worker-account-cache"],
+    "unresolved": ["Prior deployed worker and same-origin API topology are not inspected."]
+  },
+  {
+    "coverage_id": "scripts%2Fplatform%2Fdeploy.ts%23deploy::scripts%2Fplatform%2Fdeploy.ts%23run::deployment::ATTACK-CLASSES.md%23Feature%20abuse%20and%20data%20leakage",
+    "canonical_refs": {
+      "surface": "scripts/platform/deploy.ts#deploy",
+      "boundary": "scripts/platform/deploy.ts#run",
+      "subsystem": "deployment",
+      "attack_class": "ATTACK-CLASSES.md#Feature abuse and data leakage"
+    },
+    "surface": "Cloudflare deployment",
+    "boundary": "Operator authority",
+    "subsystem": "deployment",
+    "attack_class": "Feature abuse and data leakage",
+    "starting_paths": [
+      "scripts/platform/deploy.ts",
+      "services/platform/wrangler.jsonc",
+      "apps/web/next.config.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Feature abuse and data leakage",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_deployment",
+    "reviewed_paths": [
+      "scripts/platform/deploy.ts",
+      "services/platform/wrangler.jsonc",
+      "apps/web/next.config.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_deployment",
+        "reviewed_paths": [
+          "scripts/platform/deploy.ts",
+          "services/platform/wrangler.jsonc",
+          "apps/web/next.config.ts"
+        ],
+        "invariant": "Operator authority",
+        "method": "source",
+        "result": "Shell-disabled spawn, secrets stdin, distinct HTTPS origins; actual attachments not inspected.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Fauth.ts%23auth::services%2Fplatform%2Fsrc%2Fauth.ts%23identity::services%2Fplatform::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "services/platform/src/auth.ts#auth",
+      "boundary": "services/platform/src/auth.ts#identity",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "OIDC and sessions",
+    "boundary": "Hashed session and JWT verification",
+    "subsystem": "services/platform",
+    "attack_class": "Access control",
+    "starting_paths": ["services/platform/src/auth.ts", "services/platform/src/index.ts"],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_boundaries",
+    "reviewed_paths": ["services/platform/src/auth.ts", "services/platform/src/index.ts"],
+    "local_checks": [
+      {
+        "agent_id": "security_boundaries",
+        "reviewed_paths": ["services/platform/src/auth.ts", "services/platform/src/index.ts"],
+        "invariant": "Hashed session and JWT verification",
+        "method": "source",
+        "result": "OIDC state/PKCE/nonce/issuer/audience checked; server supplies owner.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Fcommerce.ts%23commerce::services%2Fplatform%2Fsrc%2Fcommerce.ts%23fulfill::services%2Fplatform::ATTACK-CLASSES.md%23Business%20logic",
+    "canonical_refs": {
+      "surface": "services/platform/src/commerce.ts#commerce",
+      "boundary": "services/platform/src/commerce.ts#fulfill",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Business logic"
+    },
+    "surface": "Stripe and ticket validation",
+    "boundary": "Payment and staff authority",
+    "subsystem": "services/platform",
+    "attack_class": "Business logic",
+    "starting_paths": ["services/platform/src/commerce.ts"],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_audit",
+    "reviewed_paths": ["services/platform/src/commerce.ts"],
+    "local_checks": [
+      {
+        "agent_id": "security_audit",
+        "reviewed_paths": ["services/platform/src/commerce.ts"],
+        "invariant": "Payment and staff authority",
+        "method": "source",
+        "result": "Persisted price, authenticated provider lookup, signature, atomic one-use consumption.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Fgoogle-calendar.ts%23googleCalendar::services%2Fplatform%2Fsrc%2Fgoogle-calendar.ts%23token::services%2Fplatform::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "services/platform/src/google-calendar.ts#googleCalendar",
+      "boundary": "services/platform/src/google-calendar.ts#token",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "Google account linking",
+    "boundary": "Owner and provider calendar owner",
+    "subsystem": "services/platform",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "services/platform/src/google-calendar.ts",
+      "services/platform/src/tokens.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_boundaries",
+    "reviewed_paths": [
+      "services/platform/src/google-calendar.ts",
+      "services/platform/src/tokens.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_boundaries",
+        "reviewed_paths": [
+          "services/platform/src/google-calendar.ts",
+          "services/platform/src/tokens.ts"
+        ],
+        "invariant": "Owner and provider calendar owner",
+        "method": "source",
+        "result": "Owner-bound OAuth state/tokens/links and calendar ownership check; encrypted recovery.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Fhttp.ts%23request::services%2Fplatform%2Fsrc%2Fhttp.ts%23boundedBody::services%2Fplatform::ATTACK-CLASSES.md%23Resource%20and%20file%20handling",
+    "canonical_refs": {
+      "surface": "services/platform/src/http.ts#request",
+      "boundary": "services/platform/src/http.ts#boundedBody",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Resource and file handling"
+    },
+    "surface": "Provider response and pagination",
+    "boundary": "Untrusted upstream resource bounds",
+    "subsystem": "services/platform",
+    "attack_class": "Resource and file handling",
+    "starting_paths": [
+      "services/platform/src/http.ts",
+      "services/platform/src/auth.ts",
+      "services/platform/src/commerce.ts",
+      "services/platform/src/inventory.ts",
+      "services/platform/src/connectors.ts",
+      "services/platform/src/providers.ts",
+      "services/platform/src/google-calendar.ts",
+      "services/platform/src/sync.ts",
+      "services/platform/src/gtfs.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Resource and file handling",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_audit",
+    "reviewed_paths": [
+      "services/platform/src/http.ts",
+      "services/platform/src/auth.ts",
+      "services/platform/src/commerce.ts",
+      "services/platform/src/inventory.ts",
+      "services/platform/src/connectors.ts",
+      "services/platform/src/providers.ts",
+      "services/platform/src/google-calendar.ts",
+      "services/platform/src/sync.ts",
+      "services/platform/src/gtfs.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_audit",
+        "reviewed_paths": [
+          "services/platform/src/http.ts",
+          "services/platform/src/auth.ts",
+          "services/platform/src/commerce.ts",
+          "services/platform/src/inventory.ts",
+          "services/platform/src/connectors.ts",
+          "services/platform/src/providers.ts",
+          "services/platform/src/google-calendar.ts",
+          "services/platform/src/sync.ts",
+          "services/platform/src/gtfs.ts"
+        ],
+        "invariant": "Untrusted upstream resource bounds",
+        "method": "source",
+        "result": "Direct response readers now bounded; Luma/Square/Google cursor loops bounded; effect under Worker limits not demonstrated.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Findex.ts%23plans::services%2Fplatform%2Fsrc%2Findex.ts%23currentPlan::services%2Fplatform::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "services/platform/src/index.ts#plans",
+      "boundary": "services/platform/src/index.ts#currentPlan",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "Plans and calendar export",
+    "boundary": "Owner predicates",
+    "subsystem": "services/platform",
+    "attack_class": "Access control",
+    "starting_paths": ["services/platform/src/index.ts", "services/platform/src/ics.ts"],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_boundaries",
+    "reviewed_paths": ["services/platform/src/index.ts", "services/platform/src/ics.ts"],
+    "local_checks": [
+      {
+        "agent_id": "security_boundaries",
+        "reviewed_paths": ["services/platform/src/index.ts", "services/platform/src/ics.ts"],
+        "invariant": "Owner predicates",
+        "method": "source",
+        "result": "List/mutations/ICS bind owner; permissive snapshots did not establish cross-user injection.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Fprovider-webhooks.ts%23providerWebhooks::services%2Fplatform%2Fsrc%2Fprovider-webhooks.ts%23verifyProviderSignature::services%2Fplatform::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "services/platform/src/provider-webhooks.ts#providerWebhooks",
+      "boundary": "services/platform/src/provider-webhooks.ts#verifyProviderSignature",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "Provider notifications",
+    "boundary": "HMAC and authoritative refresh",
+    "subsystem": "services/platform",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "services/platform/src/provider-webhooks.ts",
+      "services/platform/src/transactions.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_audit",
+    "reviewed_paths": [
+      "services/platform/src/provider-webhooks.ts",
+      "services/platform/src/transactions.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_audit",
+        "reviewed_paths": [
+          "services/platform/src/provider-webhooks.ts",
+          "services/platform/src/transactions.ts"
+        ],
+        "invariant": "HMAC and authoritative refresh",
+        "method": "source",
+        "result": "Signed payload triggers provider lookup, not direct state assignment; replay alone is not bypass.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "services%2Fplatform%2Fsrc%2Ftransactions.ts%23transactions::services%2Fplatform%2Fsrc%2Ftransactions.ts%23configured::services%2Fplatform::ATTACK-CLASSES.md%23Business%20logic",
+    "canonical_refs": {
+      "surface": "services/platform/src/transactions.ts#transactions",
+      "boundary": "services/platform/src/transactions.ts#configured",
+      "subsystem": "services/platform",
+      "attack_class": "ATTACK-CLASSES.md#Business logic"
+    },
+    "surface": "Reservation and offer operations",
+    "boundary": "Owner and allowed operation",
+    "subsystem": "services/platform",
+    "attack_class": "Business logic",
+    "starting_paths": [
+      "services/platform/src/transactions.ts",
+      "services/platform/src/merchant.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "security_audit",
+    "reviewed_paths": [
+      "services/platform/src/transactions.ts",
+      "services/platform/src/merchant.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "security_audit",
+        "reviewed_paths": [
+          "services/platform/src/transactions.ts",
+          "services/platform/src/merchant.ts"
+        ],
+        "invariant": "Owner and allowed operation",
+        "method": "source",
+        "result": "Owner-scoped offer/plan/quote; durable idempotency/recovery, no card persistence.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  }
+]

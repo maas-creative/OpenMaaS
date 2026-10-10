@@ -42,7 +42,7 @@ export async function journey(
   if (cfg.journey.provider === 'none') throw new Error('Journey provider is not configured');
   const date = new Date(t.dateTime);
   if (cfg.journey.provider === 'otp') {
-    const query = `query($origin:PlanLabeledLocationInput!,$destination:PlanLabeledLocationInput!,$dateTime:PlanDateTimeInput!){planConnection(origin:$origin,destination:$destination,dateTime:$dateTime,first:5){edges{node{start end duration legs{mode from{name} to{name} route{shortName}}}}}}`;
+    const query = `query($origin:PlanLabeledLocationInput!,$destination:PlanLabeledLocationInput!,$dateTime:PlanDateTimeInput!){planConnection(origin:$origin,destination:$destination,dateTime:$dateTime,first:5){edges{node{start end duration legs{mode startTime endTime from{name} to{name} route{shortName}}}}}}`;
     const coordinate = (p: { lat: number; lon: number }) => ({
       location: { coordinate: { latitude: p.lat, longitude: p.lon } },
     });
@@ -113,10 +113,11 @@ export async function journey(
         legs: lines.map((l: any, i: number) => ({
           mode: typeof l.Type === 'string' ? l.Type : l.Type?.text || 'TRANSIT',
           routeShortName: l.Name,
+          startTime: l.DepartureState?.Datetime?.text,
+          endTime: l.ArrivalState?.Datetime?.text,
           from: { name: points[i]?.Station?.Name || points[i]?.Name || '' },
           to: { name: points[i + 1]?.Station?.Name || points[i + 1]?.Name || '' },
         })),
-        raw: course,
       };
     }),
   };

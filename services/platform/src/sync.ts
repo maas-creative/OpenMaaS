@@ -2,9 +2,10 @@ import type { Env, Source } from './model';
 import { config, publish, records } from './store';
 import { loadSource } from './connectors';
 import { parseGtfs, parseRealtime, realtimeReferenceStatus } from './gtfs';
-import { request, UpstreamError } from './http';
+import { request, UpstreamError, boundedBody } from './http';
 export async function syncSource(env: Env, s: Source) {
-  if(['booking','expedia','uber','google-calendar','masabi'].includes(s.kind))return 'query-only';
+  if (['booking', 'expedia', 'uber', 'google-calendar', 'masabi'].includes(s.kind))
+    return 'query-only';
   if (s.kind === 'gtfs' && s.params.ingestion === 'cli') return 'cli-required';
   const now = new Date().toISOString();
   // One lease across scheduled and interactive imports, including connpass throttling.
@@ -19,9 +20,17 @@ export async function syncSource(env: Env, s: Source) {
       const response = await request(s.url!);
       const len = Number(response.headers.get('content-length'));
       if (len > 50 * 1024 * 1024) throw new Error('Feed too large: use CLI');
-      const bytes = new Uint8Array(await response.arrayBuffer());
+      const bytes = await boundedBody(response, 50 * 1024 * 1024);
       const items = s.kind === 'gtfs' ? parseGtfs(bytes, s.id) : parseRealtime(bytes, s);
-      if(s.kind==='gtfs-rt'){const trips=(await records(env,'gtfs:trips')).filter(t=>t.sourceId===s.staticSourceId);if(!trips.length)throw new Error('Import the matching static GTFS before GTFS-RT');const ids=new Set(trips.map(t=>t.trip_id));for(const item of items)(item.body as any).referenceStatus=realtimeReferenceStatus(item.body,ids);}
+      if (s.kind === 'gtfs-rt') {
+        const trips = (await records(env, 'gtfs:trips')).filter(
+          (t) => t.sourceId === s.staticSourceId,
+        );
+        if (!trips.length) throw new Error('Import the matching static GTFS before GTFS-RT');
+        const ids = new Set(trips.map((t) => t.trip_id));
+        for (const item of items)
+          (item.body as any).referenceStatus = realtimeReferenceStatus(item.body, ids);
+      }
       if (items.length > 10000)
         throw new Error('Feed exceeds Worker import limit: use CLI ingestion');
       await publish(env, s.id, items, s.intervalSeconds, bytes);

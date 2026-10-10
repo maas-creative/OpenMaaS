@@ -810,6 +810,12 @@ describe('Additional connection edge cases', () => {
       )) as typeof fetch);
     expect(r.items[0].body).toMatchObject({ name: '試験ポート', stale: true });
   });
+  it('finds registered venue coordinates by name without returning unrelated places', async () => {
+    const response = await req('/api/v1/places?q=Venue');
+    expect(response.status).toBe(200);
+    expect(await response.json()).toContainEqual({ name: 'Venue', lat: 35, lon: 139 });
+    expect(await (await req('/api/v1/places?q=NoSuchPlace')).json()).toEqual([]);
+  });
   it('uses an explicit reception time and never applies the default margin twice', () => {
     expect(
       timing({ ...event, receptionStart: '2026-10-10T09:30:00+09:00' }, 'outbound').dateTime,
@@ -819,6 +825,8 @@ describe('Additional connection edge cases', () => {
     env.SEARCH_LIMITER = { limit: async () => ({ success: false }) };
     try {
       expect((await req('/api/v1/journeys', 'POST', {})).status).toBe(429);
+      expect((await req('/api/v1/auth/login')).status).toBe(429);
+      expect((await req('/api/v1/activities/events%3Aone')).status).toBe(429);
     } finally {
       delete env.SEARCH_LIMITER;
     }

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { platform } from '@/lib/platform';
 import { ErrorMessage } from './shell';
 export default function Catalog() {
-  const [products, setProducts] = useState<any[]>([]),
+  const [products, setProducts] = useState<any[]>(),
     [error, setError] = useState(''),
     [busy, setBusy] = useState('');
   const keys = useRef<Record<string, string>>({});
@@ -16,8 +16,9 @@ export default function Catalog() {
     <div className="space-y-5">
       <h1 className="text-3xl font-bold">乗車券</h1>
       <ErrorMessage text={error} />
-      {!products.length && <p>販売可能な商品はありません。</p>}
-      {products.map((p) => (
+      {!products && !error && <p role="status">商品を読み込んでいます…</p>}
+      {products?.length === 0 && !error && <p>販売可能な商品はありません。</p>}
+      {products?.map((p) => (
         <article key={p.id} className="border rounded-xl p-5 space-y-2">
           <h2>
             {p.title} · ¥{p.amount}
@@ -26,7 +27,9 @@ export default function Catalog() {
           <p>
             販売元：{p.seller} · 問い合わせ：{p.contact}
           </p>
-          <p>参照用商品。実交通事業者での利用は検証されていません。</p>
+          {p.reference !== false && (
+            <p>参照用の券です。交通事業者の乗車券としては利用できません。</p>
+          )}
           <button
             disabled={!!busy}
             className="bg-blue-700 text-white rounded px-4 py-2 disabled:opacity-50"

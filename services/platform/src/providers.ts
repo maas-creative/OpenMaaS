@@ -170,7 +170,12 @@ export async function loadAdditional(s: Source, env: Env, fetcher: typeof fetch 
       )
     ).location;
     let cursor: string | undefined;
+    const seenPages = new Set<string>();
+    let pageCount = 0;
     do {
+      if (++pageCount > 50 || (cursor && seenPages.has(cursor)))
+        throw new Error('Provider pagination exceeds limit');
+      if (cursor) seenPages.add(cursor);
       const r = await squareRequest(
         s,
         env,

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { platform, type Session } from '@/lib/platform';
+import { safeWebUrl } from '@openmaas/common/platform-display';
 import { ErrorMessage } from './shell';
 export default function SharedPlan({ records }: { records: any[] }) {
   const [plans, setPlans] = useState<any[]>([]),
@@ -33,7 +34,7 @@ export default function SharedPlan({ records }: { records: any[] }) {
             (s) => s.sourceId === station.sourceId && s.feed === 'system_information',
           );
           const url = station.rental_uris?.web || system?.url;
-          const safeUrl = typeof url === 'string' && url.startsWith('https:') ? url : undefined;
+          const safeUrl = safeWebUrl(url);
           const p = plans.find((p) => p.id === selectedPlan);
           await platform<any>(p ? `/plans/${p.id}` : '/plans', {
             method: p ? 'PUT' : 'POST',
@@ -43,8 +44,7 @@ export default function SharedPlan({ records }: { records: any[] }) {
                 ...(p?.items || []),
                 {
                   type: 'ride',
-                  title:
-                    station.name || station.station_id || station.vehicle_id || station.bike_id,
+                  title: station.name || 'シェア交通ポート',
                   status: 'saved',
                   url: safeUrl,
                   data: {
@@ -79,7 +79,7 @@ export default function SharedPlan({ records }: { records: any[] }) {
               key={`${s.sourceId}:${s.station_id || s.vehicle_id || s.bike_id}`}
               value={`${s.sourceId}:${s.station_id || s.vehicle_id || s.bike_id}`}
             >
-              {s.name || s.station_id || s.vehicle_id || s.bike_id}
+              {s.name || 'シェア交通ポート'}
             </option>
           ))}
         </select>

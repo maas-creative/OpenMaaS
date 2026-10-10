@@ -1,3 +1,4 @@
+import { boundedBody } from './http';
 import { Hono } from 'hono';
 import { z } from 'zod';
 import { type AppEnv, hash } from './auth';
@@ -66,7 +67,9 @@ export async function expediaRequest(
     },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
-  return response.status === 204 || response.status === 202 ? {} : response.json();
+  return response.status === 204 || response.status === 202
+    ? {}
+    : JSON.parse(new TextDecoder().decode(await boundedBody(response)));
 }
 export const inventory = new Hono<AppEnv>();
 inventory.post('/services/search', async (c) => {
@@ -107,7 +110,7 @@ inventory.post('/services/search', async (c) => {
       return activity(
         s,
         String(p.id),
-        d.name?.ja || d.name?.['en-gb'] || String(p.id),
+        d.name?.ja || d.name?.['en-gb'] || '宿泊施設',
         {
           name: d.name?.ja || d.name?.['en-gb'] || '',
           lat: d.location?.latitude,
@@ -118,9 +121,9 @@ inventory.post('/services/search', async (c) => {
           description: d.description?.['en-gb'] || '',
           actions: external(p.url || d.url),
           bookingWindow: { checkinDate: q.checkin, checkoutDate: q.checkout, adults: q.adults },
-          bookableOptions: (p.products || []).map((v: any) => ({
+          bookableOptions: (p.products || []).map((v: any, index: number) => ({
             id: v.id,
-            label: v.id,
+            label: typeof v.name === 'string' ? v.name : `宿泊プラン ${index + 1}`,
             query: {
               accommodationId: p.id,
               productId: v.id,
@@ -166,7 +169,7 @@ inventory.post('/services/search', async (c) => {
       return activity(
         s,
         p.property_id,
-        d.name || p.property_id,
+        d.name || '宿泊施設',
         {
           name: d.name || '',
           lat: d.location?.coordinates?.latitude,
@@ -177,9 +180,9 @@ inventory.post('/services/search', async (c) => {
           description: '空室・料金は予約前に再確認します。',
           bookingWindow: { checkinDate: q.checkin, checkoutDate: q.checkout, adults: q.adults },
           bookableOptions: (p.rooms || []).flatMap((room: any) =>
-            (room.rates || []).map((rate: any) => ({
+            (room.rates || []).map((rate: any, index: number) => ({
               id: rate.id,
-              label: `${room.room_name || room.id} · ${rate.id}`,
+              label: `${room.room_name || d.rooms?.[room.id]?.name || '客室'} · プラン ${index + 1}`,
               query: {
                 propertyId: p.property_id,
                 roomId: room.id,

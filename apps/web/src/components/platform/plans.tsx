@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { apiOrigin, platform } from '@/lib/platform';
 import { ErrorMessage, Loading } from './shell';
+import JourneyView from './journey-view';
+import { safeWebUrl } from '@openmaas/common/platform-display';
 import Reservations from './reservations';
 import CalendarConnect from './calendar-connect';
 const labels: Record<string, string> = {
@@ -16,13 +18,14 @@ const labels: Record<string, string> = {
 };
 export default function Plans() {
   const [plans, setPlans] = useState<any[]>(),
-    [orders, setOrders] = useState<any[]>([]),
+    [orders, setOrders] = useState<any[]>(),
     [error, setError] = useState('');
   async function reload() {
     try {
       const [p, o] = await Promise.all([platform<any[]>('/plans'), platform<any[]>('/orders')]);
       setPlans(p);
       setOrders(o);
+      setError('');
     } catch (e) {
       setError((e as Error).message);
     }
@@ -34,7 +37,7 @@ export default function Plans() {
     <div className="maas-workspace space-y-5">
       <h1 className="text-3xl font-bold">自分の予定</h1>
       <ErrorMessage text={error} />
-      <Reservations />
+      {!error && plans && <Reservations />}
       {!plans && !error && <Loading />}
       {plans?.length === 0 && <p>保存した予定はありません。</p>}
       {plans?.map((p) => (
@@ -45,13 +48,31 @@ export default function Plans() {
             <div key={n} className="maas-plan-item">
               <p>
                 <span className="font-medium">{i.title}</span>{' '}
-                <span className="maas-badge">{labels[i.status] || i.status}</span>
+                <span className="maas-badge">{labels[i.status] || '状態を確認してください'}</span>
               </p>
               <p>
                 {i.current?.start || i.start
                   ? new Date(i.current?.start || i.start).toLocaleString('ja-JP')
                   : ''}
               </p>
+              {i.end && <p>終了：{new Date(i.end).toLocaleString('ja-JP')}</p>}
+              {(i.current?.place || i.snapshot?.place) && (
+                <p>
+                  {(i.current?.place || i.snapshot?.place).name}{' '}
+                  {(i.current?.place || i.snapshot?.place).address}
+                </p>
+              )}
+              {i.data?.itineraries && (
+                <details>
+                  <summary>保存した経路を確認</summary>
+                  <JourneyView route={i.data.itineraries[i.data.selected ?? 0]} />
+                </details>
+              )}
+              {safeWebUrl(i.url) && (
+                <a className="underline" href={safeWebUrl(i.url)}>
+                  提供元で確認
+                </a>
+              )}
               {i.changed && (
                 <p role="status" className="text-amber-800">
                   開催情報が変更されました。移動を再確認してください。
@@ -96,10 +117,8 @@ export default function Plans() {
         </article>
       ))}
       <h2 className="text-2xl font-semibold">購入した券</h2>
-      {orders.map((o) => (
-        <Order key={o.id} order={o} reload={reload} onError={setError} />
-      ))}
-      {orders.length === 0 && <p>購入した券はありません。</p>}
+      {orders?.map((o) => <Order key={o.id} order={o} reload={reload} onError={setError} />)}
+      {orders?.length === 0 && !error && <p>購入した券はありません。</p>}
     </div>
   );
 }
@@ -133,7 +152,11 @@ function Order({
         {o.product.title} · ¥{o.amount}
       </h3>
       <p>{labels[detail?.status || o.status]}</p>
-      <p>参照用一回券 · 実交通事業者での利用は検証されていません。</p>
+      <p>
+        {o.product.reference !== false
+          ? '参照用の券です。交通事業者の乗車券としては利用できません。'
+          : o.product.terms}
+      </p>
       <button className="border rounded p-2" onClick={check}>
         状態を確認・券を表示
       </button>
@@ -146,7 +169,9 @@ function Order({
         </button>
       )}
       {qr && <img src={qr} width={220} height={220} alt="乗車認証用QRコード" />}
-      {o.status === 'pending' && o.checkout_url && <a href={o.checkout_url}>支払いへ進む</a>}
+      {o.status === 'pending' && safeWebUrl(o.checkout_url) && (
+        <a href={o.checkout_url}>支払いへ進む</a>
+      )}
       {(detail?.status || o.status) === 'paid' && (
         <button
           className="border rounded p-2 ml-3"

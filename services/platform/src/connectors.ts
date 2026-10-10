@@ -2,7 +2,9 @@ import { activity, safeLink, secret, type Source, type Env, type RecordItem } fr
 import { json } from './http';
 import { connectorDefinitions } from './registry';
 import { loadAdditional, loadOdpt } from './providers';
-export const capabilities = Object.fromEntries(Object.entries(connectorDefinitions).map(([k,v]) => [k,v.capabilities]));
+export const capabilities = Object.fromEntries(
+  Object.entries(connectorDefinitions).map(([k, v]) => [k, v.capabilities]),
+);
 function actions(url: unknown, label = '公式サイトへ') {
   const u = safeLink(url);
   return u ? [{ type: 'external' as const, label, url: u }] : [];
@@ -67,8 +69,13 @@ export async function loadSource(
   if (s.kind === 'luma') {
     const entries: any[] = [];
     let cursor: string | undefined;
+    const seenPages = new Set<string>();
+    let pageCount = 0;
     const headers = { 'x-luma-api-key': secret(env, s.secretRef) };
     do {
+      if (++pageCount > 50 || (cursor && seenPages.has(cursor)))
+        throw new Error('Provider pagination exceeds limit');
+      if (cursor) seenPages.add(cursor);
       const organization = s.params.scope === 'organization';
       const u = new URL(
         `https://public-api.luma.com/v1/${organization ? 'organizations' : 'calendars'}/events/list`,

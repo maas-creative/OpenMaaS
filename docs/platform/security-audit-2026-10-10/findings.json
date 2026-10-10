@@ -1,0 +1,51 @@
+[
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "openmaas/legacy-worker-account-cache",
+    "title": "以前に登録されたService Workerのアカウント間キャッシュ",
+    "description": "git HEADの旧workerはGET要求についてキャッシュを先に照合し、ネットワークの200/basic応答を認証状態やCache-Controlのno-storeを確認せず保存する。旧workerが登録され、同一originのprivate応答が保存され、別アカウントの要求にもキャッシュキーとVary条件が一致する場合、以前のアカウントの応答が返る可能性がある。現行sourceはworkerを退役するが、既存配備の登録・更新状態とこの結果は未確認。",
+    "claimed_root_cause": "旧workerは認証状態に対応するキャッシュ分離や削除を実装せず、Origin内で共有されるCache APIに保存した応答を認証状態の再確認より先に返す。",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "apps/web/public/sw.js",
+        "line": 1,
+        "scope": "legacy worker update",
+        "description": "旧worker更新先は退役処理へ置換した。"
+      },
+      {
+        "kind": "sink",
+        "file": "apps/web/public/sw.js",
+        "line": 6,
+        "scope": "activate",
+        "description": "OpenMaaSの旧キャッシュだけを削除し登録解除する。旧コード到達性は配備状態に依存する。"
+      }
+    ],
+    "evidence": [
+      {
+        "file": "apps/web/src/app/layout.tsx",
+        "line": 8,
+        "description": "現行rootはPWAInstallerをマウントしない。"
+      },
+      {
+        "file": "apps/web/src/lib/platform.ts",
+        "line": 1,
+        "description": "APIの既定URLはhttp://localhost:8787。実際のURLはNEXT_PUBLIC_PLATFORM_API_URLによって変更できる。"
+      },
+      {
+        "file": "scripts/platform/deploy.ts",
+        "line": 67,
+        "description": "配備CLIは同一hostnameを拒否し、Web/APIを同じcustom domain配下の別subdomainにするよう要求する。これは実配備を確認した証拠ではない。"
+      }
+    ],
+    "blockers": [
+      "旧workerが実際に登録されていたか未確認。",
+      "実配備に同一originのprivate API経路があり、アカウント変更後にも一致するキャッシュ応答が保存されたか未確認。",
+      "スキルが要求する完全なOS隔離でのブラウザー再現を実行していない。"
+    ],
+    "validation_plan": {
+      "local": "完全な隔離環境でgit HEADの旧worker、架空A/Bアカウント、同一originのprivate GET fixtureを使用する。Aの200/basic応答を保存し、認証をBに切り替えた同一URL要求の応答を確認する。認証cookieとVary条件を記録し、現行workerへの更新・activate後にopenmaas-キャッシュ削除と登録解除を確認する。",
+      "deployment": "所有者が配備済みworker登録とAPI origin、更新済みworkerの配信を確認する。本監査は実サイトへ攻撃しない。"
+    }
+  }
+]

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { platform, type Activity } from '@/lib/platform';
 import { ErrorMessage, Loading } from './shell';
-import SharedPlan from './shared-plan';
+import NearbyTransport from './nearby-transport';
 export default function Explore() {
   const [rows, setRows] = useState<Activity[]>();
   const [sources, setSources] = useState<any[]>([]);
@@ -288,67 +288,22 @@ export default function Explore() {
           ))}
         </div>
       )}
+      <NearbyTransport
+        transit={transit}
+        shared={shared}
+        departures={Departures}
+        loaded={transit !== undefined}
+        error={error}
+      />
       <section className="border-t pt-5">
-        <h2 className="text-xl font-semibold">交通情報</h2>
-        <p>
-          停留所 {transit?.stops?.length || 0}件 · 運行情報 {transit?.realtime?.length || 0}件 ·
-          シェア交通情報 {shared.length}件
-        </p>
-        {transit?.stops?.slice(0, 20).map((s: any) => (
-          <details key={s.id} className="border rounded p-3 mt-2">
-            <summary>{s.stop_name}</summary>
-            <Departures
-              stopId={s.id}
-              calendars={s.stop_id.startsWith('odpt.') ? transit.calendars : []}
-            />
-          </details>
-        ))}
-        {transit?.realtime?.slice(0, 10).map((r: any) => (
-          <p key={r.id || JSON.stringify(r)}>
-            {r.text?.ja || r.alert?.headerText?.translation?.[0]?.text || '運行情報'} ·{' '}
-            {r.timestamp
-              ? new Date(Number(r.timestamp) * 1000).toLocaleString('ja-JP')
-              : r.time || r.fetchedAt}{' '}
-            {r.stale ? '・情報が古くなっています' : ''}
-          </p>
-        ))}
-        {shared
-          .filter((s) => s.feed === 'station_status')
-          .slice(0, 15)
-          .map((s: any) => (
-            <p key={`${s.sourceId}:${s.station_id}`}>
-              {shared.find(
-                (x) =>
-                  x.sourceId === s.sourceId &&
-                  x.station_id === s.station_id &&
-                  x.feed === 'station_information',
-              )?.name || s.station_id}
-              ：利用可能{' '}
-              {s.is_renting === false
-                ? '貸出停止'
-                : (s.num_vehicles_available ?? s.num_bikes_available ?? '不明')}
-              台 / 返却可能{' '}
-              {s.is_returning === false ? '返却停止' : (s.num_docks_available ?? '不明')}台{' '}
-              {s.stale ? '・情報が古くなっています' : ''}
-            </p>
-          ))}
-      </section>
-      <SharedPlan records={shared} />
-      <section className="border-t pt-5">
-        <h2 className="text-xl font-semibold">情報源と更新状態</h2>
+        <h2 className="text-xl font-semibold">情報の提供元</h2>
         {sources.length ? (
           sources.map((s) => (
             <div key={s.id} className="mt-3 text-sm">
-              <p>
-                {s.label}：{s.status} {s.stale ? '・最新情報を取得できていません' : ''}
-              </p>
-              <p>
-                最終成功：{s.lastSuccess || '未接続'} ·{' '}
-                <a href={s.termsUrl} target="_blank" rel="noreferrer">
-                  {s.attribution}
-                </a>
-              </p>
-              {s.error && <p>{s.error}</p>}
+              <p>{s.label}</p>
+              <a href={s.termsUrl} target="_blank" rel="noreferrer">
+                {s.attribution} · 利用条件
+              </a>
             </div>
           ))
         ) : (
@@ -405,7 +360,14 @@ function Departures({ stopId, calendars = [] }: { stopId: string; calendars?: st
             <option value="">選択してください</option>
             {calendars.map((c) => (
               <option key={c} value={c}>
-                {c.split(':').at(-1)}
+                {(
+                  {
+                    Weekday: '平日',
+                    Saturday: '土曜',
+                    SundayHoliday: '日曜・祝日',
+                    Holiday: '祝日',
+                  } as Record<string, string>
+                )[c.split(':').at(-1)!] || '運行日区分'}
               </option>
             ))}
           </select>
@@ -418,7 +380,7 @@ function Departures({ stopId, calendars = [] }: { stopId: string; calendars?: st
       {rows.length ? (
         rows.map((r, i) => (
           <p key={i}>
-            {r.departure_time} · {r.trip_id}
+            {r.departure_time} · {r.routeName || '公共交通'} · {r.destinationName || '行先情報なし'}
           </p>
         ))
       ) : (

@@ -1,9 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { platform, type Activity } from '@/lib/platform';
+import PlacePicker from './place-picker';
+import JourneyView from './journey-view';
 import { ErrorMessage, Loading } from './shell';
 export default function Detail({ id }: { id: string }) {
   const [a, setA] = useState<Activity>();
+  const [sourceLabel, setSourceLabel] = useState('');
+  const [originName, setOriginName] = useState('');
   const [serviceIds, setServiceIds] = useState<string[]>([]);
   const [error, setError] = useState(''),
     [message, setMessage] = useState('');
@@ -27,6 +31,11 @@ export default function Detail({ id }: { id: string }) {
         if (active) setServiceIds(rows.map((r) => r.id));
       })
       .catch(() => {});
+    platform<any[]>('/sources')
+      .then((rows) =>
+        setSourceLabel(rows.find((s) => s.id === id.split(':')[0])?.label || '情報の提供元'),
+      )
+      .catch(() => {});
     platform<Activity>(`/activities/${encodeURIComponent(id)}`)
       .then((r) => {
         if (active) setA(r);
@@ -41,7 +50,7 @@ export default function Detail({ id }: { id: string }) {
   async function route(direction: 'outbound' | 'return') {
     setError('');
     try {
-      if (!lat || !lon) throw new Error('出発地の緯度・経度を入力してください');
+      if (!lat || !lon) throw new Error('出発地を選択してください');
       if (direction === 'return' && !a?.end && !returnTime)
         throw new Error('帰路の日時を入力してください');
       const r = await platform<any>('/journeys', {
@@ -115,7 +124,7 @@ export default function Detail({ id }: { id: string }) {
       ) : (
         <>
           <p>
-            {a.region} · {a.sourceId}
+            {a.region} · {sourceLabel}
           </p>
           {serviceIds.includes(a.sourceId) && (
             <a className="underline" href={`/services?source=${encodeURIComponent(a.sourceId)}`}>
@@ -175,10 +184,11 @@ export default function Detail({ id }: { id: string }) {
                 onClick={() =>
                   navigator.geolocation.getCurrentPosition(
                     (p) => {
+                      setOriginName('現在地');
                       setLat(String(p.coords.latitude));
                       setLon(String(p.coords.longitude));
                     },
-                    () => setError('現在地を取得できませんでした。緯度・経度を入力してください。'),
+                    () => setError('現在地を取得できませんでした。駅・施設を検索してください。'),
                   )
                 }
               >
@@ -195,27 +205,21 @@ export default function Detail({ id }: { id: string }) {
                   />
                 </label>
               )}
+              <PlacePicker
+                label="出発地"
+                onClear={() => {
+                  setLat('');
+                  setLon('');
+                  setOriginName('');
+                }}
+                onSelect={(p) => {
+                  setLat(String(p.lat));
+                  setLon(String(p.lon));
+                  setOriginName(p.name);
+                }}
+              />
+              {originName && <p>出発地：{originName}</p>}
               <div className="grid gap-3 sm:grid-cols-2">
-                <label>
-                  出発地の緯度
-                  <input
-                    type="number"
-                    step="any"
-                    className="block border rounded p-2"
-                    value={lat}
-                    onChange={(e) => setLat(e.target.value)}
-                  />
-                </label>
-                <label>
-                  出発地の経度
-                  <input
-                    type="number"
-                    step="any"
-                    className="block border rounded p-2"
-                    value={lon}
-                    onChange={(e) => setLon(e.target.value)}
-                  />
-                </label>
                 <label>
                   到着の余裕（分）
                   <input
@@ -273,24 +277,7 @@ export default function Detail({ id }: { id: string }) {
                           />{' '}
                           この経路を予定に追加
                         </label>
-                        {r.start && r.end && (
-                          <p>
-                            {new Date(r.start).toLocaleString('ja-JP')} →{' '}
-                            {new Date(r.end).toLocaleString('ja-JP')}
-                          </p>
-                        )}
-                        {r.legs ? (
-                          r.legs.map((l: any, j: number) => (
-                            <p key={j}>
-                              {l.mode} {l.from?.name} → {l.to?.name} {l.routeShortName || ''}
-                            </p>
-                          ))
-                        ) : (
-                          <p>
-                            {r.Route?.Line?.map?.((l: any) => l.Name).join(' → ') || '経路候補'}
-                            （詳細は接続元の結果をご確認ください）
-                          </p>
-                        )}
+                        <JourneyView route={r} />
                       </article>
                     ))
                   )}

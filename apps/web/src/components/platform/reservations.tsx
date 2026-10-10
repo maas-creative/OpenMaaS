@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { policyText, safeWebUrl } from '@openmaas/common/platform-display';
 import { platform } from '@/lib/platform';
 const labels: Record<string, string> = {
   unknown: '結果不明・再照会が必要',
@@ -11,7 +12,7 @@ const labels: Record<string, string> = {
   completed: '利用終了',
 };
 export default function Reservations() {
-  const [rows, setRows] = useState<any[]>([]),
+  const [rows, setRows] = useState<any[]>(),
     [error, setError] = useState(''),
     [cancellation, setCancellation] = useState<any>(),
     [reason, setReason] = useState('');
@@ -37,19 +38,21 @@ export default function Reservations() {
     <section className="space-y-3">
       <h2 className="text-xl font-semibold">予約</h2>
       {error && <p role="alert">{error}</p>}
-      {rows.length === 0 && <p>予約はありません。</p>}
-      {rows.map((r) => (
+      {rows?.length === 0 && !error && <p>予約はありません。</p>}
+      {rows?.map((r) => (
         <article className="border rounded p-4 space-y-2" key={r.id}>
           <h3>
             {r.body.title} · {labels[r.status] || r.status}
           </h3>
-          <p className="break-words">{r.body.terms}</p>
+          <p className="break-words">{policyText(r.body.terms)}</p>
           {r.body.planId && <p>保存した予定に関連付けています。</p>}
-          {r.body.actions?.map((a: any) => (
-            <a className="underline mr-3" href={a.url} key={a.url}>
-              {a.label}
-            </a>
-          ))}
+          {r.body.actions
+            ?.filter((a: any) => safeWebUrl(a.url))
+            .map((a: any) => (
+              <a className="underline mr-3" href={a.url} key={a.url}>
+                {a.label}
+              </a>
+            ))}
           <button className="border rounded p-2 mr-3" onClick={() => act(r.id, 'refresh')}>
             提供元へ再照会
           </button>
@@ -74,7 +77,7 @@ export default function Reservations() {
       {cancellation && (
         <div className="border rounded p-4 space-y-3">
           <h3>取消条件を確認する</h3>
-          <p className="break-words">{JSON.stringify(cancellation.terms)}</p>
+          <p className="break-words">{policyText(cancellation.terms)}</p>
           {cancellation.reasons && (
             <label>
               取消理由

@@ -35,5 +35,38 @@ export async function json(
   init: RequestInit = {},
   fetcher: typeof fetch = fetch,
 ) {
-  return (await request(url, init, fetcher)).json() as Promise<any>;
+  return JSON.parse(
+    new TextDecoder().decode(await boundedBody(await request(url, init, fetcher))),
+  ) as any;
+}
+
+/** Bound decoded bodies even when Content-Length is missing or compressed. */
+export async function boundedBody(response: Response, maxBytes = 16 * 1024 * 1024) {
+  if (Number(response.headers.get('content-length')) > maxBytes)
+    throw new Error('Upstream response exceeds limit');
+  const reader = response.body?.getReader();
+  if (!reader) return new Uint8Array();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maxBytes) throw new Error('Upstream response exceeds limit');
+      chunks.push(value);
+    }
+  } catch (e) {
+    await reader.cancel();
+    throw e;
+  } finally {
+    reader.releaseLock();
+  }
+  const result = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return result;
 }

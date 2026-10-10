@@ -74,6 +74,7 @@ MaaS（Mobility as a Service）は、複数の移動手段を利用者の目的�
 - [配置CLI・資格情報・接続設定](docs/platform/deployment.md)
 - [公式API接続台帳](docs/platform/connectors.md)
 - [検証結果と未確認範囲](docs/platform/verification.md)
+- [全ページUI修正・セキュリティ監査結果](docs/platform/ui-security-remediation-2026-10-10.md)
 - [四つの導入設定例](examples/platform)
 
 ## ローカル起動
@@ -127,7 +128,7 @@ npm run lint
 
 ## 検証状況
 
-自動試験56件成功、API型検査・Next.js本番ビルド・Cloudflare Worker bundle検証成功。lintはエラー0・警告70です。公開交通フィードの実取得とローカルD1取込、ブラウザー操作も確認しています。商用接続の試験はHTTP fixtureを使っており、商用アカウントでの実取引と本番配置は未検証です。Masabiの固有接続、追加3DS認証フローは未実装です。詳細は[検証結果](docs/platform/verification.md)を参照してください。
+2026-10-10の自動試験62件成功、API型検査・Next.js本番ビルド・Cloudflare Worker bundle検証成功。lintはエラー0です。公開交通フィードの実取得とローカルD1取込、ブラウザー操作も確認しています。商用接続の試験はHTTP fixtureを使っており、商用アカウントでの実取引と本番配置は未検証です。Masabiの固有接続、追加3DS認証フローは未実装です。詳細は[検証結果](docs/platform/verification.md)を参照してください。
 
 ## ライセンスとコードの公開方針
 

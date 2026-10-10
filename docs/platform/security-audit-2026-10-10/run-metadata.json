@@ -1,0 +1,35 @@
+{
+  "run_id": "run-1",
+  "repo": "OpenMaaS",
+  "target": ".",
+  "source_ref": "1ce5b4b6aad82300716c95c9768535e35e4b7afd",
+  "worktree_dirty": true,
+  "tracked_diff_sha256": "eab3487e630df2143ba43f349cc8bb7027d8fb2c3a392cc126dec7b716bd05f5",
+  "profile": "standard",
+  "scope_paths": [
+    "services/platform",
+    "apps/web",
+    "libs/common/src/platform-display.ts",
+    "scripts/platform",
+    ".github/workflows/ci.yml"
+  ],
+  "budget": null,
+  "execution_policy": "sandboxed-source-and-local-only",
+  "selected_companion_files": [
+    "WEB-PROTOCOL-AND-AUTH.md",
+    "CLIENT-SIDE.md",
+    "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md",
+    "DATA-ISOLATION-AND-LIFECYCLE.md",
+    "CLOUD-AND-DEPLOYMENT.md",
+    "SUPPLY-CHAIN-AND-RELEASE.md"
+  ],
+  "prior_run_paths": [],
+  "shared_file_owners": {
+    "all": "root"
+  },
+  "run_status": "incomplete",
+  "incomplete_reason": "required_sandbox_runtime_controls_not_established",
+  "source_review_complete": true,
+  "implementation_checks_separate": true,
+  "final_verification": "Independent source review: prior boundary patches accepted; legacy-worker candidate corrected; UI review empty Uber coordinate conversion fixed."
+}

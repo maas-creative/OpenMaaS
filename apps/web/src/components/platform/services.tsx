@@ -1,5 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { policyText, statusText } from '@openmaas/common/platform-display';
+import PlacePicker from './place-picker';
 import Script from 'next/script';
 import { platform } from '@/lib/platform';
 import { ErrorMessage } from './shell';
@@ -131,11 +133,18 @@ export default function Services() {
           start: new Date(fields.start).toISOString(),
           end: new Date(fields.end).toISOString(),
         };
-      if (!q && connection.kind === 'uber')
+      if (!q && connection.kind === 'uber') {
+        if (
+          ['pickupLat', 'pickupLon', 'dropoffLat', 'dropoffLon'].some(
+            (key) => !fields[key]?.trim() || !Number.isFinite(Number(fields[key])),
+          )
+        )
+          throw new Error('乗車・降車地点を選択してください');
         q = {
           pickup: { latitude: Number(fields.pickupLat), longitude: Number(fields.pickupLon) },
           dropoff: { latitude: Number(fields.dropoffLat), longitude: Number(fields.dropoffLon) },
         };
+      }
       if (!q && connection.kind === 'viator')
         q = {
           productCode: fields.productCode,
@@ -256,7 +265,7 @@ export default function Services() {
         body: JSON.stringify({ offerId: offer.id, input: data, ...(planId ? { planId } : {}) }),
       });
       form.reset();
-      setMessage(`受付結果：${r.status}。自分の予定で確定状況を確認してください。`);
+      setMessage(`受付結果：${statusText(r.status)}。自分の予定で確定状況を確認してください。`);
       setOffer(undefined);
       setPrepared(undefined);
     } catch (e) {
@@ -341,8 +350,40 @@ export default function Services() {
                 {input('end', 'datetime-local')}
               </>
             )}
-            {connection.kind === 'uber' &&
-              ['pickupLat', 'pickupLon', 'dropoffLat', 'dropoffLon'].map((k) => input(k, 'number'))}
+            {connection.kind === 'uber' && (
+              <>
+                <PlacePicker
+                  label="乗車地点"
+                  onClear={() =>
+                    setFields((f) => ({ ...f, pickupLat: '', pickupLon: '', pickupName: '' }))
+                  }
+                  onSelect={(p) =>
+                    setFields((f) => ({
+                      ...f,
+                      pickupLat: String(p.lat),
+                      pickupLon: String(p.lon),
+                      pickupName: p.name,
+                    }))
+                  }
+                />
+                {fields.pickupName && <p>乗車：{fields.pickupName}</p>}
+                <PlacePicker
+                  label="降車地点"
+                  onClear={() =>
+                    setFields((f) => ({ ...f, dropoffLat: '', dropoffLon: '', dropoffName: '' }))
+                  }
+                  onSelect={(p) =>
+                    setFields((f) => ({
+                      ...f,
+                      dropoffLat: String(p.lat),
+                      dropoffLon: String(p.lon),
+                      dropoffName: p.name,
+                    }))
+                  }
+                />
+                {fields.dropoffName && <p>降車：{fields.dropoffName}</p>}
+              </>
+            )}
             {connection.kind === 'viator' && (
               <>
                 <label>
@@ -408,7 +449,7 @@ export default function Services() {
             {o.amount === null ? '料金は提供元で確認' : `${o.amount} ${o.currency}`} · 有効期限{' '}
             {new Date(o.expiresAt).toLocaleString()}
           </p>
-          <p className="break-words whitespace-pre-wrap">{o.terms}</p>
+          <p className="break-words whitespace-pre-wrap">{policyText(o.terms)}</p>
           {connection?.operations.includes('reserve') && (
             <button className="border rounded p-2" onClick={() => choose(o)}>
               この候補を申し込む
@@ -422,7 +463,7 @@ export default function Services() {
           <p>
             {prepared?.amount ?? offer.amount} {offer.currency} · 支払先は提供元です
           </p>
-          <p className="break-words">{prepared?.terms || offer.terms}</p>
+          <p className="break-words">{policyText(prepared?.terms || offer.terms)}</p>
           <label>
             関連付ける予定
             <select

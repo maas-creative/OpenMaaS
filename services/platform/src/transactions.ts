@@ -1,3 +1,4 @@
+import { policyText } from '../../../libs/common/src/platform-display';
 import { Hono } from 'hono';
 import { z } from 'zod';
 import { identity, hash, type AppEnv } from './auth';
@@ -207,7 +208,7 @@ transactions.post('/offers', async (c) => {
         title: e.product.display_name,
         amount: f.value,
         currency: f.currency_code,
-        terms: JSON.stringify(e.product.cancellation || {}),
+        terms: policyText(e.product.cancellation || {}),
         paymentHandledBy: 'provider',
         expiresAt: new Date(f.expires_at * 1000).toISOString(),
         providerData: { ...q, product_id: e.product.product_id, fare_id: f.fare_id },
@@ -223,6 +224,18 @@ transactions.post('/offers', async (c) => {
         c.req.header('CF-Connecting-IP') || '127.0.0.1',
       )),
     );
+  if (['booking', 'expedia'].includes(s.kind)) {
+    const cached = await c.env.DB.prepare(
+      'SELECT body FROM search_cache WHERE source_id=? AND expires_at>?',
+    )
+      .bind(s.id, Date.now())
+      .all<{ body: string }>();
+    const id = String(dto.query.accommodationId || dto.query.propertyId || '');
+    const activity = cached.results
+      .flatMap((r) => JSON.parse(r.body))
+      .find((a) => a.externalId === id);
+    for (const offer of offers) offer.title = activity?.title || '宿泊プラン';
+  }
   const publicOffers = [];
   for (const offer of offers) {
     const id = crypto.randomUUID();

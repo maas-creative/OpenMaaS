@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { apiOrigin, platform } from '@/lib/platform';
 import { ErrorMessage } from './shell';
+import TransactionTable from './transaction-table';
 import ConnectionForm from './connection-form';
 export default function Connections() {
   const [body, setBody] = useState(''),
@@ -32,6 +33,13 @@ export default function Connections() {
   useEffect(() => {
     void reload();
   }, []);
+  if (!body)
+    return (
+      <div className="space-y-4">
+        <h1 className="text-3xl font-bold">導入設定・接続状態</h1>
+        {error ? <ErrorMessage text={error} /> : <p role="status">権限を確認しています…</p>}
+      </div>
+    );
   async function save() {
     try {
       await platform('/admin/config', { method: 'PUT', body: JSON.stringify(JSON.parse(body)) });
@@ -177,9 +185,13 @@ export default function Connections() {
         <a className="ml-4 underline" href={`${apiOrigin}/api/v1/admin/orders.csv`}>
           注文CSV
         </a>
-        <pre className="overflow-auto border rounded p-3 mt-3">
-          {JSON.stringify(transactions, null, 2)}
-        </pre>
+        <TransactionTable data={transactions} />
+        <details>
+          <summary>取引の詳細データ</summary>
+          <pre className="overflow-auto border rounded p-3 mt-3">
+            {JSON.stringify(transactions, null, 2)}
+          </pre>
+        </details>
       </section>
     </div>
   );

@@ -1,0 +1,7 @@
+# 詳細
+
+findings.jsonの唯一の要検証記録は旧workerのキャッシュ。現行rootでは新規登録しておらず、別API originが既定なので実害の到達性は未確立。修正sw.jsはOpenMaaS名のキャッシュだけを削除し、登録解除する。既存cacheの即時削除は実配備への更新が必要。
+
+反証した主張：別利用者のplan/order/offer/reservation/Google calendar参照はowner条件で拒否。CSRFはOriginまたはstateで拒否。文字表示はReactのescape。ExpediaリンクはAPI host/pathの許可範囲に固定。署名付き通知は直接状態を採用せず再照会。Webhookのtimestamp欠如だけでは迂回を示さない。生カードの永続保存は見つからなかった。
+
+上流応答とpaginationの旧不足は修正済み。共有Worker停止などの被害を確認していないのでseverity付き確定脆弱性として報告しない。

@@ -18,6 +18,11 @@ import { inventory } from './inventory';
 import { googleCalendar } from './google-calendar';
 import { transactions, recoverReservations } from './transactions';
 const app = new Hono<AppEnv>();
+app.use('*', async (c, next) => {
+  c.header('X-Content-Type-Options', 'nosniff');
+  c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+  await next();
+});
 app.use('*', bodyLimit({ maxSize: 1000000 }));
 app.use('*', async (c, next) => {
   if (
@@ -65,13 +70,15 @@ app.onError((e, c) => {
 app.get('/health', (c) => c.json({ status: 'ok', service: 'openmaas-platform' }));
 app.use('/api/v1/*', async (c, next) => {
   if (
-    c.req.method === 'POST' &&
-    [
-      '/api/v1/journeys',
-      '/api/v1/accommodations/search',
-      '/api/v1/services/search',
-      '/api/v1/offers',
-    ].includes(c.req.path) &&
+    ((c.req.method === 'GET' &&
+      (c.req.path === '/api/v1/auth/login' || c.req.path.startsWith('/api/v1/activities/'))) ||
+      (c.req.method === 'POST' &&
+        [
+          '/api/v1/journeys',
+          '/api/v1/accommodations/search',
+          '/api/v1/services/search',
+          '/api/v1/offers',
+        ].includes(c.req.path))) &&
     c.env.SEARCH_LIMITER
   ) {
     const r = await c.env.SEARCH_LIMITER.limit({
@@ -318,6 +325,37 @@ app.post('/api/v1/accommodations/search', async (c) => {
     .run();
   return c.json(rows);
 });
+app.get('/api/v1/places', async (c) => {
+  const q = z.string().trim().min(2).max(100).parse(c.req.query('q')).toLocaleLowerCase();
+  const cfg = await config(c.env);
+  const stops = cfg.features.transit
+    ? [...(await records(c.env, 'gtfs:stops')), ...(await records(c.env, 'odpt:stops'))]
+    : [];
+  const places = [
+    ...stops.map((s) => ({ name: s.stop_name, lat: Number(s.stop_lat), lon: Number(s.stop_lon) })),
+    ...(await activities(c.env)).map((a) => a.place),
+  ];
+  const seen = new Set<string>();
+  return c.json(
+    places
+      .filter(
+        (p) =>
+          p.name &&
+          p.lat !== undefined &&
+          p.lon !== undefined &&
+          Number.isFinite(p.lat) &&
+          Number.isFinite(p.lon) &&
+          `${p.name} ${'address' in p ? p.address || '' : ''}`.toLocaleLowerCase().includes(q),
+      )
+      .filter((p) => {
+        const key = `${p.name}:${p.lat}:${p.lon}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, 20),
+  );
+});
 app.get('/api/v1/shared-mobility', async (c) =>
   c.json((await config(c.env)).features.transit ? await records(c.env, 'shared-mobility') : []),
 );
@@ -345,6 +383,8 @@ app.get('/api/v1/transit/departures', async (c) => {
     (s) => `${s.sourceId}:${s.stop_id}` === stop,
   );
   if (station) {
+    const stationNames = await records(c.env, 'odpt:stops');
+    const railways = await records(c.env, 'odpt:Railway');
     const calendar = c.req.query('calendar');
     if (!calendar)
       return c.json(
@@ -365,6 +405,23 @@ app.get('/api/v1/transit/departures', async (c) => {
             stop_id: station.stop_id,
             departure_time: d['odpt:departureTime'],
             trip_id: d['odpt:train'] || d['odpt:trainNumber'],
+            routeName:
+              railways.find(
+                (r) => r.sourceId === t.sourceId && r['owl:sameAs'] === t['odpt:railway'],
+              )?.['dc:title'] || '鉄道',
+            destinationName:
+              (Array.isArray(d['odpt:destinationStation'])
+                ? d['odpt:destinationStation']
+                : [d['odpt:destinationStation']]
+              )
+                .filter(Boolean)
+                .map(
+                  (id: string) =>
+                    stationNames.find((s) => s.sourceId === t.sourceId && s.stop_id === id)
+                      ?.stop_name,
+                )
+                .filter(Boolean)
+                .join('・') || undefined,
             direction: t['odpt:railDirection'],
             destination: d['odpt:destinationStation'],
             calendar,
@@ -393,7 +450,18 @@ app.get('/api/v1/transit/departures', async (c) => {
       );
     })
     .sort((a, b) => seconds(a.departure_time) - seconds(b.departure_time));
-  return c.json(rows);
+  const routes = await records(c.env, 'gtfs:routes');
+  return c.json(
+    rows.map((r) => {
+      const trip = trips.find((t) => t.sourceId === r.sourceId && t.trip_id === r.trip_id);
+      const route = routes.find((t) => t.sourceId === r.sourceId && t.route_id === trip?.route_id);
+      return {
+        ...r,
+        routeName: route?.route_short_name || route?.route_long_name,
+        destinationName: trip?.trip_headsign,
+      };
+    }),
+  );
 });
 app.post('/api/v1/journeys', async (c) => {
   const dto = JourneySchema.parse(await c.req.json());
@@ -623,7 +691,10 @@ app.get('/api/v1/admin/orders.csv', async (c) => {
   const rows = await c.env.DB.prepare(
     'SELECT id,product_id,amount,currency,status,created_at FROM orders ORDER BY created_at DESC',
   ).all<any>();
-  const cell = (v: unknown) => `"${String(v).replaceAll('"', '""')}"`;
+  const cell = (v: unknown) => {
+    const text = String(v);
+    return `"${(/^[=+@\-\t\r]/.test(text) ? "\'" + text : text).replaceAll('"', '""')}"`;
+  };
   return new Response(
     [
       'id,product_id,amount,currency,status,created_at',
@@ -647,6 +718,11 @@ export default {
   async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
     ctx.waitUntil(
       (async () => {
+        await env.DB.batch([
+          env.DB.prepare('DELETE FROM oidc_pending WHERE expires_at<?').bind(Date.now()),
+          env.DB.prepare('DELETE FROM sessions WHERE expires_at<?').bind(Date.now()),
+          env.DB.prepare('DELETE FROM oauth_states WHERE expires_at<?').bind(Date.now()),
+        ]);
         await syncAll(env);
         await recoverCommerce(env);
         await recoverReservations(env);

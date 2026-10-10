@@ -4,11 +4,33 @@ export async function platform<T>(path: string, init: RequestInit = {}): Promise
     ...init,
     credentials: 'include',
     headers: { 'Content-Type': 'application/json', ...init.headers },
+  }).catch(() => {
+    throw new Error('接続できませんでした。通信環境を確認して再度お試しください。');
   });
-  const body = await response.json();
+  const body = await response.json().catch(() => {
+    throw new Error('応答を読み取れませんでした。時間をおいて再度お試しください。');
+  });
   if (!response.ok)
     throw new Error(
-      response.status === 401 ? 'ログインしてください' : body.error || '接続できません',
+      response.status === 401
+        ? 'ログインしてください'
+        : response.status === 403
+          ? 'この操作の権限がありません。'
+          : response.status === 429
+            ? 'アクセスが集中しています。しばらく待ってから再度お試しください。'
+            : (
+                {
+                  'Activity not found': '活動が見つかりません。',
+                  'Plan not found': '予定が見つかりません。',
+                  'Reconcile before cancellation':
+                    '予約結果を再照会してから取消条件を確認してください。',
+                  'Confirm current cancellation terms':
+                    '取消条件が更新されました。もう一度確認してください。',
+                  'Journey provider is not configured':
+                    'この地域では経路検索をまだ利用できません。',
+                  'Search rate limit exceeded': 'しばらく待ってから検索してください。',
+                } as Record<string, string>
+              )[body.error] || '処理を完了できませんでした。時間をおいて再度お試しください。',
     );
   return body as T;
 }

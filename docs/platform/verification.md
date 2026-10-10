@@ -2,6 +2,12 @@
 
 実施日：2026-10-07。ローカルブランチ`codex/openmaas-composable-platform`。公開デプロイや本番購入は実施していません。
 
+## 2026-10-10 UI修正・監査後の再実行
+
+自動試験62件、API型検査、Web本番ビルド、API Worker dry-run成功。7実画面をローカルの試験session・データで確認。詳しい変更と確認範囲は [UI修正・セキュリティ監査結果](ui-security-remediation-2026-10-10.md) を参照。
+
+QRカメラ読取りを実装したが、実機読取りは未実施。セキュリティのソース監査は完了、指定スキルの完全なOS隔離による動的監査は未完了。
+
 ## 2026-10-09 再実行
 
 現在のコードで以下を再実行しました。
@@ -50,7 +56,7 @@ GTFS CLIは6レコードの試験ZIPで検証・SQL生成し、実Wranglerのロ
 - Square、Uber、Viator、Booking.com、Expediaの固有取引コードは実装済み。実アカウントの対象商品・権限・sandbox取引・取消は未検証。カード取扱資格・3DS追加認証など、この実装の対象外条件は[導入手順](deployment.md)に記載。
 - ODPTのStation・StationTimetable・TrainTimetable・TrainInformationを実装しfixture検証。実キーによる時刻表取得は未検証。
 - Google Calendar書込みは実装済み。実利用者OAuth・所有カレンダーへの書込みは未検証。自動更新・逆同期は未実装。
-- Masabiは正式仕様・接続環境の取得待ちで未実装。TicketmasterのPartner販売、カメラ読取、複数事業者の共同予約・一括取消は提供していない。外部リンク案内を成立予約に昇格させない。
+- Masabiは正式仕様・接続環境の取得待ちで未実装。TicketmasterのPartner販売、複数事業者の共同予約・一括取消は提供していない。外部リンク案内を成立予約に昇格させない。
 
 未確認の実取引を「成功」と報告しないため、実接続・fixture・外部遷移の範囲を上表で分離しています。取引試験は導入先のsandbox・販売資格・取消条件を得てから、提供元ごとに行います。
 

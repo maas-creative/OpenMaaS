@@ -1,3 +1,4 @@
+import { boundedBody } from './http';
 import { Hono } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
@@ -93,7 +94,7 @@ auth.get('/callback', async (c) => {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
   });
-  const tokens = (await r.json()) as { id_token: string };
+  const tokens = JSON.parse(new TextDecoder().decode(await boundedBody(r))) as { id_token: string };
   const { payload } = await jwtVerify(tokens.id_token, createRemoteJWKSet(new URL(d.jwks_uri)), {
     issuer: oidc.issuer,
     audience: oidc.clientId,

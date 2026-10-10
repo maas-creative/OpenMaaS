@@ -1,3 +1,4 @@
+import { policyText } from '../../../libs/common/src/platform-display';
 import { z } from 'zod';
 import { decryptTokens } from './tokens';
 import { type Source, type Env, safeLink } from './model';
@@ -175,7 +176,7 @@ export async function merchantQuote(s: Source, env: Env, query: unknown, custome
       {
         title: String(q.accommodationId),
         ...price(a.price?.total, a.currency?.booker || a.currency?.accommodation),
-        terms: JSON.stringify(a.products?.map((p: any) => p.policies) || a.general_policies || {}),
+        terms: policyText(a.products?.map((p: any) => p.policies) || a.general_policies || {}),
         paymentHandledBy: 'provider',
         expiresAt: new Date(Date.now() + 300000).toISOString(),
         providerData: {
@@ -232,7 +233,7 @@ export async function merchantQuote(s: Source, env: Env, query: unknown, custome
       {
         title: q.propertyId,
         ...price(total?.value, total?.currency),
-        terms: JSON.stringify(rate.cancel_penalties || []),
+        terms: policyText(rate.cancel_penalties || []),
         paymentHandledBy: 'provider',
         expiresAt: new Date(Date.now() + 300000).toISOString(),
         providerData: { bookLink: checked.links.book.href, customerIp },
@@ -260,7 +261,7 @@ export async function prepareViator(s: Source, env: Env, offer: any, id: string)
   return {
     ...offer,
     amount: held,
-    terms: JSON.stringify(item.cancellationPolicy || {}),
+    terms: policyText(item.cancellationPolicy || {}),
     expiresAt:
       expires && Date.parse(expires) < Date.now() + 300000
         ? expires

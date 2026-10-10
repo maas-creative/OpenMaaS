@@ -87,6 +87,7 @@ export const ProductSchema = z
     validHours: z.number().int().min(1).max(720),
     enabled: z.boolean(),
     terms: z.string().min(1),
+    reference: z.boolean().default(true),
     seller: z.string().min(1),
     contact: z.string().min(1),
   })

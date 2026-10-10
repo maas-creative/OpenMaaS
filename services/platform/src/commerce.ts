@@ -1,3 +1,4 @@
+import { boundedBody } from './http';
 import { Hono } from 'hono';
 import { z } from 'zod';
 import { identity, hash, type AppEnv } from './auth';
@@ -54,7 +55,7 @@ export async function stripe(env: Env, path: string, body?: URLSearchParams, key
     headers,
     body,
   });
-  return r.json() as Promise<any>;
+  return JSON.parse(new TextDecoder().decode(await boundedBody(r)));
 }
 export const commerce = new Hono<AppEnv>();
 commerce.get('/products', async (c) => {
@@ -143,7 +144,7 @@ commerce.get('/tickets', identity, async (c) => {
         id: r.id,
         orderId: r.id,
         title: JSON.parse(r.product).title,
-        reference: true,
+        reference: JSON.parse(r.product).reference !== false,
         status:
           r.status === 'paid'
             ? Date.parse(r.expires_at) > Date.now()
@@ -194,7 +195,10 @@ commerce.get('/orders/:id', async (c) => {
     checkoutUrl: row.checkout_url,
     ticket:
       updated.status === 'paid' && Date.parse(row.expires_at) > Date.now()
-        ? { token: await ticketToken(c.env, row.id), reference: true }
+        ? {
+            token: await ticketToken(c.env, row.id),
+            reference: JSON.parse(row.product).reference !== false,
+          }
         : null,
   });
 });
@@ -228,14 +232,20 @@ commerce.post('/tickets/validate', identity, async (c) => {
     .strict()
     .parse(await c.req.json());
   const row = await c.env.DB.prepare(
-    "UPDATE orders SET status='used',updated_at=? WHERE ticket_token=? AND status='paid' AND expires_at>? RETURNING id",
+    "UPDATE orders SET status='used',updated_at=? WHERE ticket_token=? AND status='paid' AND expires_at>? RETURNING id,product,expires_at",
   )
     .bind(now(), await hash(dto.token), now())
-    .first<{ id: string }>();
+    .first<{ id: string; product: string; expires_at: string }>();
   if (!row)
     return c.json({ valid: false, message: '券が無効、使用済み、または取消処理中です' }, 409);
   await audit(c.env, owner, 'ticket_used', row.id);
-  return c.json({ valid: true, id: row.id });
+  return c.json({
+    valid: true,
+    id: row.id,
+    title: JSON.parse(row.product).title,
+    expiresAt: row.expires_at,
+    reference: JSON.parse(row.product).reference !== false,
+  });
 });
 commerce.post('/webhooks/stripe', async (c) => {
   const body = await c.req.text();

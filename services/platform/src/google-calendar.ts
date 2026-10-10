@@ -121,8 +121,13 @@ googleCalendar.get('/integrations/google/callback', async (c) => {
 googleCalendar.get('/integrations/:id/google/calendars', async (c) => {
   const access = await token(c.env, c.req.param('id'), c.get('owner'));
   let next: string | undefined;
+  const seenPages = new Set<string>();
+  let pageCount = 0;
   const rows: any[] = [];
   do {
+    if (++pageCount > 50 || (next && seenPages.has(next)))
+      throw new Error('Provider pagination exceeds limit');
+    if (next) seenPages.add(next);
     const u = new URL('https://www.googleapis.com/calendar/v3/users/me/calendarList');
     u.searchParams.set('minAccessRole', 'owner');
     if (next) u.searchParams.set('pageToken', next);
