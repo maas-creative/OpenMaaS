@@ -63,9 +63,9 @@ export default function Explore() {
         }).format(new Date(a.start)) === date),
   );
   return (
-    <div className="space-y-6">
+    <div className="maas-workspace space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">次の目的地を見つける</h1>
+        <h1 className="text-3xl font-bold">イベント・施設を探す</h1>
         <p className="mt-2 text-slate-600">活動を選び、行き方と帰り方を確かめる。</p>
       </div>
       <ErrorMessage text={error} />
@@ -132,6 +132,7 @@ export default function Explore() {
               required
               type="date"
               value={checkout}
+              min={checkin || undefined}
               onChange={(e) => setCheckout(e.target.value)}
               className="block border rounded p-2"
             />
@@ -154,7 +155,7 @@ export default function Explore() {
         </form>
       )}
 
-      <form onSubmit={(e) => e.preventDefault()} className="grid gap-3 sm:grid-cols-4">
+      <form onSubmit={(e) => e.preventDefault()} className="maas-filters grid gap-3 sm:grid-cols-4">
         <label>
           地域
           <select
@@ -208,6 +209,51 @@ export default function Explore() {
           </select>
         </label>
       </form>
+      <div className="flex flex-wrap items-center gap-2" aria-live="polite">
+        <span className="text-sm text-slate-600">{rows ? `${list.length}件` : '読み込み中'}</span>
+        {[
+          { value: region, clear: () => setRegion(''), label: '地域' },
+          { value: q, clear: () => setQ(''), label: 'キーワード' },
+          { value: date, clear: () => setDate(''), label: '日付' },
+          { value: category, clear: () => setCategory(''), label: 'カテゴリ' },
+        ]
+          .filter((c) => c.value)
+          .map((c) => (
+            <button
+              key={c.label}
+              type="button"
+              className="maas-chip"
+              onClick={c.clear}
+              aria-label={`${c.label}の条件を解除`}
+            >
+              {c.label === 'カテゴリ'
+                ? {
+                    event: 'イベント',
+                    experience: '体験',
+                    facility: '施設',
+                    accommodation: '宿泊',
+                    parking: '駐車場',
+                    ride: '配車',
+                  }[c.value] || c.value
+                : c.value}{' '}
+              <span aria-hidden="true">×</span>
+            </button>
+          ))}
+        {(q || region || date || category) && (
+          <button
+            type="button"
+            onClick={() => {
+              setQ('');
+              setRegion('');
+              setDate('');
+              setCategory('');
+            }}
+            className="text-sm underline"
+          >
+            条件をリセット
+          </button>
+        )}
+      </div>
       {!rows && !error ? (
         <Loading />
       ) : !list.length ? (
@@ -217,7 +263,7 @@ export default function Explore() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {list.map((a) => (
-            <article key={a.id} className="rounded-xl border p-5">
+            <article key={a.id} className="maas-activity rounded-xl border p-5">
               <p className="text-sm text-slate-500">
                 {a.region} · {sources.find((s) => s.id === a.sourceId)?.label || a.sourceId}
               </p>
@@ -229,6 +275,9 @@ export default function Explore() {
               </p>
               {a.start && <p>{new Date(a.start).toLocaleString('ja-JP')}</p>}
               <p className="mt-2 text-sm">{a.description}</p>
+              <Link className="maas-next" href={`/activities/${encodeURIComponent(a.id)}`}>
+                詳細・行き方を確認 <span aria-hidden="true">→</span>
+              </Link>
               <p>
                 {a.price
                   ? `${a.price.currency} ${a.price.amount}（参考）`

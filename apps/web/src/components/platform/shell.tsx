@@ -79,5 +79,11 @@ export function ErrorMessage({ text }: { text: string }) {
   ) : null;
 }
 export function Loading() {
-  return <p role="status">読み込み中…</p>;
+  return (
+    <div role="status" className="maas-loading">
+      <span>読み込み中…</span>
+      <div aria-hidden="true" />
+      <div aria-hidden="true" />
+    </div>
+  );
 }

@@ -105,7 +105,10 @@ export default function Detail({ id }: { id: string }) {
     }
   }
   return (
-    <div className="space-y-5">
+    <div className="maas-workspace space-y-5">
+      <a className="maas-back" href="/explore">
+        ← イベント・施設の一覧
+      </a>
       <ErrorMessage text={error} />
       {!a ? (
         !error && <Loading />

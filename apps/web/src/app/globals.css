@@ -221,3 +221,112 @@
     background-position: 200% 0;
   }
 }
+
+/* Shared product surfaces: clear hierarchy and feedback without an extra UI library. */
+.maas-workspace {
+  color: #172b3b;
+}
+.maas-workspace h1 {
+  letter-spacing: -0.035em;
+}
+.maas-workspace article,
+.maas-workspace section.rounded-xl,
+.maas-filters {
+  background: #fff;
+  border-color: #dbe3e9;
+  box-shadow: 0 4px 18px rgb(23 43 59 / 4%);
+  border-radius: 18px;
+}
+.maas-filters {
+  padding: 20px;
+  border: 1px solid #dbe3e9;
+}
+.maas-workspace label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.maas-workspace input,
+.maas-workspace select {
+  min-height: 44px;
+  margin-top: 6px;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  border-radius: 10px;
+  max-width: 100%;
+}
+.maas-workspace button {
+  min-height: 44px;
+}
+.maas-workspace :is(button, a, input, select):focus-visible {
+  outline: 3px solid #1682bc;
+  outline-offset: 3px;
+}
+.maas-chip,
+.maas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: #eaf3f9;
+  color: #135e86;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+}
+.maas-next {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+  color: #0b6cae;
+  font-weight: 600;
+  min-height: 44px;
+}
+.maas-back {
+  display: inline-block;
+  color: #0b6cae;
+  padding-block: 10px;
+}
+.maas-activity {
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s;
+}
+.maas-activity:hover {
+  border-color: #80abc6;
+  box-shadow: 0 8px 24px rgb(23 43 59 / 8%);
+}
+.maas-plan-item {
+  border-left: 3px solid #bfd7e5;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 0 12px 12px 0;
+}
+.maas-loading {
+  padding: 20px;
+  color: #64748b;
+}
+.maas-loading > div {
+  height: 18px;
+  margin-top: 16px;
+  border-radius: 8px;
+  background: #e2e8f0;
+  animation: maas-pulse 1.5s ease-in-out infinite;
+}
+.maas-loading > div:last-child {
+  width: 65%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .maas-activity {
+    transition: none;
+  }
+  .maas-loading > div {
+    animation: none;
+  }
+}
+
+@keyframes maas-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}

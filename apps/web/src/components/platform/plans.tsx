@@ -31,7 +31,7 @@ export default function Plans() {
     void reload();
   }, []);
   return (
-    <div className="space-y-5">
+    <div className="maas-workspace space-y-5">
       <h1 className="text-3xl font-bold">自分の予定</h1>
       <ErrorMessage text={error} />
       <Reservations />
@@ -42,9 +42,10 @@ export default function Plans() {
           <h2 className="text-xl font-semibold">{p.title}</h2>
           <CalendarConnect planId={p.id} />
           {p.items.map((i: any, n: number) => (
-            <div key={n}>
+            <div key={n} className="maas-plan-item">
               <p>
-                {i.title} · {labels[i.status] || i.status}
+                <span className="font-medium">{i.title}</span>{' '}
+                <span className="maas-badge">{labels[i.status] || i.status}</span>
               </p>
               <p>
                 {i.current?.start || i.start
@@ -75,6 +76,12 @@ export default function Plans() {
             </a>
             <button
               onClick={async () => {
+                if (
+                  !window.confirm(
+                    `「${p.title}」を予定から削除しますか？予約や購入は取り消されません。`,
+                  )
+                )
+                  return;
                 try {
                   await platform(`/plans/${p.id}`, { method: 'DELETE' });
                   await reload();
