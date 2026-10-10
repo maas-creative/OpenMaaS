@@ -1,0 +1,134 @@
+[
+  {
+    "route": "/activities/demo%3Aevent",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/activities/[id]/page.tsx"
+  },
+  {
+    "route": "/admin",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/page.tsx"
+  },
+  {
+    "route": "/admin/provider",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/provider/page.tsx"
+  },
+  {
+    "route": "/admin/settings",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/settings/page.tsx"
+  },
+  {
+    "route": "/admin/transit",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/transit/page.tsx"
+  },
+  {
+    "route": "/admin/transporter",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/transporter/page.tsx"
+  },
+  {
+    "route": "/admin/users",
+    "status": 307,
+    "location": "/connections",
+    "source": "apps/web/src/app/admin/users/page.tsx"
+  },
+  {
+    "route": "/bookings",
+    "status": 307,
+    "location": "/my-plans",
+    "source": "apps/web/src/app/bookings/page.tsx"
+  },
+  {
+    "route": "/catalog",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/catalog/page.tsx"
+  },
+  {
+    "route": "/connections",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/connections/page.tsx"
+  },
+  {
+    "route": "/dashboard",
+    "status": 307,
+    "location": "/explore",
+    "source": "apps/web/src/app/dashboard/page.tsx"
+  },
+  {
+    "route": "/explore",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/explore/page.tsx"
+  },
+  {
+    "route": "/journey",
+    "status": 307,
+    "location": "/explore",
+    "source": "apps/web/src/app/journey/page.tsx"
+  },
+  {
+    "route": "/my-plans",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/my-plans/page.tsx"
+  },
+  {
+    "route": "/",
+    "status": 307,
+    "location": "/explore",
+    "source": "apps/web/src/app/page.tsx"
+  },
+  {
+    "route": "/payments",
+    "status": 307,
+    "location": "/my-plans",
+    "source": "apps/web/src/app/payments/page.tsx"
+  },
+  {
+    "route": "/profile",
+    "status": 307,
+    "location": "/my-plans",
+    "source": "apps/web/src/app/profile/page.tsx"
+  },
+  {
+    "route": "/routes",
+    "status": 307,
+    "location": "/explore",
+    "source": "apps/web/src/app/routes/page.tsx"
+  },
+  {
+    "route": "/services",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/services/page.tsx"
+  },
+  {
+    "route": "/tickets",
+    "status": 307,
+    "location": "/catalog",
+    "source": "apps/web/src/app/tickets/page.tsx"
+  },
+  {
+    "route": "/tickets/purchase",
+    "status": 307,
+    "location": "/catalog",
+    "source": "apps/web/src/app/tickets/purchase/page.tsx"
+  },
+  {
+    "route": "/validate",
+    "status": 200,
+    "location": null,
+    "source": "apps/web/src/app/validate/page.tsx"
+  }
+]

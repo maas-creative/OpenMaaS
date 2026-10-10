@@ -87,3 +87,7 @@ OPENMAAS_API_ORIGIN=http://localhost:8787 OPENMAAS_BOOTSTRAP_TOKEN=YOUR_LOCAL_TO
 新しい情報接続は`connectors.ts`へ正規化と能力を追加し、SourceSchema、台帳、fixturesを更新します。画面はActivity/Actionを読むため追加サービスごとの別画面は不要です。予約接続は`contracts.ts`と`test/reservation-contract.ts`のsandbox契約試験を参照し、保留・確定・応答不明、見積の有効期限、事業者決済／導入先決済を区別します。検索しか許されない契約で予約メソッドを有効にしないこと。受付時刻は開始時刻と別の`receptionStart`で保持します。予約をせず保存した予定のICSはTENTATIVEとし、宿泊の検索日付は時刻を推測せず終日予定で出力します。
 
 `npm test`、`npm run build`、`npm run lint`が標準検証です。[試験結果](verification.md)にはfixtureと公開実取得を分けて記録します。
+
+## 画面監査
+
+[全ページの表示監査（2026-10-10）](ui-audit-2026-10-10.md)に、22ルートの確認結果と、交通・経路・予約条件・予定・管理画面の修正優先度をまとめています。
