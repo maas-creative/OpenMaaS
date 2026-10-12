@@ -1,8 +1,10 @@
 'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { apiOrigin, platform, type Session, type PublicConfig } from '@/lib/platform';
 export function PlatformHeader() {
+  const pathname = usePathname();
   const [cfg, setCfg] = useState<PublicConfig>();
   const [session, setSession] = useState<Session>();
   useEffect(() => {
@@ -21,10 +23,18 @@ export function PlatformHeader() {
   }, []);
   const navigation = (
     <>
-      <Link href="/explore">出かける</Link>
-      <Link href="/journey">行き方を調べる</Link>
-      <Link href="/services">サービス申込み</Link>
-      <Link href="/my-plans">自分の予定</Link>
+      <Link href="/explore" aria-current={pathname === '/explore' ? 'page' : undefined}>
+        出かける
+      </Link>
+      <Link href="/journey" aria-current={pathname === '/journey' ? 'page' : undefined}>
+        行き方を調べる
+      </Link>
+      <Link href="/services" aria-current={pathname === '/services' ? 'page' : undefined}>
+        サービス申込み
+      </Link>
+      <Link href="/my-plans" aria-current={pathname === '/my-plans' ? 'page' : undefined}>
+        自分の予定
+      </Link>
       <a
         href={
           process.env.NEXT_PUBLIC_OPENMAAS_SOURCE_URL || 'https://github.com/maas-creative/OpenMaaS'
@@ -53,7 +63,7 @@ export function PlatformHeader() {
         <Link href="/explore" className="text-xl font-bold">
           {cfg?.name || 'OpenMaaS'}
         </Link>
-        <div className="hidden sm:flex flex-wrap items-center gap-5">{navigation}</div>
+        <div className="hidden xl:flex flex-wrap items-center gap-5">{navigation}</div>
         <span className="ml-auto text-sm">
           {session?.authenticated ? (
             session.name
@@ -61,7 +71,7 @@ export function PlatformHeader() {
             <a href={`${apiOrigin}/api/v1/auth/login`}>ログイン</a>
           )}
         </span>
-        <details className="relative sm:hidden">
+        <details className="relative xl:hidden">
           <summary className="cursor-pointer rounded border px-3 py-2 text-sm">メニュー</summary>
           <div className="absolute right-0 top-full z-20 mt-2 flex w-48 flex-col gap-4 rounded border bg-background p-4 shadow-lg">
             {navigation}

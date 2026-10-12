@@ -330,3 +330,18 @@
     opacity: 0.45;
   }
 }
+
+/* Route search follows the shared product palette and native controls. */
+.maas-route-form { background: #fff; border-color: #dbe3e9; }
+.maas-workspace .maas-primary { background: #135e86; color: #fff; font-weight: 600; }
+.maas-workspace .maas-primary:hover:not(:disabled) { background: #0e4868; }
+.maas-workspace button:disabled { opacity: .5; cursor: not-allowed; }
+.maas-search-options { border-top: 1px solid #dbe3e9; padding-top: 12px; }
+.maas-search-options summary { cursor: pointer; padding: 10px 0; font-weight: 600; }
+.maas-search-options summary:focus-visible { outline: 3px solid #1682bc; outline-offset: 3px; }
+.maas-route-steps { margin: 24px 0 0 12px; padding-top: 8px; }
+.maas-route-steps > li { border-color: #cbd5e1; }
+.maas-route-steps > li:last-child { padding-bottom: 0; }
+.maas-step-number { position: absolute; left: -13px; top: 0; width: 24px; height: 24px; display: grid; place-items: center; background: #135e86; color: white; border-radius: 50%; font-size: 12px; font-weight: 600; }
+
+nav [aria-current="page"] { color: #135e86; font-weight: 700; text-decoration: underline; text-underline-offset: 6px; }

@@ -4,7 +4,7 @@ import { policyText, statusText } from '@openmaas/common/platform-display';
 import PlacePicker from './place-picker';
 import Script from 'next/script';
 import { platform } from '@/lib/platform';
-import { ErrorMessage } from './shell';
+import { ErrorMessage, Loading } from './shell';
 interface Connection {
   id: string;
   label: string;
@@ -65,6 +65,7 @@ const names: Record<string, string> = {
 };
 export default function Services() {
   const [connections, setConnections] = useState<Connection[]>([]),
+    [loaded, setLoaded] = useState(false),
     [selected, setSelected] = useState(''),
     [fields, setFields] = useState<Record<string, string>>({ adults: '1' }),
     [activities, setActivities] = useState<any[]>([]),
@@ -84,6 +85,7 @@ export default function Services() {
   useEffect(() => {
     Promise.all([platform<Connection[]>('/service-connections'), platform<any[]>('/activities')])
       .then(([c, a]) => {
+        setLoaded(true);
         setConnections(c.filter((c) => c.kind !== 'google-calendar'));
         setActivities(a);
         const param = new URLSearchParams(window.location.search).get('source');
@@ -291,9 +293,18 @@ export default function Services() {
     </label>
   );
   return (
-    <div className="space-y-5">
+    <div className="maas-workspace space-y-5">
       <h1 className="text-3xl font-bold">サービスを申し込む</h1>
       <ErrorMessage text={error} />
+      {!loaded && !error && <Loading />}
+      {loaded && !connections.length && (
+        <p role="status">
+          現在、申し込めるサービスはありません。
+          <a className="ml-2 underline" href="/explore">
+            イベント・施設を探す
+          </a>
+        </p>
+      )}
       {message && (
         <p role="status">
           {message}{' '}
@@ -302,27 +313,29 @@ export default function Services() {
           </a>
         </p>
       )}
-      <label>
-        サービス
-        <select
-          className="block border rounded p-2"
-          value={selected}
-          onChange={(e) => {
-            setSelected(e.target.value);
-            setInventory([]);
-            setOffers([]);
-            setOffer(undefined);
-            setPrepared(undefined);
-          }}
-        >
-          <option value="">選択してください</option>
-          {connections.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      {connections.length > 0 && (
+        <label>
+          サービス
+          <select
+            className="block border rounded p-2"
+            value={selected}
+            onChange={(e) => {
+              setSelected(e.target.value);
+              setInventory([]);
+              setOffers([]);
+              setOffer(undefined);
+              setPrepared(undefined);
+            }}
+          >
+            <option value="">選択してください</option>
+            {connections.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       {connection && (
         <>
           <p>情報照会は予約ではありません。価格・条件を確認してから申し込みます。</p>

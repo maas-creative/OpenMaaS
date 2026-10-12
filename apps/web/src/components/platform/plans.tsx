@@ -38,6 +38,14 @@ export default function Plans() {
     <div className="maas-workspace space-y-5">
       <h1 className="text-3xl font-bold">自分の予定</h1>
       <ErrorMessage text={error} />
+      {error === 'ログインしてください' && (
+        <a
+          className="inline-block maas-primary rounded px-5 py-3"
+          href={`${apiOrigin}/api/v1/auth/login`}
+        >
+          ログインして予定を開く
+        </a>
+      )}
       {!error && plans && <Reservations />}
       {!plans && !error && <Loading />}
       {plans?.length === 0 && <p>保存した予定はありません。</p>}

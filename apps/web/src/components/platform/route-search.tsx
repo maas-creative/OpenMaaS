@@ -62,7 +62,7 @@ export default function RouteSearch() {
     <div className="maas-workspace space-y-6">
       <h1 className="text-3xl font-bold">行き方を調べる</h1>
       <form
-        className="rounded-xl border p-5 space-y-4"
+        className="maas-route-form rounded-xl border p-5 space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           void search();
@@ -82,30 +82,33 @@ export default function RouteSearch() {
             onClear={() => setDestination(undefined)}
           />
         </div>
-        <button
-          type="button"
-          className="underline"
-          disabled={!origin || !destination || busy}
-          onClick={() => {
-            setOrigin(destination);
-            setDestination(origin);
-          }}
-        >
-          出発地と目的地を入れ替える
-        </button>
-        <button
-          type="button"
-          className="underline"
-          onClick={() => {
-            navigator.geolocation.getCurrentPosition(
-              (p) => setOrigin({ name: '現在地', lat: p.coords.latitude, lon: p.coords.longitude }),
-              () => setError('現在地を取得できません。地点名から選んでください。'),
-              { timeout: 10000 },
-            );
-          }}
-        >
-          現在地から出発する
-        </button>
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <button
+            type="button"
+            className="underline"
+            disabled={!origin || !destination || busy}
+            onClick={() => {
+              setOrigin(destination);
+              setDestination(origin);
+            }}
+          >
+            出発地と目的地を入れ替える
+          </button>
+          <button
+            type="button"
+            className="underline"
+            onClick={() => {
+              navigator.geolocation.getCurrentPosition(
+                (p) =>
+                  setOrigin({ name: '現在地', lat: p.coords.latitude, lon: p.coords.longitude }),
+                () => setError('現在地を取得できません。地点名から選んでください。'),
+                { timeout: 10000 },
+              );
+            }}
+          >
+            現在地から出発する
+          </button>
+        </div>
         {origin?.name === '現在地' && <p>出発地：現在地</p>}
         <div className="grid sm:grid-cols-2 gap-4">
           <label>
@@ -123,53 +126,64 @@ export default function RouteSearch() {
             <select className={field} value={type} onChange={(e) => setType(e.target.value)}>
               <option value="departure">この時刻に出発</option>
               <option value="arrival">この時刻までに到着</option>
-              <option value="first">この日の始発</option>
+              <option value="first">この日の最初の便（0時以降）</option>
               <option value="last">この日の終電・最終便</option>
             </select>
           </label>
-          <label>
-            優先すること
-            <select
-              className={field}
-              value={strategy}
-              onChange={(e) => setStrategy(e.target.value)}
-            >
-              <option value="balanced">バランス</option>
-              <option value="fastest">所要時間が短い</option>
-              <option value="fewestTransfers">乗り換えが少ない</option>
-              <option value="lowestFare">運賃が安い</option>
-              <option value="shortestWalk">歩く時間が短い</option>
-            </select>
-          </label>
-          <label>
-            乗り換えの上限
-            <select
-              className={field}
-              value={transfers}
-              onChange={(e) => setTransfers(Number(e.target.value))}
-            >
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                <option key={n} value={n}>
-                  {n}回
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
-        <p className="text-sm">
+        <details className="maas-search-options">
+          <summary>検索条件を調整</summary>
+          <div className="grid sm:grid-cols-2 gap-4 pt-3">
+            <label>
+              優先すること
+              <select
+                className={field}
+                value={strategy}
+                onChange={(e) => setStrategy(e.target.value)}
+              >
+                <option value="balanced">バランス</option>
+                <option value="fastest">所要時間が短い</option>
+                <option value="fewestTransfers">乗り換えが少ない</option>
+                <option value="lowestFare">運賃が安い</option>
+                <option value="shortestWalk">歩く時間が短い</option>
+              </select>
+            </label>
+            <label>
+              乗り換えの上限
+              <select
+                className={field}
+                value={transfers}
+                onChange={(e) => setTransfers(Number(e.target.value))}
+              >
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                  <option key={n} value={n}>
+                    {n}回
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </details>
+        <p className="text-sm text-slate-600">
           地点名と選んだ場所・日時を、行き方を調べるサービス（Transit API）へ送信します。
         </p>
-        <button className="rounded border px-5 py-3" disabled={!origin || !destination || busy}>
+        <button
+          className="maas-primary w-full sm:w-auto rounded px-5 py-3"
+          disabled={!origin || !destination || busy}
+        >
           {busy ? '検索中…' : '経路を検索'}
         </button>
       </form>
+      {busy && <p role="status">経路を検索しています…</p>}
       <ErrorMessage text={error} />
       {result && (
         <section className="space-y-4" aria-label="検索結果">
           <h2 className="text-2xl font-semibold">
             {result.search?.origin.name}から{result.search?.destination.name}
           </h2>
-          <p>取得：{new Date(result.fetchedAt || '').toLocaleString('ja-JP')}</p>
+          <p className="text-sm text-slate-600">
+            取得：{new Date(result.fetchedAt || '').toLocaleString('ja-JP')}
+          </p>
           {result.coverage?.notices.map((n, i) => (
             <p key={i} className={n.severity === 'warning' ? 'rounded bg-amber-50 p-3' : ''}>
               {n.message}
@@ -185,7 +199,7 @@ export default function RouteSearch() {
               <button
                 key={r.id || i}
                 aria-pressed={selected === i}
-                className={`rounded-xl border p-4 text-left ${selected === i ? 'border-sky-700 bg-sky-50' : ''}`}
+                className={`rounded-xl border p-4 text-left ${selected === i ? 'border-sky-700 bg-sky-50 ring-1 ring-sky-700' : 'bg-white hover:bg-slate-50'}`}
                 onClick={() => {
                   setSelected(i);
                   setMessage('');
@@ -193,9 +207,10 @@ export default function RouteSearch() {
               >
                 <p className="font-semibold">
                   候補 {i + 1}
+                  {selected === i ? ' ・選択中' : ''}
                   {r.recommended ? ' ・おすすめ' : ''}
                 </p>
-                <p>
+                <p className="my-2 text-lg font-semibold tabular-nums">
                   {new Date(r.start).toLocaleString('ja-JP', {
                     timeZone: 'Asia/Tokyo',
                     month: 'numeric',
@@ -226,7 +241,7 @@ export default function RouteSearch() {
             <>
               <JourneyView route={result.itineraries[selected]} />
               <button
-                className="rounded border px-4 py-3"
+                className="maas-primary rounded px-4 py-3"
                 disabled={saving || !!message}
                 onClick={async () => {
                   setSaving(true);
@@ -257,7 +272,7 @@ export default function RouteSearch() {
                   }
                 }}
               >
-                この経路を予定に保存（ログインが必要）
+                {saving ? '保存中…' : message ? '保存済み' : 'この経路を予定に保存'}
               </button>
             </>
           )}

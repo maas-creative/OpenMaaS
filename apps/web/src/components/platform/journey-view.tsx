@@ -30,9 +30,20 @@ const modes: Record<string, string> = {
 const time = (v: unknown, timeZone?: string) => {
   if (!v || !Number.isFinite(new Date(v as string).getTime())) return '時刻情報なし';
   try {
-    return new Date(v as string).toLocaleString('ja-JP', { timeZone });
+    return new Date(v as string).toLocaleString('ja-JP', {
+      timeZone,
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   } catch {
-    return new Date(v as string).toLocaleString('ja-JP');
+    return new Date(v as string).toLocaleString('ja-JP', {
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   }
 };
 export default function JourneyView({ route }: { route: any }) {
@@ -40,8 +51,9 @@ export default function JourneyView({ route }: { route: any }) {
   if (!route) return null;
   const showTime = (value: unknown) => time(value, route.timezone);
   return (
-    <div className="space-y-2">
-      <p>
+    <div className="maas-journey rounded-xl border bg-white p-5 space-y-3">
+      <h3 className="text-lg font-semibold">経路の詳細</h3>
+      <p className="text-sm text-slate-600">
         {showTime(route.start)} → {showTime(route.end)}
       </p>
       {Number.isFinite(route.duration) && <p>所要時間 {Math.ceil(route.duration / 60)}分</p>}
@@ -75,9 +87,12 @@ export default function JourneyView({ route }: { route: any }) {
           )}
         </p>
       )}
-      <ol className="space-y-3">
+      <ol className="maas-route-steps">
         {route.legs?.map((l: any, i: number) => (
-          <li className="border-l-2 pl-3" key={i}>
+          <li className="relative border-l-2 pl-5 pb-5" key={i}>
+            <span className="maas-step-number" aria-hidden="true">
+              {i + 1}
+            </span>
             <p className="font-medium">
               {modes[l.mode] || '移動'} {l.routeShortName || ''}
             </p>
@@ -95,7 +110,7 @@ export default function JourneyView({ route }: { route: any }) {
             <p className="text-sm">
               {showTime(l.startTime || l.start)} → {showTime(l.endTime || l.end)}
             </p>
-            {route.timezone && l.mode !== 'WALK' && l.from?.id && (
+            {route.timezone && l.mode !== 'WALK' && l.mode !== 'walk' && l.from?.id && (
               <StationDepartures
                 key={`${l.from.id}:${l.startTime}`}
                 id={l.from.id}
