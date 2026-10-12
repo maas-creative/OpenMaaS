@@ -22,6 +22,7 @@ export function PlatformHeader() {
   const navigation = (
     <>
       <Link href="/explore">出かける</Link>
+      <Link href="/journey">行き方を調べる</Link>
       <Link href="/services">サービス申込み</Link>
       <Link href="/my-plans">自分の予定</Link>
       <a

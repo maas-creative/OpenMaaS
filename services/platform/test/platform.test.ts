@@ -2033,3 +2033,90 @@ describe('Configuration changes with active reservations', () => {
     await env.DB.prepare('UPDATE settings SET body=? WHERE id=1').bind(JSON.stringify(cfg)).run();
   });
 });
+
+describe('Standalone transit routes and saved route snapshots', () => {
+  it('searches without an activity, saves an unreserved route, and isolates updates by owner', async () => {
+    const input = {
+      origin: { name: 'A', lat: 35, lon: 139 },
+      destination: { name: 'B', lat: 36, lon: 140 },
+      dateTime: '2026-10-12T00:00:00Z',
+    };
+    await env.DB.prepare('UPDATE settings SET body=? WHERE id=1')
+      .bind(JSON.stringify({ ...cfg, journey: { provider: 'transit-api' } }))
+      .run();
+    vi.stubGlobal('fetch', async () =>
+      jsonResponse({
+        date: '20261012',
+        timezone: 'Asia/Tokyo',
+        osm: {},
+        coverage: { feeds: [], notices: [] },
+        options: [
+          {
+            id: 'r1',
+            recommended: true,
+            metrics: { walkSecs: 0, waitSecs: 0 },
+            journey: {
+              departureSecs: 32400,
+              arrivalSecs: 33000,
+              durationSecs: 600,
+              transferCount: 0,
+              legs: [
+                {
+                  kind: 'transit',
+                  mode: 'rail',
+                  routeName: 'Line',
+                  from: { name: 'A' },
+                  to: { name: 'B' },
+                  departureSecs: 32400,
+                  arrivalSecs: 33000,
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    );
+    try {
+      const response = await req('/api/v1/routes/search', 'POST', input, 'none');
+      expect(response.status).toBe(200);
+      const result = await response.json();
+      expect(result.itineraries).toHaveLength(1);
+      const route = result.itineraries[0];
+      const body = {
+        title: 'A to B',
+        items: [
+          {
+            type: 'outbound',
+            title: 'A to B',
+            status: 'saved',
+            start: route.start,
+            end: route.end,
+            data: { ...result, selected: 0 },
+          },
+        ],
+      };
+      const saved = await req('/api/v1/plans', 'POST', body);
+      expect(saved.status).toBe(201);
+      const plan = await saved.json();
+      expect((await req(`/api/v1/plans/${plan.id}`, 'PUT', body, 'other')).status).toBe(404);
+      expect((await req(`/api/v1/plans/${plan.id}`, 'PUT', body, 'user')).status).toBe(200);
+      const rows = await (await req('/api/v1/plans')).json();
+      expect(rows.find((p: any) => p.id === plan.id).items[0]).toMatchObject({
+        status: 'saved',
+        data: { search: { origin: input.origin } },
+      });
+      expect((await req('/api/v1/plans', 'POST', body, 'none')).status).toBe(401);
+    } finally {
+      await env.DB.prepare('UPDATE settings SET body=? WHERE id=1').bind(JSON.stringify(cfg)).run();
+    }
+  });
+  it('rate limits remote place and route queries before upstream work', async () => {
+    env.SEARCH_LIMITER = { limit: async () => ({ success: false }) };
+    try {
+      expect((await req('/api/v1/routes/search', 'POST', {})).status).toBe(429);
+      expect((await req('/api/v1/places?q=Tokyo')).status).toBe(429);
+    } finally {
+      delete env.SEARCH_LIMITER;
+    }
+  });
+});

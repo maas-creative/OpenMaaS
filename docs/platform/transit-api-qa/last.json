@@ -1,0 +1,15 @@
+{
+  "type": "last",
+  "status": 200,
+  "seconds": 0.63,
+  "candidates": 1,
+  "first": {
+    "start": "2026-10-12T15:44:59.000Z",
+    "end": "2026-10-12T20:05:09.000Z",
+    "duration": 15610,
+    "transfers": 1,
+    "walkSeconds": 190,
+    "fare": null
+  },
+  "source": "Real OpenMaaS API -> real Transit API; public station coordinates"
+}

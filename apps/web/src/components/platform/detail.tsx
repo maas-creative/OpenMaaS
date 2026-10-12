@@ -251,6 +251,9 @@ export default function Detail({ id }: { id: string }) {
               </div>
               {Object.values(results).map((result: any) => (
                 <div key={result.arriveBy ? 'outbound' : 'return'}>
+                  {result.coverage?.notices.map((n: { message: string; code: string }) => (
+                    <p key={n.code}>{n.message}</p>
+                  ))}
                   <p>
                     {new Date(result.dateTime).toLocaleString('ja-JP')} ·{' '}
                     {result.arriveBy ? '到着' : '出発'}

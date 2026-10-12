@@ -1,0 +1,15 @@
+{
+  "type": "departure",
+  "status": 200,
+  "seconds": 13.01,
+  "candidates": 6,
+  "first": {
+    "start": "2026-10-12T00:00:59.000Z",
+    "end": "2026-10-12T00:37:09.000Z",
+    "duration": 2170,
+    "transfers": 0,
+    "walkSeconds": 190,
+    "fare": null
+  },
+  "source": "Real OpenMaaS API -> real Transit API; public station coordinates"
+}

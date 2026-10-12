@@ -20,6 +20,15 @@ export async function platform<T>(path: string, init: RequestInit = {}): Promise
             ? 'アクセスが集中しています。しばらく待ってから再度お試しください。'
             : (
                 {
+                  'Activity has been cancelled':
+                    '開催が中止されました。別の目的地を選んでください。',
+                  'Specify travel date and time': '移動する日時を指定してください。',
+                  'Venue coordinates are missing':
+                    '会場の場所が分からないため経路を検索できません。',
+                  'Online activity does not require travel':
+                    'オンライン開催のため、会場への移動はありません。',
+                  'この駅・停留所の発車予定を取得できませんでした。':
+                    'この駅・停留所の発車予定を取得できませんでした。',
                   'Activity not found': '活動が見つかりません。',
                   'Plan not found': '予定が見つかりません。',
                   'Reconcile before cancellation':
@@ -28,6 +37,14 @@ export async function platform<T>(path: string, init: RequestInit = {}): Promise
                     '取消条件が更新されました。もう一度確認してください。',
                   'Journey provider is not configured':
                     'この地域では経路検索をまだ利用できません。',
+                  '自由な経路検索にはTransit APIを導入設定で選んでください':
+                    '導入設定でTransit APIを選ぶと、この地域で経路検索を使えます。',
+                  出発地と目的地を別の場所にしてください:
+                    '出発地と目的地を別の場所にしてください。',
+                  '地点を検索できませんでした。時間を置いて再検索してください。':
+                    '地点を検索できませんでした。時間を置いて再検索してください。',
+                  '経路を取得できませんでした。日時や地点を変えて再検索してください。':
+                    '経路を取得できませんでした。日時や地点を変えて再検索してください。',
                   'Search rate limit exceeded': 'しばらく待ってから検索してください。',
                 } as Record<string, string>
               )[body.error] || '処理を完了できませんでした。時間をおいて再度お試しください。',

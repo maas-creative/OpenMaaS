@@ -16,7 +16,7 @@ export async function request(
   const r = await fetcher(u.toString(), {
     ...init,
     redirect: 'manual',
-    signal: AbortSignal.timeout(20000),
+    signal: init.signal || AbortSignal.timeout(20000),
   });
   if (!r.ok)
     throw new UpstreamError(

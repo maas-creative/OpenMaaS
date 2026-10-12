@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { apiOrigin, platform } from '@/lib/platform';
 import { ErrorMessage, Loading } from './shell';
 import JourneyView from './journey-view';
+import RouteRefresh from './route-refresh';
 import { safeWebUrl } from '@openmaas/common/platform-display';
 import Reservations from './reservations';
 import CalendarConnect from './calendar-connect';
@@ -65,9 +66,13 @@ export default function Plans() {
               {i.data?.itineraries && (
                 <details>
                   <summary>保存した経路を確認</summary>
+                  {i.data.coverage?.notices.map((notice: { message: string; code: string }) => (
+                    <p key={notice.code}>{notice.message}</p>
+                  ))}
                   <JourneyView route={i.data.itineraries[i.data.selected ?? 0]} />
                 </details>
               )}
+              {i.data?.search && <RouteRefresh plan={p} index={n} onSaved={() => void reload()} />}
               {safeWebUrl(i.url) && (
                 <a className="underline" href={safeWebUrl(i.url)}>
                   提供元で確認

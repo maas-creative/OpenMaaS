@@ -65,8 +65,7 @@
   ],
   "products": [],
   "journey": {
-    "provider": "none",
-    "routerId": "default"
+    "provider": "transit-api"
   },
   "admins": [],
   "validators": []

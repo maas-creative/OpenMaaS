@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type { Activity, Config, Env } from './model';
 import { secret } from './model';
 import { json } from './http';
+import { transitSearch, RouteSearchSchema } from './transit-api';
 export const JourneySchema = z.object({
   activityId: z.string().optional(),
   direction: z.enum(['outbound', 'return']),
@@ -39,6 +40,19 @@ export async function journey(
   const venue = { lat: a.place.lat!, lon: a.place.lon! },
     from = input.direction === 'outbound' ? input.origin : venue,
     to = input.direction === 'outbound' ? venue : input.origin;
+  if (cfg.journey.provider === 'transit-api')
+    return {
+      ...(await transitSearch(
+        RouteSearchSchema.parse({
+          origin: from,
+          destination: to,
+          dateTime: t.dateTime,
+          searchType: t.arriveBy ? 'arrival' : 'departure',
+        }),
+        fetcher,
+      )),
+      ...t,
+    };
   if (cfg.journey.provider === 'none') throw new Error('Journey provider is not configured');
   const date = new Date(t.dateTime);
   if (cfg.journey.provider === 'otp') {

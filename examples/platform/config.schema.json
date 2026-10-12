@@ -270,6 +270,10 @@
                 "type": "string",
                 "minLength": 1
               },
+              "reference": {
+                "type": "boolean",
+                "default": true
+              },
               "seller": {
                 "type": "string",
                 "minLength": 1
@@ -302,7 +306,8 @@
               "enum": [
                 "none",
                 "otp",
-                "ekispert"
+                "ekispert",
+                "transit-api"
               ]
             },
             "url": {

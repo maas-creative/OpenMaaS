@@ -8,10 +8,11 @@ import { config, records, publish, audit } from './store';
 import { capabilities, loadSource, normalizeLuma } from './connectors';
 import { syncAll, syncSource } from './sync';
 import { JourneySchema, journey } from './journeys';
+import { RouteSearchSchema, transitSearch, transitPlaces, transitDepartures } from './transit-api';
 import { calendar } from './ics';
 import { commerce, recoverCommerce } from './commerce';
 import { serviceRuns, seconds } from './gtfs';
-import { json } from './http';
+import { json, UpstreamError } from './http';
 import { diagnostics } from './diagnostics';
 import { providerWebhooks, recoverNotifications } from './provider-webhooks';
 import { inventory } from './inventory';
@@ -71,10 +72,14 @@ app.get('/health', (c) => c.json({ status: 'ok', service: 'openmaas-platform' })
 app.use('/api/v1/*', async (c, next) => {
   if (
     ((c.req.method === 'GET' &&
-      (c.req.path === '/api/v1/auth/login' || c.req.path.startsWith('/api/v1/activities/'))) ||
+      (c.req.path === '/api/v1/auth/login' ||
+        c.req.path === '/api/v1/places' ||
+        c.req.path === '/api/v1/transit/station-departures' ||
+        c.req.path.startsWith('/api/v1/activities/'))) ||
       (c.req.method === 'POST' &&
         [
           '/api/v1/journeys',
+          '/api/v1/routes/search',
           '/api/v1/accommodations/search',
           '/api/v1/services/search',
           '/api/v1/offers',
@@ -326,8 +331,19 @@ app.post('/api/v1/accommodations/search', async (c) => {
   return c.json(rows);
 });
 app.get('/api/v1/places', async (c) => {
-  const q = z.string().trim().min(2).max(100).parse(c.req.query('q')).toLocaleLowerCase();
+  const q = z.string().trim().min(1).max(100).parse(c.req.query('q')).toLocaleLowerCase();
   const cfg = await config(c.env);
+  if (cfg.journey.provider === 'transit-api') {
+    try {
+      return c.json(await transitPlaces(q));
+    } catch (e) {
+      if (e instanceof UpstreamError && e.status === 429) {
+        c.header('Retry-After', String(e.retryAfter));
+        return c.json({ error: 'Search rate limit exceeded' }, 429);
+      }
+      return c.json({ error: '地点を検索できませんでした。時間を置いて再検索してください。' }, 502);
+    }
+  }
   const stops = cfg.features.transit
     ? [...(await records(c.env, 'gtfs:stops')), ...(await records(c.env, 'odpt:stops'))]
     : [];
@@ -372,6 +388,19 @@ app.get('/api/v1/transit', async (c) => {
     routes: await records(c.env, 'gtfs:routes'),
     realtime: await records(c.env, 'realtime'),
   });
+});
+app.get('/api/v1/transit/station-departures', async (c) => {
+  const id = z.string().min(1).max(300).parse(c.req.query('id'));
+  const dateTime = z.string().datetime({ offset: true }).parse(c.req.query('dateTime'));
+  if ((await config(c.env)).journey.provider !== 'transit-api')
+    return c.json({ error: '自由な経路検索にはTransit APIを導入設定で選んでください' }, 409);
+  try {
+    return c.json(await transitDepartures(id, dateTime));
+  } catch (e) {
+    if (e instanceof UpstreamError && e.status === 429)
+      return c.json({ error: 'Search rate limit exceeded' }, 429);
+    return c.json({ error: 'この駅・停留所の発車予定を取得できませんでした。' }, 502);
+  }
 });
 app.get('/api/v1/transit/departures', async (c) => {
   const stop = z.string().min(1).parse(c.req.query('stopId')),
@@ -462,6 +491,30 @@ app.get('/api/v1/transit/departures', async (c) => {
       };
     }),
   );
+});
+app.post('/api/v1/routes/search', async (c) => {
+  const dto = RouteSearchSchema.parse(await c.req.json());
+  if (dto.origin.lat === dto.destination.lat && dto.origin.lon === dto.destination.lon)
+    return c.json({ error: '出発地と目的地を別の場所にしてください' }, 400);
+  if ((await config(c.env)).journey.provider !== 'transit-api')
+    return c.json({ error: '自由な経路検索にはTransit APIを導入設定で選んでください' }, 409);
+  try {
+    return c.json(await transitSearch(dto));
+  } catch (e) {
+    if (e instanceof UpstreamError && e.status === 429) {
+      c.header('Retry-After', String(e.retryAfter));
+      return c.json({ error: 'Search rate limit exceeded' }, 429);
+    }
+    return c.json(
+      {
+        error:
+          e instanceof Error && e.message.startsWith('出発地')
+            ? e.message
+            : '経路を取得できませんでした。日時や地点を変えて再検索してください。',
+      },
+      502,
+    );
+  }
 });
 app.post('/api/v1/journeys', async (c) => {
   const dto = JourneySchema.parse(await c.req.json());

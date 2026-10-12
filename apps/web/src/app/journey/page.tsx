@@ -1,2 +1,4 @@
-import {redirect} from 'next/navigation';
-export default function Page(){redirect('/explore');}
+import RouteSearch from '@/components/platform/route-search';
+export default function Page() {
+  return <RouteSearch />;
+}

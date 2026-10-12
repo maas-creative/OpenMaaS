@@ -120,7 +120,7 @@ export const ConfigSchema = z
     products: z.array(ProductSchema).default([]),
     journey: z
       .object({
-        provider: z.enum(['none', 'otp', 'ekispert']),
+        provider: z.enum(['none', 'otp', 'ekispert', 'transit-api']),
         url: httpsUrl.optional(),
         secretRef: z.string().optional(),
         routerId: z.string().default('default'),
@@ -246,6 +246,7 @@ export const defaultConfig: Config = ConfigSchema.parse({
   contact: '',
   features: { activities: true, transit: true, accommodations: true, commerce: false },
   sources: [],
+  journey: { provider: 'transit-api' },
 });
 export function secret(env: Env, ref?: string): string {
   const v = ref ? env[ref] : undefined;

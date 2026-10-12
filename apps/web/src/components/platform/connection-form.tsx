@@ -103,6 +103,7 @@ export default function ConnectionForm({
             onChange={(e) => nested('journey', 'provider', e.target.value)}
           >
             <option value="none">未接続</option>
+            <option value="transit-api">Transit API（日本の交通・認証不要）</option>
             <option value="otp">OpenTripPlanner</option>
             <option value="ekispert">駅すぱあと</option>
           </select>
@@ -111,16 +112,25 @@ export default function ConnectionForm({
           url: '経路検索エンドポイント（HTTPS）',
           secretRef: '経路検索の資格情報参照名',
           routerId: 'OTP router ID',
-        }).map(([k, label]) => (
-          <label key={k}>
-            {label}
-            <input
-              className={fieldClass}
-              value={String((cfg.journey as Record<string, string>)[k] || '')}
-              onChange={(e) => nested('journey', k, e.target.value)}
-            />
-          </label>
-        ))}
+        })
+          .filter(([k]) =>
+            (cfg.journey as { provider: string }).provider === 'otp'
+              ? ['url', 'routerId'].includes(k)
+              : (cfg.journey as { provider: string }).provider === 'ekispert' && k === 'secretRef',
+          )
+          .map(([k, label]) => (
+            <label key={k}>
+              {label}
+              <input
+                className={fieldClass}
+                value={String((cfg.journey as Record<string, string>)[k] || '')}
+                onChange={(e) => nested('journey', k, e.target.value)}
+              />
+            </label>
+          ))}
+        {(cfg.journey as { provider: string }).provider === 'transit-api' && (
+          <p>Transit APIはAPIキーやURLの入力なしで使えます。</p>
+        )}
         {Object.entries({
           issuer: 'OIDC issuer（HTTPS）',
           clientId: 'OIDC client ID',
